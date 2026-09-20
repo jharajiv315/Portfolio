@@ -1,0 +1,11 @@
+/* Clean Global App Styling */
+html,
+body,
+#root {
+  background-color: #000000;
+  color: #ffffff;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
+}
