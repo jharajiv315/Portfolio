@@ -47,7 +47,7 @@ export const ProjectView = () => {
     : [];
 
   return (
-    <div className="relative min-h-screen bg-[#050811] text-slate-100 selection:bg-indigo-500/30 selection:text-indigo-200 py-12 px-5 sm:px-8">
+    <div className="relative min-h-screen bg-black text-white font-poppins py-12 px-5 sm:px-8">
       <CustomCursor />
       <ParticleBackground />
 
@@ -56,38 +56,38 @@ export const ProjectView = () => {
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/10">
           <button
             onClick={() => navigate("/")}
-            className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors group"
+            className="inline-flex items-center gap-2 text-sm font-body font-medium text-gray-400 hover:text-white transition-colors group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             <span>Return to Portfolio</span>
           </button>
 
-          <span className="text-xs font-mono uppercase tracking-widest text-indigo-400">
+          <span className="text-xs font-body uppercase tracking-wider text-cyan-400 font-medium">
             Project Overview
           </span>
         </div>
 
         {loading ? (
           <div className="flex items-center justify-center min-h-[50vh]">
-            <div className="w-8 h-8 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin" />
+            <div className="w-8 h-8 rounded-full border-2 border-cyan-500 border-t-transparent animate-spin" />
           </div>
         ) : !project ? (
-          <div className="text-center py-20 text-slate-400 font-mono">
+          <div className="text-center py-20 text-gray-400 font-body">
             Project not found or unavailable.
           </div>
         ) : (
           <div className="flex flex-col gap-10">
             {/* Header / Title */}
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-mono uppercase tracking-wider mb-3">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-body uppercase tracking-wider mb-3">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>{project.stack || "Full-Stack Development"}</span>
               </div>
-              <h1 className="text-3xl sm:text-5xl font-display font-extrabold text-white mb-4">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-white mb-4 tracking-tight">
                 {project.title}
               </h1>
               {project.deployed && (
-                <span className="inline-block px-3 py-1 rounded-full text-xs font-mono bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
+                <span className="inline-block px-3 py-1 rounded-full text-xs font-body font-medium bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
                   Status: {project.deployed}
                 </span>
               )}
@@ -110,11 +110,11 @@ export const ProjectView = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Main Description */}
               <div className="md:col-span-2 glass-card rounded-2xl p-6 sm:p-8 border border-white/10 flex flex-col gap-4">
-                <h2 className="text-xl font-display font-bold text-white flex items-center gap-2">
-                  <Layers className="w-5 h-5 text-indigo-400" />
+                <h2 className="text-xl font-heading font-bold text-white flex items-center gap-2">
+                  <Layers className="w-5 h-5 text-cyan-400" />
                   <span>About this Project</span>
                 </h2>
-                <p className="text-slate-300 text-base leading-relaxed whitespace-pre-line font-sans">
+                <p className="text-gray-300 text-base leading-relaxed whitespace-pre-line font-body font-normal">
                   {project.description}
                 </p>
               </div>
@@ -122,15 +122,15 @@ export const ProjectView = () => {
               {/* Sidebar: Tech & Links */}
               <div className="glass-card rounded-2xl p-6 sm:p-8 border border-white/10 flex flex-col gap-6">
                 <div>
-                  <h3 className="text-sm font-mono uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2">
-                    <Cpu className="w-4 h-4 text-indigo-400" />
+                  <h3 className="text-xs font-body uppercase tracking-wider text-gray-400 mb-3 flex items-center gap-2 font-medium">
+                    <Cpu className="w-4 h-4 text-cyan-400" />
                     <span>Technologies</span>
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {technologiesList.map((t, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1 rounded-full text-xs font-mono bg-white/5 border border-white/10 text-slate-200"
+                        className="px-2.5 py-0.5 rounded-full text-xs font-body font-normal bg-white/5 border border-white/10 text-gray-200"
                       >
                         {t}
                       </span>
@@ -144,7 +144,7 @@ export const ProjectView = () => {
                       href={project.gitRepoLink}
                       target="_blank"
                       rel="noreferrer"
-                      className="w-full py-2.5 px-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 hover:text-white transition-colors flex items-center justify-center gap-2 text-xs font-mono uppercase tracking-wider"
+                      className="w-full py-2.5 px-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-200 hover:text-white transition-colors flex items-center justify-center gap-2 text-sm font-body font-medium"
                     >
                       <Github className="w-4 h-4" />
                       <span>Source Code</span>
@@ -156,7 +156,7 @@ export const ProjectView = () => {
                       href={project.projectLink}
                       target="_blank"
                       rel="noreferrer"
-                      className="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white transition-colors flex items-center justify-center gap-2 text-xs font-mono uppercase tracking-wider shadow-md shadow-indigo-600/30"
+                      className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-black font-body font-medium transition-all flex items-center justify-center gap-2 text-sm shadow-md shadow-cyan-500/20"
                     >
                       <ExternalLink className="w-4 h-4" />
                       <span>Live Preview</span>

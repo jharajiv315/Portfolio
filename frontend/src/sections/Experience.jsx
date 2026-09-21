@@ -32,16 +32,16 @@ function DesktopExperienceCard({ exp, progress }) {
         } left-1/2 -translate-x-1/2 w-0.5 h-3 bg-cyan-400/70`}
       />
 
-      <div className="text-[11px] font-mono font-semibold text-cyan-400 flex items-center justify-between mb-1.5">
+      <div className="text-[11px] font-body font-medium text-cyan-400 flex items-center justify-between mb-1.5">
         <span className="truncate max-w-[140px]">{exp.company}</span>
-        <span className="text-gray-400 text-[10px]">{exp.period}</span>
+        <span className="text-gray-400 text-[11px] font-normal">{exp.period}</span>
       </div>
 
-      <h3 className="text-sm font-bold text-white mb-2 leading-snug">
+      <h3 className="text-sm sm:text-base font-heading font-bold text-white mb-1.5 leading-snug">
         {exp.role}
       </h3>
 
-      <p className="text-gray-300 text-xs leading-relaxed mb-3 line-clamp-3">
+      <p className="text-gray-300 text-xs sm:text-sm font-body font-normal leading-relaxed mb-3 line-clamp-3">
         {exp.description}
       </p>
 
@@ -50,7 +50,7 @@ function DesktopExperienceCard({ exp, progress }) {
           {exp.skills.slice(0, 3).map((skill, i) => (
             <span
               key={i}
-              className="px-2 py-0.5 text-[10px] font-medium rounded bg-cyan-950/70 text-cyan-300 border border-cyan-500/20"
+              className="px-2 py-0.5 text-[10px] font-body font-normal rounded bg-cyan-950/70 text-cyan-300 border border-cyan-500/20"
             >
               {skill}
             </span>
@@ -152,16 +152,16 @@ export default function Experience({ timelines = [] }) {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-semibold tracking-wider uppercase mb-3">
-              <Sparkles size={14} />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 section-pill mb-3">
+              <Sparkles size={13} />
               Career Journey
             </div>
 
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white">
-              My <span className="text-cyan-400 drop-shadow-[0_0_25px_rgba(34,211,238,0.45)]">Experience</span>
+            <h2 className="section-heading">
+              My <span className="text-cyan-400">Experience</span>
             </h2>
 
-            <p className="mt-3 text-sm sm:text-base text-gray-400 max-w-2xl mx-auto">
+            <p className="mt-3 section-subtext max-w-2xl mx-auto">
               Academic progression, competitive programming milestones, and technical development.
             </p>
           </motion.div>
@@ -187,24 +187,24 @@ export default function Experience({ timelines = [] }) {
                 >
                   <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0.5 h-3 bg-cyan-400/70" />
 
-                  <div className="text-[11px] font-mono font-semibold text-cyan-400 flex items-center justify-between mb-1.5">
-                    <span className="truncate max-w-[140px]">{exp.company}</span>
-                    <span className="text-gray-400 text-[10px]">{exp.period}</span>
+                  <div className="text-[11px] font-body font-medium text-cyan-400 flex items-center justify-between mb-1.5">
+                    <span>{exp.company}</span>
+                    <span className="text-gray-400 text-[11px] font-normal">{exp.period}</span>
                   </div>
 
-                  <h3 className="text-sm font-bold text-white mb-2 leading-snug">
+                  <h3 className="text-sm sm:text-base font-heading font-bold text-white mb-1.5 leading-snug">
                     {exp.role}
                   </h3>
 
-                  <p className="text-gray-300 text-xs leading-relaxed mb-3 line-clamp-3">
+                  <p className="text-gray-300 text-xs sm:text-sm font-body font-normal leading-relaxed mb-3">
                     {exp.description}
                   </p>
 
                   <div className="flex flex-wrap gap-1">
-                    {exp.skills.slice(0, 3).map((skill, i) => (
+                    {exp.skills.map((skill, i) => (
                       <span
                         key={i}
-                        className="px-2 py-0.5 text-[10px] font-medium rounded bg-cyan-950/70 text-cyan-300 border border-cyan-500/20"
+                        className="px-2 py-0.5 text-[10px] font-body font-normal rounded bg-cyan-950/70 text-cyan-300 border border-cyan-500/20"
                       >
                         {skill}
                       </span>
@@ -263,16 +263,16 @@ export default function Experience({ timelines = [] }) {
                 >
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-0.5 h-3 bg-cyan-400/70" />
 
-                  <div className="text-[11px] font-mono font-semibold text-cyan-400 flex items-center justify-between mb-1.5">
+                  <div className="text-[11px] font-body font-medium text-cyan-400 flex items-center justify-between mb-1.5">
                     <span className="truncate max-w-[140px]">{exp.company}</span>
-                    <span className="text-gray-400 text-[10px]">{exp.period}</span>
+                    <span className="text-gray-400 text-[11px] font-normal">{exp.period}</span>
                   </div>
 
-                  <h3 className="text-sm font-bold text-white mb-2 leading-snug">
+                  <h3 className="text-sm sm:text-base font-heading font-bold text-white mb-1.5 leading-snug">
                     {exp.role}
                   </h3>
 
-                  <p className="text-gray-300 text-xs leading-relaxed mb-3 line-clamp-3">
+                  <p className="text-gray-300 text-xs sm:text-sm font-body font-normal leading-relaxed mb-3 line-clamp-3">
                     {exp.description}
                   </p>
 
@@ -280,7 +280,7 @@ export default function Experience({ timelines = [] }) {
                     {exp.skills.slice(0, 3).map((skill, i) => (
                       <span
                         key={i}
-                        className="px-2 py-0.5 text-[10px] font-medium rounded bg-cyan-950/70 text-cyan-300 border border-cyan-500/20"
+                        className="px-2 py-0.5 text-[10px] font-body font-normal rounded bg-cyan-950/70 text-cyan-300 border border-cyan-500/20"
                       >
                         {skill}
                       </span>
@@ -319,18 +319,18 @@ export default function Experience({ timelines = [] }) {
                 </div>
 
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                  <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-cyan-950/70 text-cyan-300 border border-cyan-500/30">
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-body font-medium bg-cyan-950/70 text-cyan-300 border border-cyan-500/30">
                     {exp.company}
                   </span>
-                  <span className="text-xs text-gray-400 font-mono flex items-center gap-1">
+                  <span className="text-xs text-gray-400 font-body flex items-center gap-1">
                     <Calendar size={12} />
                     {exp.period}
                   </span>
                 </div>
 
-                <h3 className="text-base font-bold text-white mb-2">{exp.role}</h3>
+                <h3 className="text-sm sm:text-base font-heading font-bold text-white mb-1.5 leading-snug">{exp.role}</h3>
 
-                <p className="text-gray-300 text-xs sm:text-sm leading-relaxed mb-3">
+                <p className="text-gray-300 text-xs sm:text-sm font-body font-normal leading-relaxed mb-3">
                   {exp.description}
                 </p>
 
@@ -338,7 +338,7 @@ export default function Experience({ timelines = [] }) {
                   {exp.skills.map((skill, i) => (
                     <span
                       key={i}
-                      className="px-2 py-0.5 text-xs font-medium rounded bg-zinc-900 text-cyan-300 border border-cyan-500/20"
+                      className="px-2 py-0.5 text-[10px] sm:text-xs font-body font-normal rounded bg-zinc-900 text-cyan-300 border border-cyan-500/20"
                     >
                       {skill}
                     </span>

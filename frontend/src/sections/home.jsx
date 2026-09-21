@@ -173,15 +173,7 @@ export default function Home({ user }) {
           >
             {/* ================= ROLE TYPEWRITER ================= */}
             <motion.div
-              className="
-                text-2xl
-                sm:text-3xl
-                md:text-4xl
-                font-semibold
-                text-white
-                tracking-tight
-                min-h-[1.2em]
-              "
+              className="hero-role text-white min-h-[1.2em]"
               initial={{
                 opacity: 0,
                 y: 20,
@@ -210,11 +202,7 @@ export default function Home({ user }) {
 
             {/* ================= MAIN HEADING ================= */}
             <motion.h1
-              className="
-                mt-4
-                tracking-tight
-                leading-[0.95]
-              "
+              className="mt-3 leading-[1.02] tracking-tight"
               initial={{
                 opacity: 0,
                 y: 40,
@@ -230,16 +218,7 @@ export default function Home({ user }) {
             >
               {/* HELLO I'M */}
               <motion.span
-                className="
-                  block
-                  text-5xl
-                  sm:text-6xl
-                  md:text-7xl
-                  lg:text-7xl
-                  xl:text-8xl
-                  font-bold
-                  text-[#27d3d3]
-                "
+                className="block hero-greeting"
                 initial={{
                   opacity: 0,
                   y: 20,
@@ -258,17 +237,7 @@ export default function Home({ user }) {
 
               {/* NAME */}
               <motion.span
-                className="
-                  block
-                  text-white
-                  whitespace-nowrap
-                  text-5xl
-                  sm:text-6xl
-                  md:text-7xl
-                  lg:text-7xl
-                  xl:text-8xl
-                  font-bold
-                "
+                className="block hero-title mt-1"
                 initial={{
                   opacity: 0,
                   y: 20,
@@ -288,15 +257,7 @@ export default function Home({ user }) {
 
             {/* ================= PARAGRAPH ================= */}
             <motion.p
-              className="
-                mt-6
-                text-base
-                sm:text-lg
-                md:text-xl
-                text-gray-300
-                max-w-2xl
-                leading-relaxed
-              "
+              className="mt-5 body-copy-large text-gray-300 max-w-xl leading-relaxed"
               initial={{
                 opacity: 0,
                 y: 20,
@@ -317,7 +278,7 @@ export default function Home({ user }) {
             {/* ================= BUTTONS ================= */}
             <motion.div
               className="
-                mt-10
+                mt-8
                 flex
                 flex-wrap
                 items-center
@@ -348,10 +309,9 @@ export default function Home({ user }) {
                 }}
                 className="
                   px-6
-                  py-3
+                  py-2.5
                   rounded-full
-                  font-medium
-                  text-lg
+                  btn-label
                   text-white
                   bg-gradient-to-r
                   from-[#1cd8d2]
@@ -380,10 +340,9 @@ export default function Home({ user }) {
                   }}
                   className="
                     px-6
-                    py-3
+                    py-2.5
                     rounded-full
-                    font-medium
-                    text-lg
+                    btn-label
                     text-black
                     bg-white
                     hover:bg-gray-200
@@ -406,10 +365,9 @@ export default function Home({ user }) {
                   }}
                   className="
                     px-6
-                    py-3
+                    py-2.5
                     rounded-full
-                    font-medium
-                    text-lg
+                    btn-label
                     text-black
                     bg-white
                     hover:bg-gray-200

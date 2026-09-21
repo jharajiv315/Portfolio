@@ -233,10 +233,10 @@ export default function Contact({ user }) {
             <div className="bg-zinc-950/85 border border-zinc-800/80 rounded-2xl sm:rounded-3xl p-6 sm:p-10 shadow-[0_0_50px_rgba(0,0,0,0.8)] backdrop-blur-xl relative overflow-hidden">
               {/* Form Header */}
               <div className="mb-8">
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-                  Let's Work Together
+                <h2 className="section-heading">
+                  Let's Work <span className="text-cyan-400">Together</span>
                 </h2>
-                <p className="mt-2 text-sm sm:text-base text-gray-400">
+                <p className="mt-2 section-subtext">
                   Have a project in mind or want to collaborate? Fill out the form below and I'll get back to you promptly.
                 </p>
               </div>
@@ -245,7 +245,7 @@ export default function Contact({ user }) {
               <form onSubmit={handleSubmit} className="space-y-5">
                 {/* 1. Your Name */}
                 <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-xs sm:text-sm font-body font-medium text-gray-300 mb-2">
                     Your Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -255,13 +255,13 @@ export default function Contact({ user }) {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Your Name"
-                    className="w-full px-4 py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-white placeholder-gray-500 font-body text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
                   />
                 </div>
 
                 {/* 2. Your Email */}
                 <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-xs sm:text-sm font-body font-medium text-gray-300 mb-2">
                     Your Email <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -271,20 +271,20 @@ export default function Contact({ user }) {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Your Email"
-                    className="w-full px-4 py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-white placeholder-gray-500 font-body text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
                   />
                 </div>
 
                 {/* 3. Service Needed */}
                 <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-xs sm:text-sm font-body font-medium text-gray-300 mb-2">
                     Service Needed <span className="text-red-500">*</span>
                   </label>
                   <select
                     name="service"
                     value={formData.service}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-white text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all cursor-pointer"
+                    className="w-full px-4 py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-white font-body text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all cursor-pointer"
                   >
                     <option value="Web Development" className="bg-zinc-900 text-white">
                       Web Development
@@ -315,7 +315,7 @@ export default function Contact({ user }) {
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-body font-medium text-gray-300 mb-2">
                       Your Budget <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -325,14 +325,14 @@ export default function Contact({ user }) {
                       value={formData.budget}
                       onChange={handleChange}
                       placeholder="Your Budget (e.g. ₹10,000 / $200+)"
-                      className="w-full px-4 py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-white placeholder-gray-500 font-body text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
                     />
                   </motion.div>
                 )}
 
                 {/* 5. Explain Your Idea */}
                 <div>
-                  <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-xs sm:text-sm font-body font-medium text-gray-300 mb-2">
                     Explain Your Idea <span className="text-red-500">*</span>
                   </label>
                   <textarea
@@ -342,7 +342,7 @@ export default function Contact({ user }) {
                     value={formData.idea}
                     onChange={handleChange}
                     placeholder="Explain your idea..."
-                    className="w-full px-4 py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all resize-none"
+                    className="w-full px-4 py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-white placeholder-gray-500 font-body text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all resize-none"
                   />
                 </div>
 
@@ -351,7 +351,7 @@ export default function Contact({ user }) {
                   <motion.div
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className={`text-sm font-medium flex items-center gap-1.5 p-3 rounded-xl ${
+                    className={`text-sm font-body font-medium flex items-center gap-1.5 p-3 rounded-xl ${
                       submitted
                         ? "text-emerald-400 bg-emerald-950/40 border border-emerald-800/60"
                         : "text-red-400 bg-red-950/40 border border-red-800/60"
@@ -367,7 +367,7 @@ export default function Contact({ user }) {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-3.5 px-6 rounded-xl font-semibold text-sm sm:text-base text-white bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 transition-all shadow-[0_0_25px_rgba(59,130,246,0.35)] hover:shadow-[0_0_35px_rgba(34,211,238,0.5)] hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                    className="w-full py-3.5 px-6 rounded-xl font-body font-medium text-sm sm:text-base text-white bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 transition-all shadow-[0_0_25px_rgba(59,130,246,0.35)] hover:shadow-[0_0_35px_rgba(34,211,238,0.5)] hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                   >
                     {loading ? (
                       <span className="inline-block w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

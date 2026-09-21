@@ -72,11 +72,17 @@
     }
     html {
       scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
     }
     body {
       @apply bg-[#000000] text-white font-poppins;
       overflow-x: hidden;
       background-color: #000000;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
     ::selection {
       background: rgba(32, 230, 233, 0.25);
@@ -96,6 +102,136 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #1e2638;
     }
+  }
+
+  /* =========================================================
+     SEMANTIC TYPOGRAPHY SYSTEM (Reference Source: Poppins + Roboto)
+     ========================================================= */
+  :root {
+    --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-heading: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* Headings & Display Tokens (Roboto) */
+  .font-heading {
+    font-family: var(--font-heading);
+  }
+
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  .hero-greeting {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 3.75rem);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: #27d3d3;
+  }
+
+  .hero-title {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: clamp(2.25rem, 5.5vw, 4.25rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    text-wrap: balance;
+  }
+
+  .hero-role {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: clamp(1.125rem, 2.2vw, 1.75rem);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: #ffffff;
+  }
+
+  .section-heading {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: #ffffff;
+  }
+
+  .section-subtext {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: clamp(0.875rem, 1.2vw, 1rem);
+    line-height: 1.6;
+    letter-spacing: normal;
+    color: #9ca3af;
+  }
+
+  .section-pill {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.75rem;
+    line-height: 1;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .card-heading {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: #ffffff;
+  }
+
+  .card-subtext {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: rgba(34, 211, 238, 0.8);
+  }
+
+  .body-copy-large {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: clamp(1rem, 1.25vw, 1.125rem);
+    line-height: 1.65;
+    color: #d1d5db;
+  }
+
+  .body-copy {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: #d1d5db;
+  }
+
+  .body-copy-muted {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: #9ca3af;
+  }
+
+  .btn-label {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1.25;
+    letter-spacing: 0.01em;
+  }
+
+  .skill-badge-text {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    color: #e5e7eb;
+    letter-spacing: normal;
   }
 
   /* Reference Glassmorphism & Glow utilities */

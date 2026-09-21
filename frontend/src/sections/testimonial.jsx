@@ -19,14 +19,14 @@ export default function Testimonials({ testimonials = [] }) {
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-14">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-semibold tracking-wider uppercase mb-3">
-            <Sparkles size={14} />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 section-pill mb-3">
+            <Sparkles size={13} />
             Endorsements
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white">
+          <h2 className="section-heading">
             What People <span className="text-cyan-400">Say</span>
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-gray-400 max-w-xl mx-auto">
+          <p className="mt-3 section-subtext max-w-xl mx-auto">
             Feedback and recommendations from mentors, teammates, and tech communities.
           </p>
         </div>
@@ -51,7 +51,7 @@ export default function Testimonials({ testimonials = [] }) {
                     ))}
                   </div>
                 </div>
-                <p className="text-gray-300 text-sm leading-relaxed mb-6 italic">
+                <p className="text-gray-300 font-body text-sm leading-relaxed mb-6 italic">
                   "{t.content || t.description || t.quote}"
                 </p>
               </div>
@@ -64,13 +64,13 @@ export default function Testimonials({ testimonials = [] }) {
                     className="w-10 h-10 rounded-full object-cover border border-cyan-500/40"
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold text-sm">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white font-heading font-semibold text-sm">
                     {t.name ? t.name.charAt(0) : "U"}
                   </div>
                 )}
                 <div>
-                  <h4 className="text-sm font-bold text-white">{t.name}</h4>
-                  <p className="text-xs text-cyan-400/80">
+                  <h4 className="text-sm sm:text-base font-heading font-semibold text-white">{t.name}</h4>
+                  <p className="text-xs font-body text-cyan-400/80">
                     {t.role || t.designation || "Colleague"}
                   </p>
                 </div>

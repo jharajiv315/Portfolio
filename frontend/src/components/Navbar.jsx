@@ -32,7 +32,7 @@ export default function Navbar({ user }) {
             className="w-8 h-8 object-contain"
           />
 
-          <span className="text-xl font-bold text-white tracking-wide">
+          <span className="text-base sm:text-lg font-heading font-semibold text-white tracking-normal">
             {user?.fullName || "Rajiv Jha"}
           </span>
         </div>
@@ -49,7 +49,7 @@ export default function Navbar({ user }) {
         {/* RIGHT - Reach Out */}
         <a
           href="#contact"
-          className="bg-gradient-to-r from-pink-500 to-blue-500 text-white px-5 sm:px-6 py-2 rounded-full font-semibold shadow-lg hover:opacity-90 transition-opacity duration-300 text-sm sm:text-base whitespace-nowrap"
+          className="bg-gradient-to-r from-pink-500 to-blue-500 text-white px-5 sm:px-6 py-2 rounded-full font-body font-medium shadow-lg hover:opacity-90 transition-opacity duration-300 text-sm whitespace-nowrap"
         >
           Reach Out
         </a>

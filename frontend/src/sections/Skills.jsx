@@ -238,23 +238,25 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
           margin: 0;
           padding: 0;
           color: #ffffff;
-          font-size: 46px;
-          line-height: 1.1;
+          font-family: var(--font-heading);
+          font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+          line-height: 1.15;
           font-weight: 700;
-          letter-spacing: -1px;
+          letter-spacing: -0.015em;
         }
 
         .skills-heading h2 span {
           color: #22d3ee;
-          text-shadow: 0 0 18px rgba(34, 211, 238, 0.25);
         }
 
         .skills-heading p {
-          margin: 12px 0 0 0;
+          margin: 10px 0 0 0;
           padding: 0;
-          color: #d1d5db;
-          font-size: 15px;
-          line-height: 1.5;
+          font-family: var(--font-body);
+          font-weight: 400;
+          color: #9ca3af;
+          font-size: clamp(0.875rem, 1.2vw, 1rem);
+          line-height: 1.6;
         }
 
         .skills-wrapper {
@@ -316,11 +318,13 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
 
         .skill-name {
           color: #d1d5db;
-          font-size: 13px;
-          font-weight: 500;
+          font-family: var(--font-body);
+          font-size: 12px;
+          font-weight: 400;
           line-height: 1.2;
           white-space: nowrap;
           text-align: center;
+          letter-spacing: normal;
         }
 
         .skills-fade-left {
@@ -354,7 +358,7 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
             margin-bottom: 25px;
           }
           .skills-heading h2 {
-            font-size: 38px;
+            font-size: 28px;
           }
           .skills-heading p {
             font-size: 13px;
@@ -373,6 +377,7 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
           }
           .skill-name {
             font-size: 11px;
+            font-weight: 400;
           }
           .skills-fade-left,
           .skills-fade-right {

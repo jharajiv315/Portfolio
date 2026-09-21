@@ -93,48 +93,22 @@ export default function About({ user }) {
           {/* ================= PROFILE DETAILS ================= */}
           <div className="flex-1">
             {/* NAME */}
-            <h2
-              className="
-                mb-2
-                text-4xl
-                font-bold
-                tracking-tight
-                text-cyan-400
-                md:text-5xl
-              "
-            >
+            <h2 className="mb-2 font-heading font-bold text-3xl sm:text-4xl md:text-4xl text-cyan-400 tracking-tight">
               {user?.fullName || "Rajiv Jha"}
             </h2>
 
             {/* ROLE */}
-            <h3 className="mb-5 text-xl font-semibold md:text-2xl">
+            <h3 className="mb-4 text-base sm:text-lg font-body font-medium text-gray-200">
               Computer Science Student · Aspiring AI/ML Engineer
             </h3>
 
             {/* DESCRIPTION */}
-            <p
-              className="
-                max-w-3xl
-                text-base
-                leading-relaxed
-                text-gray-300
-                md:text-lg
-              "
-            >
+            <p className="max-w-3xl body-copy leading-relaxed text-gray-300">
               {user?.aboutMe ||
                 "I'm a B.Tech Computer Science student focused on becoming an AI/ML Engineer. I enjoy building software across the full stack, working with data, learning machine learning, and solving algorithmic problems."}
             </p>
 
-            <p
-              className="
-                mt-3
-                max-w-3xl
-                text-base
-                leading-relaxed
-                text-gray-300
-                md:text-lg
-              "
-            >
+            <p className="mt-3 max-w-3xl body-copy leading-relaxed text-gray-300">
               My technical path is grounded in strong problem-solving fundamentals with Java & DSA, Python for data and machine learning, and modern full-stack development with React, Node.js, and PostgreSQL.
             </p>
 
@@ -156,7 +130,7 @@ export default function About({ user }) {
                   border-white/10
                   bg-white/[0.03]
                   px-5
-                  py-5
+                  py-4
                   text-center
                   backdrop-blur-sm
                   transition-all
@@ -165,8 +139,8 @@ export default function About({ user }) {
                   hover:bg-white/[0.05]
                 "
               >
-                <p className="text-sm text-gray-400">Experience</p>
-                <p className="mt-1 font-bold text-white">Building Real Projects</p>
+                <p className="text-xs font-body font-normal text-gray-400 uppercase tracking-wider">Experience</p>
+                <p className="mt-1 font-body font-semibold text-sm sm:text-base text-white">Building Real Projects</p>
               </div>
 
               {/* SPECIALITY CARD */}
@@ -177,7 +151,7 @@ export default function About({ user }) {
                   border-white/10
                   bg-white/[0.03]
                   px-5
-                  py-5
+                  py-4
                   text-center
                   backdrop-blur-sm
                   transition-all
@@ -186,8 +160,8 @@ export default function About({ user }) {
                   hover:bg-white/[0.05]
                 "
               >
-                <p className="text-sm text-gray-400">Speciality</p>
-                <p className="mt-1 font-bold text-white">AI/ML + Full-Stack</p>
+                <p className="text-xs font-body font-normal text-gray-400 uppercase tracking-wider">Speciality</p>
+                <p className="mt-1 font-body font-semibold text-sm sm:text-base text-white">AI/ML + Full-Stack</p>
               </div>
 
               {/* FOCUS CARD */}
@@ -198,7 +172,7 @@ export default function About({ user }) {
                   border-white/10
                   bg-white/[0.03]
                   px-5
-                  py-5
+                  py-4
                   text-center
                   backdrop-blur-sm
                   transition-all
@@ -207,8 +181,8 @@ export default function About({ user }) {
                   hover:bg-white/[0.05]
                 "
               >
-                <p className="text-sm text-gray-400">Focus</p>
-                <p className="mt-1 font-bold text-white">DSA & Production AI</p>
+                <p className="text-xs font-body font-normal text-gray-400 uppercase tracking-wider">Focus</p>
+                <p className="mt-1 font-body font-semibold text-sm sm:text-base text-white">DSA & Production AI</p>
               </div>
             </div>
 
@@ -219,9 +193,9 @@ export default function About({ user }) {
                 className="
                   rounded-lg
                   bg-white
-                  px-6
-                  py-3
-                  font-semibold
+                  px-5
+                  py-2.5
+                  btn-label
                   text-black
                   transition-transform
                   duration-300
@@ -238,9 +212,9 @@ export default function About({ user }) {
                   border
                   border-white/20
                   bg-white/[0.03]
-                  px-6
-                  py-3
-                  font-semibold
+                  px-5
+                  py-2.5
+                  btn-label
                   text-white
                   transition-all
                   duration-300
@@ -265,52 +239,19 @@ export default function About({ user }) {
             delay: 0.15,
           }}
         >
-          <h2
-            className="
-              mb-5
-              text-3xl
-              font-bold
-              md:text-4xl
-            "
-          >
-            About Me
+          <h2 className="mb-4 section-heading text-2xl sm:text-3xl md:text-4xl">
+            About <span className="text-cyan-400">Me</span>
           </h2>
 
-          <p
-            className="
-              max-w-4xl
-              text-base
-              leading-relaxed
-              text-gray-300
-              md:text-lg
-            "
-          >
+          <p className="max-w-4xl body-copy leading-relaxed text-gray-300">
             I'm a B.Tech Computer Science Engineering student (2025–2029) focused on software engineering, data systems, and algorithmic problem-solving.
           </p>
 
-          <p
-            className="
-              mt-4
-              max-w-4xl
-              text-base
-              leading-relaxed
-              text-gray-300
-              md:text-lg
-            "
-          >
+          <p className="mt-4 max-w-4xl body-copy leading-relaxed text-gray-300">
             I learn by building real projects, understanding the mathematical and algorithmic fundamentals behind technology, and continuously iterating. My projects span intelligent full-stack systems, automated guidance tools, and scalable web backends.
           </p>
 
-          <p
-            className="
-              mt-4
-              max-w-4xl
-              text-base
-              leading-relaxed
-              text-gray-300
-              md:text-lg
-            "
-          >
+          <p className="mt-4 max-w-4xl body-copy leading-relaxed text-gray-300">
             Currently, I am diving deep into advanced Data Structures & Algorithms in Java (graphs, backtracking, dynamic programming), alongside exploring practical machine learning workflows with Python, NumPy, Pandas, and PostgreSQL.
           </p>
         </motion.div>

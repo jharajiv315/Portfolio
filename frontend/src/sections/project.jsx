@@ -62,26 +62,26 @@ function ProjectCard({ project, index, total, range, targetScale, progress }) {
             {/* Header / Number & Category */}
             <div>
               <div className="flex items-center justify-between gap-3 mb-2">
-                <span className="text-cyan-400 font-mono text-sm tracking-widest uppercase font-bold flex items-center gap-1.5">
-                  <Sparkles size={14} className="animate-pulse" />
+                <span className="text-cyan-400 font-body text-xs font-medium uppercase tracking-wider flex items-center gap-1.5">
+                  <Sparkles size={13} className="animate-pulse" />
                   {project.stack || "Full-Stack Project"}
                 </span>
-                <span className="text-gray-500 font-mono text-sm font-semibold">
+                <span className="text-gray-500 font-body text-xs font-medium">
                   {displayNum} / {totalNum}
                 </span>
               </div>
 
-              <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-tight hover:text-cyan-300 transition-colors">
+              <h3 className="card-heading hover:text-cyan-300 transition-colors">
                 {project.title}
               </h3>
 
-              <p className="text-sm font-medium text-cyan-400/80 mt-1">
+              <p className="card-subtext mt-1">
                 {project.stack || "Production Architecture"}
               </p>
             </div>
 
             {/* Description */}
-            <p className="text-gray-300 text-sm sm:text-base leading-relaxed line-clamp-4">
+            <p className="body-copy-muted line-clamp-4 leading-relaxed">
               {project.description}
             </p>
 
@@ -90,7 +90,7 @@ function ProjectCard({ project, index, total, range, targetScale, progress }) {
               {techList.map((item, i) => (
                 <span
                   key={i}
-                  className="px-3 py-1 text-xs font-medium rounded-full bg-cyan-950/60 text-cyan-300 border border-cyan-500/20 backdrop-blur-md"
+                  className="px-2.5 py-0.5 text-xs font-body font-normal rounded-full bg-cyan-950/60 text-cyan-300 border border-cyan-500/20 backdrop-blur-md"
                 >
                   {item}
                 </span>
@@ -105,20 +105,20 @@ function ProjectCard({ project, index, total, range, targetScale, progress }) {
                   href={liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold text-sm text-black bg-gradient-to-r from-cyan-400 to-blue-400 hover:from-cyan-300 hover:to-blue-300 transition-all shadow-[0_0_20px_rgba(34,211,238,0.4)] hover:shadow-[0_0_28px_rgba(34,211,238,0.6)] hover:scale-105 active:scale-95"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full btn-label text-black bg-gradient-to-r from-cyan-400 to-blue-400 hover:from-cyan-300 hover:to-blue-300 transition-all shadow-[0_0_20px_rgba(34,211,238,0.4)] hover:shadow-[0_0_28px_rgba(34,211,238,0.6)] hover:scale-105 active:scale-95"
                 >
-                  <Globe size={16} />
+                  <Globe size={15} />
                   Live Demo
-                  <ArrowUpRight size={16} />
+                  <ArrowUpRight size={15} />
                 </a>
               ) : (
                 <Link
                   to={liveUrl}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold text-sm text-black bg-gradient-to-r from-cyan-400 to-blue-400 hover:from-cyan-300 hover:to-blue-300 transition-all shadow-[0_0_20px_rgba(34,211,238,0.4)] hover:shadow-[0_0_28px_rgba(34,211,238,0.6)] hover:scale-105 active:scale-95"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full btn-label text-black bg-gradient-to-r from-cyan-400 to-blue-400 hover:from-cyan-300 hover:to-blue-300 transition-all shadow-[0_0_20px_rgba(34,211,238,0.4)] hover:shadow-[0_0_28px_rgba(34,211,238,0.6)] hover:scale-105 active:scale-95"
                 >
-                  <Globe size={16} />
+                  <Globe size={15} />
                   View Details
-                  <ArrowUpRight size={16} />
+                  <ArrowUpRight size={15} />
                 </Link>
               )}
 
@@ -128,9 +128,9 @@ function ProjectCard({ project, index, total, range, targetScale, progress }) {
                   href={project.gitRepoLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold text-sm text-gray-200 bg-zinc-900/80 border border-zinc-700/80 hover:border-cyan-400/60 hover:text-white hover:bg-zinc-800 transition-all hover:scale-105 active:scale-95"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full btn-label text-gray-200 bg-zinc-900/80 border border-zinc-700/80 hover:border-cyan-400/60 hover:text-white hover:bg-zinc-800 transition-all hover:scale-105 active:scale-95"
                 >
-                  <FaGithub size={16} />
+                  <FaGithub size={15} />
                   Source Code
                 </a>
               )}
@@ -265,16 +265,16 @@ export default function Projects({ projects = [], user }) {
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-semibold tracking-wider uppercase mb-4">
-            <Sparkles size={14} />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 section-pill mb-3">
+            <Sparkles size={13} />
             Portfolio Showcase
           </div>
 
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white">
-            My <span className="text-cyan-400 drop-shadow-[0_0_25px_rgba(34,211,238,0.45)]">Work</span>
+          <h2 className="section-heading">
+            My <span className="text-cyan-400">Projects</span>
           </h2>
 
-          <p className="mt-4 text-base sm:text-lg text-gray-400 max-w-2xl mx-auto">
+          <p className="mt-3 section-subtext max-w-2xl mx-auto">
             Explore live deployed web applications, AI tools, and production-ready platforms built with modern technology stacks.
           </p>
         </motion.div>

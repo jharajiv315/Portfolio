@@ -22,6 +22,7 @@ module.exports = {
         roboto: ["Roboto", "sans-serif"],
         sans: ["Poppins", "sans-serif"],
         display: ["Roboto", "sans-serif"],
+        heading: ["Roboto", "sans-serif"],
       },
       colors: {
         brand: {

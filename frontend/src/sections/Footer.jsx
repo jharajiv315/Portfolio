@@ -18,7 +18,7 @@ export default function Footer({ user }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-8"
+          className="text-2xl sm:text-3xl font-heading font-semibold text-white tracking-tight mb-6"
         >
           {fullName}
         </motion.h2>
@@ -29,7 +29,7 @@ export default function Footer({ user }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.15 }}
-          className="flex items-center gap-6 text-xl sm:text-2xl text-gray-400 mb-8"
+          className="flex items-center gap-6 text-lg sm:text-xl text-gray-400 mb-6"
         >
           {user?.twitterURL && (
             <a
@@ -72,13 +72,13 @@ export default function Footer({ user }) {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.25 }}
-          className="text-xs sm:text-sm text-gray-400 italic mb-4 max-w-md"
+          className="text-xs sm:text-sm font-body font-normal text-gray-400 italic mb-3 max-w-md"
         >
           "Success is when preparation meets opportunity."
         </motion.p>
 
         {/* Copyright */}
-        <p className="text-[11px] sm:text-xs text-gray-500">
+        <p className="text-xs font-body font-normal text-gray-500">
           © {currentYear} {fullName}. All rights reserved.
         </p>
       </div>
