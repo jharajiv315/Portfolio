@@ -188,31 +188,31 @@ export default function Contact({ user }) {
       <div className="pointer-events-none absolute left-[35%] top-[40%] h-[350px] w-[350px] rounded-full bg-cyan-500/10 blur-[130px]" />
 
       {/* ================= MAIN CONTAINER ================= */}
-      <div className="relative z-10 w-full max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+      <div className="relative z-10 w-full max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* ================= LEFT COLUMN: ASTRONAUT ARTWORK ================= */}
           <motion.div
             className="lg:col-span-5 flex flex-col items-center justify-center text-center relative"
-            initial={{ opacity: 0, x: -40 }}
+            initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
           >
             {/* Ambient Moon Glow behind Astronaut */}
-            <div className="absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-gradient-to-tr from-purple-600/30 via-cyan-500/20 to-transparent blur-3xl pointer-events-none" />
+            <div className="absolute w-64 h-64 sm:w-80 sm:h-80 rounded-full bg-gradient-to-tr from-purple-600/15 via-cyan-500/10 to-transparent blur-3xl pointer-events-none" />
 
             {/* Floating Animated Astronaut Artwork */}
             <motion.div
               animate={{
-                y: [-12, 12, -12],
-                rotate: [-1.5, 1.5, -1.5],
+                y: [-10, 10, -10],
+                rotate: [-1.2, 1.2, -1.2],
               }}
               transition={{
-                duration: 5,
+                duration: 5.5,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="relative z-10 w-full max-w-[340px] sm:max-w-[420px] lg:max-w-full drop-shadow-[0_0_35px_rgba(59,130,246,0.35)]"
+              className="relative z-10 w-full max-w-[280px] sm:max-w-[340px] lg:max-w-[380px] drop-shadow-[0_8px_30px_rgba(59,130,246,0.2)]"
             >
               <img
                 src={astraImg}
@@ -224,29 +224,37 @@ export default function Contact({ user }) {
 
           {/* ================= RIGHT COLUMN: LET'S WORK TOGETHER FORM ================= */}
           <motion.div
-            className="lg:col-span-7"
-            initial={{ opacity: 0, x: 40 }}
+            className="lg:col-span-7 w-full max-w-[560px] mx-auto lg:ml-auto"
+            initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
           >
-            <div className="bg-zinc-950/85 border border-zinc-800/80 rounded-2xl sm:rounded-3xl p-6 sm:p-10 shadow-[0_0_50px_rgba(0,0,0,0.8)] backdrop-blur-xl relative overflow-hidden">
+            <div
+              className="rounded-[16px] p-6 sm:p-8 backdrop-blur-md relative overflow-hidden"
+              style={{
+                backgroundColor: "rgba(8, 10, 14, 0.78)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                boxShadow:
+                  "0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 1px 1px rgba(255, 255, 255, 0.04)",
+              }}
+            >
               {/* Form Header */}
-              <div className="mb-8">
-                <h2 className="section-heading">
-                  Let's Work <span className="text-cyan-400">Together</span>
+              <div className="mb-6 sm:mb-7">
+                <h2 className="font-heading font-semibold sm:font-bold text-[30px] sm:text-[38px] lg:text-[42px] leading-[1.1] text-white tracking-[-0.015em]">
+                  Let's Work <span className="text-[#20E6E9]">Together</span>
                 </h2>
-                <p className="mt-2 section-subtext">
+                <p className="mt-2.5 font-body font-normal text-[14px] sm:text-[15px] leading-[1.6] text-gray-400 max-w-[520px]">
                   Have a project in mind or want to collaborate? Fill out the form below and I'll get back to you promptly.
                 </p>
               </div>
 
               {/* Contact Form */}
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-[18px]">
                 {/* 1. Your Name */}
                 <div>
-                  <label className="block text-xs sm:text-sm font-body font-medium text-gray-300 mb-2">
-                    Your Name <span className="text-red-500">*</span>
+                  <label className="block font-body font-medium text-[12.5px] sm:text-[13px] text-[#D0D4DA] mb-2">
+                    Your Name <span className="text-red-400/80 text-xs ml-0.5">*</span>
                   </label>
                   <input
                     type="text"
@@ -255,14 +263,14 @@ export default function Contact({ user }) {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Your Name"
-                    className="w-full px-4 py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-white placeholder-gray-500 font-body text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
+                    className="w-full h-[46px] sm:h-[48px] px-4 rounded-[9px] bg-white/[0.035] border border-white/10 text-white/95 placeholder:text-zinc-500 font-body text-[13.5px] sm:text-[14px] hover:border-white/20 focus:outline-none focus:border-[#20E6E9]/65 focus:ring-2 focus:ring-[#20E6E9]/[0.06] transition-all duration-150 ease-out"
                   />
                 </div>
 
                 {/* 2. Your Email */}
                 <div>
-                  <label className="block text-xs sm:text-sm font-body font-medium text-gray-300 mb-2">
-                    Your Email <span className="text-red-500">*</span>
+                  <label className="block font-body font-medium text-[12.5px] sm:text-[13px] text-[#D0D4DA] mb-2">
+                    Your Email <span className="text-red-400/80 text-xs ml-0.5">*</span>
                   </label>
                   <input
                     type="email"
@@ -271,37 +279,37 @@ export default function Contact({ user }) {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Your Email"
-                    className="w-full px-4 py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-white placeholder-gray-500 font-body text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
+                    className="w-full h-[46px] sm:h-[48px] px-4 rounded-[9px] bg-white/[0.035] border border-white/10 text-white/95 placeholder:text-zinc-500 font-body text-[13.5px] sm:text-[14px] hover:border-white/20 focus:outline-none focus:border-[#20E6E9]/65 focus:ring-2 focus:ring-[#20E6E9]/[0.06] transition-all duration-150 ease-out"
                   />
                 </div>
 
                 {/* 3. Service Needed */}
                 <div>
-                  <label className="block text-xs sm:text-sm font-body font-medium text-gray-300 mb-2">
-                    Service Needed <span className="text-red-500">*</span>
+                  <label className="block font-body font-medium text-[12.5px] sm:text-[13px] text-[#D0D4DA] mb-2">
+                    Service Needed <span className="text-red-400/80 text-xs ml-0.5">*</span>
                   </label>
                   <select
                     name="service"
                     value={formData.service}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-white font-body text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all cursor-pointer"
+                    className="w-full h-[46px] sm:h-[48px] px-4 rounded-[9px] bg-white/[0.035] border border-white/10 text-white/95 font-body text-[13.5px] sm:text-[14px] hover:border-white/20 focus:outline-none focus:border-[#20E6E9]/65 focus:ring-2 focus:ring-[#20E6E9]/[0.06] transition-all duration-150 ease-out cursor-pointer"
                   >
-                    <option value="Web Development" className="bg-zinc-900 text-white">
+                    <option value="Web Development" className="bg-[#080a0e] text-white">
                       Web Development
                     </option>
-                    <option value="Full Stack Application" className="bg-zinc-900 text-white">
+                    <option value="Full Stack Application" className="bg-[#080a0e] text-white">
                       Full Stack Application
                     </option>
-                    <option value="Frontend & UI/UX Design" className="bg-zinc-900 text-white">
+                    <option value="Frontend & UI/UX Design" className="bg-[#080a0e] text-white">
                       Frontend & UI/UX Design
                     </option>
-                    <option value="AI & API Integration" className="bg-zinc-900 text-white">
+                    <option value="AI & API Integration" className="bg-[#080a0e] text-white">
                       AI & API Integration
                     </option>
-                    <option value="Others" className="bg-zinc-900 text-white">
+                    <option value="Others" className="bg-[#080a0e] text-white">
                       Others
                     </option>
-                    <option value="Something in mind?" className="bg-zinc-900 text-white">
+                    <option value="Something in mind?" className="bg-[#080a0e] text-white">
                       Something in mind?
                     </option>
                   </select>
@@ -310,13 +318,14 @@ export default function Contact({ user }) {
                 {/* 4. Your Budget */}
                 {!isOthers && (
                   <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
+                    initial={{ opacity: 0, height: 0, y: -4 }}
+                    animate={{ opacity: 1, height: "auto", y: 0 }}
+                    exit={{ opacity: 0, height: 0, y: -4 }}
+                    transition={{ duration: 0.28, ease: "easeOut" }}
+                    className="overflow-hidden"
                   >
-                    <label className="block text-xs sm:text-sm font-body font-medium text-gray-300 mb-2">
-                      Your Budget <span className="text-red-500">*</span>
+                    <label className="block font-body font-medium text-[12.5px] sm:text-[13px] text-[#D0D4DA] mb-2">
+                      Your Budget <span className="text-red-400/80 text-xs ml-0.5">*</span>
                     </label>
                     <input
                       type="text"
@@ -325,56 +334,59 @@ export default function Contact({ user }) {
                       value={formData.budget}
                       onChange={handleChange}
                       placeholder="Your Budget (e.g. ₹10,000 / $200+)"
-                      className="w-full px-4 py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-white placeholder-gray-500 font-body text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all"
+                      className="w-full h-[46px] sm:h-[48px] px-4 rounded-[9px] bg-white/[0.035] border border-white/10 text-white/95 placeholder:text-zinc-500 font-body text-[13.5px] sm:text-[14px] hover:border-white/20 focus:outline-none focus:border-[#20E6E9]/65 focus:ring-2 focus:ring-[#20E6E9]/[0.06] transition-all duration-150 ease-out"
                     />
                   </motion.div>
                 )}
 
                 {/* 5. Explain Your Idea */}
                 <div>
-                  <label className="block text-xs sm:text-sm font-body font-medium text-gray-300 mb-2">
-                    Explain Your Idea <span className="text-red-500">*</span>
+                  <label className="block font-body font-medium text-[12.5px] sm:text-[13px] text-[#D0D4DA] mb-2">
+                    Explain Your Idea <span className="text-red-400/80 text-xs ml-0.5">*</span>
                   </label>
                   <textarea
                     name="idea"
                     required
-                    rows={4}
                     value={formData.idea}
                     onChange={handleChange}
                     placeholder="Explain your idea..."
-                    className="w-full px-4 py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-white placeholder-gray-500 font-body text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all resize-none"
+                    className="w-full h-[115px] sm:h-[120px] px-4 py-3 rounded-[10px] bg-white/[0.035] border border-white/10 text-white/95 placeholder:text-zinc-500 font-body text-[13.5px] sm:text-[14px] leading-relaxed hover:border-white/20 focus:outline-none focus:border-[#20E6E9]/65 focus:ring-2 focus:ring-[#20E6E9]/[0.06] transition-all duration-150 ease-out resize-none"
                   />
                 </div>
 
                 {/* Status Message */}
                 {status && (
                   <motion.div
-                    initial={{ opacity: 0, y: -5 }}
+                    initial={{ opacity: 0, y: -4 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className={`text-sm font-body font-medium flex items-center gap-1.5 p-3 rounded-xl ${
+                    className={`text-xs sm:text-[13px] font-body font-normal flex items-center gap-2 py-2.5 px-3.5 rounded-[8px] ${
                       submitted
-                        ? "text-emerald-400 bg-emerald-950/40 border border-emerald-800/60"
-                        : "text-red-400 bg-red-950/40 border border-red-800/60"
+                        ? "text-emerald-300 bg-emerald-950/30 border border-emerald-500/25"
+                        : "text-rose-300 bg-rose-950/30 border border-rose-500/25"
                     }`}
                   >
-                    {submitted ? <CheckCircle2 size={18} /> : <span>⚠️</span>}
-                    {status}
+                    {submitted ? (
+                      <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0" />
+                    ) : (
+                      <span className="text-rose-400 text-sm flex-shrink-0">⚠️</span>
+                    )}
+                    <span>{status}</span>
                   </motion.div>
                 )}
 
                 {/* 6. Submit Button */}
-                <div className="pt-2">
+                <div className="pt-1.5">
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-3.5 px-6 rounded-xl font-body font-medium text-sm sm:text-base text-white bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 transition-all shadow-[0_0_25px_rgba(59,130,246,0.35)] hover:shadow-[0_0_35px_rgba(34,211,238,0.5)] hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                    className="w-full h-[48px] rounded-[9px] font-body font-medium text-[14px] sm:text-[15px] text-white bg-gradient-to-r from-[#2563EB] to-[#20E6E9] hover:from-[#1D4ED8] hover:to-[#12D4D7] shadow-[0_2px_12px_rgba(37,99,235,0.22)] hover:shadow-[0_4px_16px_rgba(32,230,233,0.28)] transition-all duration-200 ease-out hover:-translate-y-[1px] active:translate-y-0 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                   >
                     {loading ? (
-                      <span className="inline-block w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     ) : (
                       <>
-                        <Send size={18} />
-                        Send Message
+                        <span>Send Message</span>
+                        <Send size={16} />
                       </>
                     )}
                   </button>
