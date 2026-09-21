@@ -5,13 +5,21 @@ dotenv.config({ path: './config/config.env' });
 
 const { Pool } = pkg;
 
-export const pool = new Pool({
-    user: process.env.PG_USER || 'postgres',
-    host: process.env.PG_HOST || 'localhost',
-    database: process.env.PG_DATABASE || 'portfolio_db',
-    password: process.env.PG_PASSWORD || 'postgre',
-    port: Number(process.env.PG_PORT) || 5432,
-});
+const isLocal = !process.env.DATABASE_URL && (!process.env.PG_HOST || process.env.PG_HOST === 'localhost' || process.env.PG_HOST === '127.0.0.1');
+
+export const pool = process.env.DATABASE_URL || process.env.PG_URI
+  ? new Pool({
+      connectionString: process.env.DATABASE_URL || process.env.PG_URI,
+      ssl: isLocal ? false : { rejectUnauthorized: false },
+    })
+  : new Pool({
+      user: process.env.PG_USER || 'postgres',
+      host: process.env.PG_HOST || 'localhost',
+      database: process.env.PG_DATABASE || 'portfolio_db',
+      password: process.env.PG_PASSWORD || 'postgre',
+      port: Number(process.env.PG_PORT) || 5432,
+      ssl: isLocal ? false : { rejectUnauthorized: false },
+    });
 
 export const initDb = async () => {
     const createMessagesTable = `
