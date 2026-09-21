@@ -240,21 +240,21 @@ export default function Contact({ user }) {
               }}
             >
               {/* Form Header */}
-              <div className="mb-6 sm:mb-7">
-                <h2 className="font-heading font-semibold sm:font-bold text-[30px] sm:text-[38px] lg:text-[42px] leading-[1.1] text-white tracking-[-0.015em]">
+              <div className="mb-6">
+                <h2 className="font-heading font-semibold sm:font-bold text-[26px] sm:text-[32px] lg:text-[36px] leading-[1.1] text-white tracking-[-0.015em]">
                   Let's Work <span className="text-[#20E6E9]">Together</span>
                 </h2>
-                <p className="mt-2.5 font-body font-normal text-[14px] sm:text-[15px] leading-[1.6] text-gray-400 max-w-[520px]">
+                <p className="mt-2 font-body font-normal text-[13px] sm:text-[14px] leading-[1.6] text-gray-400 max-w-[480px]">
                   Have a project in mind or want to collaborate? Fill out the form below and I'll get back to you promptly.
                 </p>
               </div>
 
               {/* Contact Form */}
-              <form onSubmit={handleSubmit} className="space-y-[18px]">
+              <form onSubmit={handleSubmit} className="space-y-5">
                 {/* 1. Your Name */}
                 <div>
-                  <label className="block font-body font-medium text-[12.5px] sm:text-[13px] text-[#D0D4DA] mb-2">
-                    Your Name <span className="text-red-400/80 text-xs ml-0.5">*</span>
+                  <label className="block font-body font-medium text-[12px] text-white/70 mb-2">
+                    Your Name <span className="text-red-400/80 text-[11px] ml-0.5">*</span>
                   </label>
                   <input
                     type="text"
@@ -263,14 +263,14 @@ export default function Contact({ user }) {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Your Name"
-                    className="w-full h-[46px] sm:h-[48px] px-4 rounded-[9px] bg-white/[0.035] border border-white/10 text-white/95 placeholder:text-zinc-500 font-body text-[13.5px] sm:text-[14px] hover:border-white/20 focus:outline-none focus:border-[#20E6E9]/65 focus:ring-2 focus:ring-[#20E6E9]/[0.06] transition-all duration-150 ease-out"
+                    className="w-full h-[46px] px-3.5 rounded-[8px] bg-white/[0.035] border border-white/[0.08] text-white/90 placeholder:text-white/35 font-body text-[13px] sm:text-[13.5px] hover:border-white/[0.14] focus:outline-none focus:border-[#20E6E9]/55 focus:ring-1 focus:ring-[#20E6E9]/[0.06] transition-all duration-150 ease-out"
                   />
                 </div>
 
                 {/* 2. Your Email */}
                 <div>
-                  <label className="block font-body font-medium text-[12.5px] sm:text-[13px] text-[#D0D4DA] mb-2">
-                    Your Email <span className="text-red-400/80 text-xs ml-0.5">*</span>
+                  <label className="block font-body font-medium text-[12px] text-white/70 mb-2">
+                    Your Email <span className="text-red-400/80 text-[11px] ml-0.5">*</span>
                   </label>
                   <input
                     type="email"
@@ -279,20 +279,20 @@ export default function Contact({ user }) {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Your Email"
-                    className="w-full h-[46px] sm:h-[48px] px-4 rounded-[9px] bg-white/[0.035] border border-white/10 text-white/95 placeholder:text-zinc-500 font-body text-[13.5px] sm:text-[14px] hover:border-white/20 focus:outline-none focus:border-[#20E6E9]/65 focus:ring-2 focus:ring-[#20E6E9]/[0.06] transition-all duration-150 ease-out"
+                    className="w-full h-[46px] px-3.5 rounded-[8px] bg-white/[0.035] border border-white/[0.08] text-white/90 placeholder:text-white/35 font-body text-[13px] sm:text-[13.5px] hover:border-white/[0.14] focus:outline-none focus:border-[#20E6E9]/55 focus:ring-1 focus:ring-[#20E6E9]/[0.06] transition-all duration-150 ease-out"
                   />
                 </div>
 
                 {/* 3. Service Needed */}
                 <div>
-                  <label className="block font-body font-medium text-[12.5px] sm:text-[13px] text-[#D0D4DA] mb-2">
-                    Service Needed <span className="text-red-400/80 text-xs ml-0.5">*</span>
+                  <label className="block font-body font-medium text-[12px] text-white/70 mb-2">
+                    Service Needed <span className="text-red-400/80 text-[11px] ml-0.5">*</span>
                   </label>
                   <select
                     name="service"
                     value={formData.service}
                     onChange={handleChange}
-                    className="w-full h-[46px] sm:h-[48px] px-4 rounded-[9px] bg-white/[0.035] border border-white/10 text-white/95 font-body text-[13.5px] sm:text-[14px] hover:border-white/20 focus:outline-none focus:border-[#20E6E9]/65 focus:ring-2 focus:ring-[#20E6E9]/[0.06] transition-all duration-150 ease-out cursor-pointer"
+                    className="w-full h-[46px] px-3.5 rounded-[8px] bg-white/[0.035] border border-white/[0.08] text-white/90 font-body text-[13px] sm:text-[13.5px] hover:border-white/[0.14] focus:outline-none focus:border-[#20E6E9]/55 focus:ring-1 focus:ring-[#20E6E9]/[0.06] transition-all duration-150 ease-out cursor-pointer"
                   >
                     <option value="Web Development" className="bg-[#080a0e] text-white">
                       Web Development
@@ -321,11 +321,11 @@ export default function Contact({ user }) {
                     initial={{ opacity: 0, height: 0, y: -4 }}
                     animate={{ opacity: 1, height: "auto", y: 0 }}
                     exit={{ opacity: 0, height: 0, y: -4 }}
-                    transition={{ duration: 0.28, ease: "easeOut" }}
+                    transition={{ duration: 0.25, ease: "easeOut" }}
                     className="overflow-hidden"
                   >
-                    <label className="block font-body font-medium text-[12.5px] sm:text-[13px] text-[#D0D4DA] mb-2">
-                      Your Budget <span className="text-red-400/80 text-xs ml-0.5">*</span>
+                    <label className="block font-body font-medium text-[12px] text-white/70 mb-2">
+                      Your Budget <span className="text-red-400/80 text-[11px] ml-0.5">*</span>
                     </label>
                     <input
                       type="text"
@@ -334,15 +334,15 @@ export default function Contact({ user }) {
                       value={formData.budget}
                       onChange={handleChange}
                       placeholder="Your Budget (e.g. ₹10,000 / $200+)"
-                      className="w-full h-[46px] sm:h-[48px] px-4 rounded-[9px] bg-white/[0.035] border border-white/10 text-white/95 placeholder:text-zinc-500 font-body text-[13.5px] sm:text-[14px] hover:border-white/20 focus:outline-none focus:border-[#20E6E9]/65 focus:ring-2 focus:ring-[#20E6E9]/[0.06] transition-all duration-150 ease-out"
+                      className="w-full h-[46px] px-3.5 rounded-[8px] bg-white/[0.035] border border-white/[0.08] text-white/90 placeholder:text-white/35 font-body text-[13px] sm:text-[13.5px] hover:border-white/[0.14] focus:outline-none focus:border-[#20E6E9]/55 focus:ring-1 focus:ring-[#20E6E9]/[0.06] transition-all duration-150 ease-out"
                     />
                   </motion.div>
                 )}
 
                 {/* 5. Explain Your Idea */}
                 <div>
-                  <label className="block font-body font-medium text-[12.5px] sm:text-[13px] text-[#D0D4DA] mb-2">
-                    Explain Your Idea <span className="text-red-400/80 text-xs ml-0.5">*</span>
+                  <label className="block font-body font-medium text-[12px] text-white/70 mb-2">
+                    Explain Your Idea <span className="text-red-400/80 text-[11px] ml-0.5">*</span>
                   </label>
                   <textarea
                     name="idea"
@@ -350,7 +350,7 @@ export default function Contact({ user }) {
                     value={formData.idea}
                     onChange={handleChange}
                     placeholder="Explain your idea..."
-                    className="w-full h-[115px] sm:h-[120px] px-4 py-3 rounded-[10px] bg-white/[0.035] border border-white/10 text-white/95 placeholder:text-zinc-500 font-body text-[13.5px] sm:text-[14px] leading-relaxed hover:border-white/20 focus:outline-none focus:border-[#20E6E9]/65 focus:ring-2 focus:ring-[#20E6E9]/[0.06] transition-all duration-150 ease-out resize-none"
+                    className="w-full h-[112px] px-3.5 py-2.5 rounded-[8px] bg-white/[0.035] border border-white/[0.08] text-white/90 placeholder:text-white/35 font-body text-[13px] sm:text-[13.5px] leading-relaxed hover:border-white/[0.14] focus:outline-none focus:border-[#20E6E9]/55 focus:ring-1 focus:ring-[#20E6E9]/[0.06] transition-all duration-150 ease-out resize-none"
                   />
                 </div>
 
@@ -359,14 +359,14 @@ export default function Contact({ user }) {
                   <motion.div
                     initial={{ opacity: 0, y: -4 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className={`text-xs sm:text-[13px] font-body font-normal flex items-center gap-2 py-2.5 px-3.5 rounded-[8px] ${
+                    className={`text-xs sm:text-[13px] font-body font-normal flex items-center gap-2 py-2 px-3 rounded-[6px] ${
                       submitted
                         ? "text-emerald-300 bg-emerald-950/30 border border-emerald-500/25"
                         : "text-rose-300 bg-rose-950/30 border border-rose-500/25"
                     }`}
                   >
                     {submitted ? (
-                      <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0" />
+                      <CheckCircle2 size={15} className="text-emerald-400 flex-shrink-0" />
                     ) : (
                       <span className="text-rose-400 text-sm flex-shrink-0">⚠️</span>
                     )}
@@ -375,18 +375,18 @@ export default function Contact({ user }) {
                 )}
 
                 {/* 6. Submit Button */}
-                <div className="pt-1.5">
+                <div className="pt-2">
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full h-[48px] rounded-[9px] font-body font-medium text-[14px] sm:text-[15px] text-white bg-gradient-to-r from-[#2563EB] to-[#20E6E9] hover:from-[#1D4ED8] hover:to-[#12D4D7] shadow-[0_2px_12px_rgba(37,99,235,0.22)] hover:shadow-[0_4px_16px_rgba(32,230,233,0.28)] transition-all duration-200 ease-out hover:-translate-y-[1px] active:translate-y-0 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                    className="w-full h-[46px] rounded-[8px] font-body font-medium text-[13.5px] sm:text-[14px] text-white bg-gradient-to-r from-[#2563EB] to-[#20E6E9] hover:from-[#1D4ED8] hover:to-[#12D4D7] shadow-[0_2px_8px_rgba(37,99,235,0.18)] hover:shadow-[0_4px_12px_rgba(32,230,233,0.22)] transition-all duration-150 ease-out hover:-translate-y-[1px] active:translate-y-0 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                   >
                     {loading ? (
                       <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     ) : (
                       <>
                         <span>Send Message</span>
-                        <Send size={16} />
+                        <Send size={15} />
                       </>
                     )}
                   </button>
