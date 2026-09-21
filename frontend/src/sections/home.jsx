@@ -8,7 +8,7 @@ import {
 import { FaEnvelope } from "react-icons/fa";
 
 import ParticlesBackground from "../components/ParticleBackground";
-import avator from "../assets/avator.png";
+import developerMascot from "../assets/developer-mascot.png";
 
 const defaultRoles = [
   "Full-Stack Developer",
@@ -600,16 +600,19 @@ export default function Home({ user }) {
 
             {/* AVATAR IMAGE */}
             <motion.img
-              src={avator}
-              alt="Rajiv Jha"
+              src={developerMascot}
+              alt="Rajiv Jha developer mascot"
               className="
                 relative
                 z-10
-                w-[360px]
-                lg:w-[390px]
-                xl:w-[480px]
+                w-full
+                max-w-[360px]
+                lg:max-w-[420px]
+                xl:max-w-[480px]
+                h-auto
                 object-contain
-                drop-shadow-[0_0_35px_rgba(0,184,248,0.3)]
+                select-none
+                drop-shadow-[0_10px_25px_rgba(0,184,248,0.15)]
               "
               animate={{
                 y: [0, -12, 0],
