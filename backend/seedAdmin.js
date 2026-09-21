@@ -6,7 +6,7 @@ async function seedAdmin() {
   await initDb();
 
   const email = 'jharajiv315@gmail.com';
-  const plainPassword = 'rajiv@45';
+  const plainPassword = 'Rajiv45';
   const hashedPassword = await bcrypt.hash(plainPassword, 10);
 
   const existingUser = await User.findOne({ email });

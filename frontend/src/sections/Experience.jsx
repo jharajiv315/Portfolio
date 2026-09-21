@@ -99,7 +99,7 @@ export default function Experience({ timelines = [] }) {
     if (desc.includes("DSA") || desc.includes("Data Structures")) skillList.push("DSA");
     if (desc.includes("Python")) skillList.push("Python");
     if (desc.includes("PostgreSQL") || desc.includes("SQL")) skillList.push("PostgreSQL");
-    if (desc.includes("Machine Learning") || desc.includes("AI")) skillList.push("AI/ML");
+    if (desc.includes("Machine Learning") || desc.includes("AI")) skillList.push("AIML");
     if (desc.includes("Deep Learning") || desc.includes("PyTorch")) skillList.push("PyTorch");
     if (desc.includes("Full-Stack") || desc.includes("web")) skillList.push("Full Stack");
     if (skillList.length === 0) skillList.push("Computer Science");

@@ -99,13 +99,13 @@ export default function About({ user }) {
 
             {/* ROLE */}
             <h3 className="mb-4 text-base sm:text-lg font-body font-medium text-gray-200">
-              Computer Science Student · Aspiring AI/ML Engineer
+              Computer Science Student · Aspiring AIML Engineer
             </h3>
 
             {/* DESCRIPTION */}
             <p className="max-w-3xl body-copy leading-relaxed text-gray-300">
               {user?.aboutMe ||
-                "I'm a B.Tech Computer Science student focused on becoming an AI/ML Engineer. I enjoy building software across the full stack, working with data, learning machine learning, and solving algorithmic problems."}
+                "I'm a B.Tech Computer Science student focused on becoming an AIML Engineer. I enjoy building software across the full stack, working with data, learning machine learning, and solving algorithmic problems."}
             </p>
 
             <p className="mt-3 max-w-3xl body-copy leading-relaxed text-gray-300">
@@ -161,7 +161,7 @@ export default function About({ user }) {
                 "
               >
                 <p className="text-xs font-body font-normal text-gray-400 uppercase tracking-wider">Speciality</p>
-                <p className="mt-1 font-body font-semibold text-sm sm:text-base text-white">AI/ML + Full-Stack</p>
+                <p className="mt-1 font-body font-semibold text-sm sm:text-base text-white">AIML + Full-Stack</p>
               </div>
 
               {/* FOCUS CARD */}

@@ -12,7 +12,7 @@ import developerMascot from "../assets/developer-mascot.png";
 
 const defaultRoles = [
   "Full-Stack Developer",
-  "Aspiring AI/ML Engineer",
+  "Aspiring AIML Engineer",
   "Software Developer",
   "Problem Solver",
 ];

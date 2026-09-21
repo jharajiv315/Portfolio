@@ -111,16 +111,16 @@ portfolio/
 
 ## Tech Stack
 
-| Domain | Technology | Details |
-| :--- | :--- | :--- |
-| **Public Frontend** | React 18, Vite 5 | Fast SPA bundling, modular components |
-| **Styling & Motion** | Tailwind CSS, Framer Motion | Custom dark theme, particle canvas, fluid transitions |
-| **Icons & Typography** | Lucide React, React Icons, Poppins, Roboto | Vector iconography, typography hierarchy |
-| **Admin Dashboard** | React 18, Redux Toolkit, Radix UI | Centralized asynchronous state, accessible UI primitives |
-| **Backend API** | Node.js, Express 5 | RESTful API, JSON body parser, file upload middleware |
-| **Database** | PostgreSQL (`pg` pool) | Relational persistence, automated table migrations |
-| **Authentication** | JSON Web Tokens (JWT), bcrypt | Encrypted passwords, HTTP-only secure cookie sessions |
-| **Cloud Storage** | Cloudinary SDK | Cloud storage for project screenshots and avatars |
+| Domain                 | Technology                                 | Details                                                  |
+| :--------------------- | :----------------------------------------- | :------------------------------------------------------- |
+| **Public Frontend**    | React 18, Vite 5                           | Fast SPA bundling, modular components                    |
+| **Styling & Motion**   | Tailwind CSS, Framer Motion                | Custom dark theme, particle canvas, fluid transitions    |
+| **Icons & Typography** | Lucide React, React Icons, Poppins, Roboto | Vector iconography, typography hierarchy                 |
+| **Admin Dashboard**    | React 18, Redux Toolkit, Radix UI          | Centralized asynchronous state, accessible UI primitives |
+| **Backend API**        | Node.js, Express 5                         | RESTful API, JSON body parser, file upload middleware    |
+| **Database**           | PostgreSQL (`pg` pool)                     | Relational persistence, automated table migrations       |
+| **Authentication**     | JSON Web Tokens (JWT), bcrypt              | Encrypted passwords, HTTP-only secure cookie sessions    |
+| **Cloud Storage**      | Cloudinary SDK                             | Cloud storage for project screenshots and avatars        |
 
 ---
 
@@ -207,6 +207,7 @@ Ensure your PostgreSQL service is running and `portfolio_db` is created.
 When the backend starts, table schemas are created automatically if they do not already exist.
 
 To seed initial portfolio data:
+
 ```bash
 cd backend
 node seedRealData.js
@@ -217,6 +218,7 @@ node seedRealData.js
 Open three dedicated terminal windows:
 
 #### Terminal 1 — Backend API (`http://localhost:4000`)
+
 ```bash
 cd backend
 npm start
@@ -225,12 +227,14 @@ npm start
 ```
 
 #### Terminal 2 — Public Portfolio Frontend (`http://localhost:5173`)
+
 ```bash
 cd frontend
 npm run dev
 ```
 
 #### Terminal 3 — Administrator Dashboard (`http://localhost:5174`)
+
 ```bash
 cd dashboard
 npm run dev
@@ -252,59 +256,59 @@ Base URL: `http://localhost:4000/api/v1`
 
 ### User & Authentication (`/user`)
 
-| Method | Endpoint | Auth Required | Description |
-| :--- | :--- | :---: | :--- |
-| `POST` | `/api/v1/user/login` | No | Authenticate admin, set HTTP-only JWT cookie |
-| `GET` | `/api/v1/user/logout` | Yes | Clear JWT session cookie and terminate session |
-| `GET` | `/api/v1/user/me` | Yes | Get authenticated administrator details |
-| `GET` | `/api/v1/user/portfolio/me` | No | Get public portfolio owner profile (avatar, bio, links) |
-| `PUT` | `/api/v1/user/update/me` | Yes | Update profile details, avatar image, or resume |
-| `PUT` | `/api/v1/user/password/update` | Yes | Change administrator account password |
-| `POST` | `/api/v1/user/password/forgot` | No | Request password reset token |
-| `PUT` | `/api/v1/user/password/reset/:token` | No | Reset password using verified token |
+| Method | Endpoint                             | Auth Required | Description                                             |
+| :----- | :----------------------------------- | :-----------: | :------------------------------------------------------ |
+| `POST` | `/api/v1/user/login`                 |      No       | Authenticate admin, set HTTP-only JWT cookie            |
+| `GET`  | `/api/v1/user/logout`                |      Yes      | Clear JWT session cookie and terminate session          |
+| `GET`  | `/api/v1/user/me`                    |      Yes      | Get authenticated administrator details                 |
+| `GET`  | `/api/v1/user/portfolio/me`          |      No       | Get public portfolio owner profile (avatar, bio, links) |
+| `PUT`  | `/api/v1/user/update/me`             |      Yes      | Update profile details, avatar image, or resume         |
+| `PUT`  | `/api/v1/user/password/update`       |      Yes      | Change administrator account password                   |
+| `POST` | `/api/v1/user/password/forgot`       |      No       | Request password reset token                            |
+| `PUT`  | `/api/v1/user/password/reset/:token` |      No       | Reset password using verified token                     |
 
 ### Projects (`/project`)
 
-| Method | Endpoint | Auth Required | Description |
-| :--- | :--- | :---: | :--- |
-| `POST` | `/api/v1/project/add` | Yes | Create a new project entry with Cloudinary banner |
-| `GET` | `/api/v1/project/getall` | No | Fetch all projects for public portfolio display |
-| `GET` | `/api/v1/project/get/:id` | No | Fetch single project details by ID |
-| `PUT` | `/api/v1/project/update/:id` | Yes | Update project fields or banner image |
-| `DELETE` | `/api/v1/project/delete/:id` | Yes | Delete a project and remove its Cloudinary banner |
+| Method   | Endpoint                     | Auth Required | Description                                       |
+| :------- | :--------------------------- | :-----------: | :------------------------------------------------ |
+| `POST`   | `/api/v1/project/add`        |      Yes      | Create a new project entry with Cloudinary banner |
+| `GET`    | `/api/v1/project/getall`     |      No       | Fetch all projects for public portfolio display   |
+| `GET`    | `/api/v1/project/get/:id`    |      No       | Fetch single project details by ID                |
+| `PUT`    | `/api/v1/project/update/:id` |      Yes      | Update project fields or banner image             |
+| `DELETE` | `/api/v1/project/delete/:id` |      Yes      | Delete a project and remove its Cloudinary banner |
 
 ### Skills (`/skill`)
 
-| Method | Endpoint | Auth Required | Description |
-| :--- | :--- | :---: | :--- |
-| `POST` | `/api/v1/skill/add` | Yes | Add new technical skill with icon SVG/image |
-| `GET` | `/api/v1/skill/getall` | No | Retrieve all skills grouped by category |
-| `PUT` | `/api/v1/skill/update/:id` | Yes | Update skill proficiency percentage |
-| `DELETE` | `/api/v1/skill/delete/:id` | Yes | Remove a skill entry |
+| Method   | Endpoint                   | Auth Required | Description                                 |
+| :------- | :------------------------- | :-----------: | :------------------------------------------ |
+| `POST`   | `/api/v1/skill/add`        |      Yes      | Add new technical skill with icon SVG/image |
+| `GET`    | `/api/v1/skill/getall`     |      No       | Retrieve all skills grouped by category     |
+| `PUT`    | `/api/v1/skill/update/:id` |      Yes      | Update skill proficiency percentage         |
+| `DELETE` | `/api/v1/skill/delete/:id` |      Yes      | Remove a skill entry                        |
 
 ### Timeline & Experience (`/timeline`)
 
-| Method | Endpoint | Auth Required | Description |
-| :--- | :--- | :---: | :--- |
-| `POST` | `/api/v1/timeline/add` | Yes | Add career timeline event (education/experience) |
-| `GET` | `/api/v1/timeline/getall` | No | Retrieve timeline events in chronological order |
-| `DELETE` | `/api/v1/timeline/delete/:id` | Yes | Delete timeline event |
+| Method   | Endpoint                      | Auth Required | Description                                      |
+| :------- | :---------------------------- | :-----------: | :----------------------------------------------- |
+| `POST`   | `/api/v1/timeline/add`        |      Yes      | Add career timeline event (education/experience) |
+| `GET`    | `/api/v1/timeline/getall`     |      No       | Retrieve timeline events in chronological order  |
+| `DELETE` | `/api/v1/timeline/delete/:id` |      Yes      | Delete timeline event                            |
 
 ### Software Applications / Tools (`/softwareapplication`)
 
-| Method | Endpoint | Auth Required | Description |
-| :--- | :--- | :---: | :--- |
-| `POST` | `/api/v1/softwareapplication/add` | Yes | Add development software/tool |
-| `GET` | `/api/v1/softwareapplication/getall` | No | Retrieve all software applications |
-| `DELETE` | `/api/v1/softwareapplication/delete/:id` | Yes | Delete software application entry |
+| Method   | Endpoint                                 | Auth Required | Description                        |
+| :------- | :--------------------------------------- | :-----------: | :--------------------------------- |
+| `POST`   | `/api/v1/softwareapplication/add`        |      Yes      | Add development software/tool      |
+| `GET`    | `/api/v1/softwareapplication/getall`     |      No       | Retrieve all software applications |
+| `DELETE` | `/api/v1/softwareapplication/delete/:id` |      Yes      | Delete software application entry  |
 
 ### Messages & Inquiries (`/message`)
 
-| Method | Endpoint | Auth Required | Description |
-| :--- | :--- | :---: | :--- |
-| `POST` | `/api/v1/message/send` | No | Submit contact form inquiry from public portfolio |
-| `GET` | `/api/v1/message/getall` | Yes | Fetch all received contact inquiries |
-| `DELETE` | `/api/v1/message/delete/:id` | Yes | Delete message inquiry |
+| Method   | Endpoint                     | Auth Required | Description                                       |
+| :------- | :--------------------------- | :-----------: | :------------------------------------------------ |
+| `POST`   | `/api/v1/message/send`       |      No       | Submit contact form inquiry from public portfolio |
+| `GET`    | `/api/v1/message/getall`     |      Yes      | Fetch all received contact inquiries              |
+| `DELETE` | `/api/v1/message/delete/:id` |      Yes      | Delete message inquiry                            |
 
 ---
 
@@ -313,17 +317,21 @@ Base URL: `http://localhost:4000/api/v1`
 Both frontend applications compile to standalone, optimized static assets ready for deployment on static hosting providers (Vercel, Netlify, Cloudflare Pages, Nginx, AWS S3):
 
 ### Build Public Portfolio:
+
 ```bash
 cd frontend
 npm run build
 ```
+
 Output directory: `frontend/dist/`
 
 ### Build Admin Dashboard:
+
 ```bash
 cd dashboard
 npm run build
 ```
+
 Output directory: `dashboard/dist/`
 
 ---
@@ -358,6 +366,6 @@ Output directory: `dashboard/dist/`
 ## Author
 
 - **Name**: Rajiv Jha
-- **Position**: Computer Science Student · Aspiring AI/ML Engineer
+- **Position**: Computer Science Student · Aspiring AIML Engineer
 - **GitHub**: [https://github.com/jharajiv315](https://github.com/jharajiv315)
 - **LinkedIn**: [https://www.linkedin.com/in/rajiv-jha-9b36ba3a2/](https://www.linkedin.com/in/rajiv-jha-9b36ba3a2/)
