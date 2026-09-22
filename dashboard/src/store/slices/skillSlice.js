@@ -11,7 +11,7 @@ const skillSlice = createSlice({
     message: null,
   },
   reducers: {
-    getAllSkillsRequest(state, action) {
+    getAllSkillsRequest(state) {
       state.skills = [];
       state.error = null;
       state.loading = true;
@@ -22,11 +22,10 @@ const skillSlice = createSlice({
       state.loading = false;
     },
     getAllSkillsFailed(state, action) {
-      state.skills = state.skills;
       state.error = action.payload;
       state.loading = false;
     },
-    addNewSkillRequest(state, action) {
+    addNewSkillRequest(state) {
       state.loading = true;
       state.error = null;
       state.message = null;
@@ -41,7 +40,7 @@ const skillSlice = createSlice({
       state.loading = false;
       state.message = null;
     },
-    deleteSkillRequest(state, action) {
+    deleteSkillRequest(state) {
       state.loading = true;
       state.error = null;
       state.message = null;
@@ -56,7 +55,7 @@ const skillSlice = createSlice({
       state.loading = false;
       state.message = null;
     },
-    updateSkillRequest(state, action) {
+    updateSkillRequest(state) {
       state.loading = true;
       state.error = null;
       state.message = null;
@@ -71,15 +70,13 @@ const skillSlice = createSlice({
       state.loading = false;
       state.message = null;
     },
-    resetSkillSlice(state, action) {
+    resetSkillSlice(state) {
       state.error = null;
-      state.skills = state.skills;
       state.message = null;
       state.loading = false;
     },
-    clearAllErrors(state, action) {
+    clearAllErrors(state) {
       state.error = null;
-      state.skills = state.skills;
     },
   },
 });
@@ -95,7 +92,7 @@ export const getAllSkills = () => async (dispatch) => {
     dispatch(skillSlice.actions.clearAllErrors());
   } catch (error) {
     dispatch(
-      skillSlice.actions.getAllSkillsFailed(error.response.data.message)
+      skillSlice.actions.getAllSkillsFailed(error.response?.data?.message || "Failed to fetch skills")
     );
   }
 };
@@ -111,12 +108,12 @@ export const addNewSkill = (data) => async (dispatch) => {
         headers: { "Content-Type": "multipart/form-data" },
       }
     );
-    console.log(response);
-    console.log(response.data.message);
     dispatch(skillSlice.actions.addNewSkillSuccess(response.data.message));
     dispatch(skillSlice.actions.clearAllErrors());
   } catch (error) {
-    dispatch(skillSlice.actions.addNewSkillFailed(error.response.data.message));
+    dispatch(
+      skillSlice.actions.addNewSkillFailed(error.response?.data?.message || "Failed to add skill")
+    );
   }
 };
 
@@ -134,7 +131,9 @@ export const updateSkill = (id, proficiency) => async (dispatch) => {
     dispatch(skillSlice.actions.updateSkillSuccess(response.data.message));
     dispatch(skillSlice.actions.clearAllErrors());
   } catch (error) {
-    dispatch(skillSlice.actions.updateSkillFailed(error.response.data.message));
+    dispatch(
+      skillSlice.actions.updateSkillFailed(error.response?.data?.message || "Failed to update skill")
+    );
   }
 };
 
@@ -150,7 +149,9 @@ export const deleteSkill = (id) => async (dispatch) => {
     dispatch(skillSlice.actions.deleteSkillSuccess(response.data.message));
     dispatch(skillSlice.actions.clearAllErrors());
   } catch (error) {
-    dispatch(skillSlice.actions.deleteSkillFailed(error.response.data.message));
+    dispatch(
+      skillSlice.actions.deleteSkillFailed(error.response?.data?.message || "Failed to delete skill")
+    );
   }
 };
 
