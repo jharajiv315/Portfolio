@@ -11,7 +11,7 @@ const timelineSlice = createSlice({
     message: null,
   },
   reducers: {
-    getAllTimelineRequest(state, action) {
+    getAllTimelineRequest(state) {
       state.timeline = [];
       state.error = null;
       state.loading = true;
@@ -22,11 +22,10 @@ const timelineSlice = createSlice({
       state.loading = false;
     },
     getAllTimelineFailed(state, action) {
-      state.timeline = state.timeline;
       state.error = action.payload;
       state.loading = false;
     },
-    addNewTimelineRequest(state, action) {
+    addNewTimelineRequest(state) {
       state.loading = true;
       state.error = null;
       state.message = null;
@@ -41,7 +40,7 @@ const timelineSlice = createSlice({
       state.loading = false;
       state.message = null;
     },
-    deleteTimelineRequest(state, action) {
+    deleteTimelineRequest(state) {
       state.loading = true;
       state.error = null;
       state.message = null;
@@ -56,15 +55,13 @@ const timelineSlice = createSlice({
       state.loading = false;
       state.message = null;
     },
-    resetTimelineSlice(state, action) {
+    resetTimelineSlice(state) {
       state.error = null;
-      state.timeline = state.timeline;
       state.message = null;
       state.loading = false;
     },
-    clearAllErrors(state, action) {
+    clearAllErrors(state) {
       state.error = null;
-      state = state.timeline;
     },
   },
 });
@@ -82,17 +79,19 @@ export const getAllTimeline = () => async (dispatch) => {
     dispatch(timelineSlice.actions.clearAllErrors());
   } catch (error) {
     dispatch(
-      timelineSlice.actions.getAllTimelineFailed(error.response.data.message)
+      timelineSlice.actions.getAllTimelineFailed(
+        error.response?.data?.message || "Failed to fetch timeline"
+      )
     );
   }
 };
 
-export const addNewTimeline = (data) => async (dispatch) => {
+export const addNewTimeline = (timelineData) => async (dispatch) => {
   dispatch(timelineSlice.actions.addNewTimelineRequest());
   try {
     const response = await axios.post(
       `${API_URL}/api/v1/timeline/add`,
-      data,
+      timelineData,
       {
         withCredentials: true,
         headers: { "Content-Type": "application/json" },
@@ -104,10 +103,13 @@ export const addNewTimeline = (data) => async (dispatch) => {
     dispatch(timelineSlice.actions.clearAllErrors());
   } catch (error) {
     dispatch(
-      timelineSlice.actions.addNewTimelineFailed(error.response.data.message)
+      timelineSlice.actions.addNewTimelineFailed(
+        error.response?.data?.message || "Failed to add timeline"
+      )
     );
   }
 };
+
 export const deleteTimeline = (id) => async (dispatch) => {
   dispatch(timelineSlice.actions.deleteTimelineRequest());
   try {
@@ -123,7 +125,9 @@ export const deleteTimeline = (id) => async (dispatch) => {
     dispatch(timelineSlice.actions.clearAllErrors());
   } catch (error) {
     dispatch(
-      timelineSlice.actions.deleteTimelineFailed(error.response.data.message)
+      timelineSlice.actions.deleteTimelineFailed(
+        error.response?.data?.message || "Failed to delete timeline"
+      )
     );
   }
 };
