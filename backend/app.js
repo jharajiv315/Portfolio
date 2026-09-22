@@ -34,7 +34,8 @@ app.use(
       }
       return callback(null, true);
     },
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
     credentials: true,
   })
 );
