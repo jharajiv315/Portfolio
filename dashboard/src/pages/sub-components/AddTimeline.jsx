@@ -127,13 +127,12 @@ const AddTimeline = () => {
             {!loading ? (
               <Button
                 type="submit"
-                onClick={() => handleAddNewSkill()}
                 className="w-full"
               >
                 Add Timeline
               </Button>
             ) : (
-              <SpecialLoadingButton content={"Adding New Skill"} />
+              <SpecialLoadingButton content={"Adding New Timeline"} />
             )}
           </div>
         </form>
