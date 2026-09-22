@@ -94,8 +94,8 @@ const AddSoftwareApplications = () => {
                     <div className="text-center">
                       {svgPreview ? (
                         <img
-                          className="mx-auto h-12 w-12 text-gray-300"
-                          viewBox="0 0 24 24"
+                          className="mx-auto h-12 w-12 text-gray-300 object-contain"
+                          alt="Software Application Svg Preview"
                           src={svgPreview ? `${svgPreview}` : "/docHolder.jpg"}
                         />
                       ) : (
