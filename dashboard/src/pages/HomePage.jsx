@@ -26,7 +26,7 @@ import AddProject from "./sub-components/AddProject";
 import AddSoftwareApplications from "./sub-components/AddSoftwareApplications";
 import Account from "./sub-components/Account";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "@/store/slices/userSlice";
+import { clearAllUserErrors, logout } from "@/store/slices/userSlice";
 import { toast } from "react-toastify";
 import Messages from "./sub-components/Messages";
 import AddTimeline from "./sub-components/AddTimeline";
