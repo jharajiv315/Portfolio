@@ -11,7 +11,7 @@ const softwareApplicationSlice = createSlice({
     message: null,
   },
   reducers: {
-    getAllsoftwareApplicationsRequest(state, action) {
+    getAllsoftwareApplicationsRequest(state) {
       state.softwareApplications = [];
       state.error = null;
       state.loading = true;
@@ -22,11 +22,10 @@ const softwareApplicationSlice = createSlice({
       state.loading = false;
     },
     getAllsoftwareApplicationsFailed(state, action) {
-      state.softwareApplications = state.softwareApplications;
       state.error = action.payload;
       state.loading = false;
     },
-    addNewsoftwareApplicationsRequest(state, action) {
+    addNewsoftwareApplicationsRequest(state) {
       state.loading = true;
       state.error = null;
       state.message = null;
@@ -41,7 +40,7 @@ const softwareApplicationSlice = createSlice({
       state.loading = false;
       state.message = null;
     },
-    deletesoftwareApplicationsRequest(state, action) {
+    deletesoftwareApplicationsRequest(state) {
       state.loading = true;
       state.error = null;
       state.message = null;
@@ -56,15 +55,13 @@ const softwareApplicationSlice = createSlice({
       state.loading = false;
       state.message = null;
     },
-    resetSoftwareApplicationSlice(state, action) {
+    resetSoftwareApplicationSlice(state) {
       state.error = null;
-      state.softwareApplications = state.softwareApplications;
       state.message = null;
       state.loading = false;
     },
-    clearAllErrors(state, action) {
+    clearAllErrors(state) {
       state.error = null;
-      state.softwareApplications = state.softwareApplications;
     },
   },
 });
@@ -87,7 +84,7 @@ export const getAllSoftwareApplications = () => async (dispatch) => {
   } catch (error) {
     dispatch(
       softwareApplicationSlice.actions.getAllsoftwareApplicationsFailed(
-        error.response.data.message
+        error.response?.data?.message || "Failed to fetch software applications"
       )
     );
   }
@@ -115,7 +112,7 @@ export const addNewSoftwareApplication = (data) => async (dispatch) => {
   } catch (error) {
     dispatch(
       softwareApplicationSlice.actions.addNewsoftwareApplicationsFailed(
-        error.response.data.message
+        error.response?.data?.message || "Failed to add application"
       )
     );
   }
@@ -141,7 +138,7 @@ export const deleteSoftwareApplication = (id) => async (dispatch) => {
   } catch (error) {
     dispatch(
       softwareApplicationSlice.actions.deletesoftwareApplicationsFailed(
-        error.response.data.message
+        error.response?.data?.message || "Failed to delete application"
       )
     );
   }
