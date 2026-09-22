@@ -5,14 +5,14 @@ import axios from "axios";
 const projectSlice = createSlice({
   name: "project",
   initialState: {
-    loading: false,
     projects: [],
+    loading: false,
     error: null,
     message: null,
     singleProject: {},
   },
   reducers: {
-    getAllProjectsRequest(state, action) {
+    getAllProjectsRequest(state) {
       state.projects = [];
       state.error = null;
       state.loading = true;
@@ -23,11 +23,10 @@ const projectSlice = createSlice({
       state.loading = false;
     },
     getAllProjectsFailed(state, action) {
-      state.projects = state.projects;
       state.error = action.payload;
       state.loading = false;
     },
-    addNewProjectRequest(state, action) {
+    addNewProjectRequest(state) {
       state.loading = true;
       state.error = null;
       state.message = null;
@@ -42,7 +41,7 @@ const projectSlice = createSlice({
       state.loading = false;
       state.message = null;
     },
-    deleteProjectRequest(state, action) {
+    deleteProjectRequest(state) {
       state.loading = true;
       state.error = null;
       state.message = null;
@@ -57,7 +56,7 @@ const projectSlice = createSlice({
       state.loading = false;
       state.message = null;
     },
-    updateProjectRequest(state, action) {
+    updateProjectRequest(state) {
       state.loading = true;
       state.error = null;
       state.message = null;
@@ -72,15 +71,13 @@ const projectSlice = createSlice({
       state.loading = false;
       state.message = null;
     },
-    resetProjectSlice(state, action) {
+    resetProjectSlice(state) {
       state.error = null;
-      state.projects = state.projects;
       state.message = null;
       state.loading = false;
     },
-    clearAllErrors(state, action) {
+    clearAllErrors(state) {
       state.error = null;
-      state = state.projects;
     },
   },
 });
@@ -98,7 +95,7 @@ export const getAllProjects = () => async (dispatch) => {
     dispatch(projectSlice.actions.clearAllErrors());
   } catch (error) {
     dispatch(
-      projectSlice.actions.getAllProjectsFailed(error.response.data.message)
+      projectSlice.actions.getAllProjectsFailed(error.response?.data?.message || "Failed to fetch projects")
     );
   }
 };
@@ -118,10 +115,11 @@ export const addNewProject = (data) => async (dispatch) => {
     dispatch(projectSlice.actions.clearAllErrors());
   } catch (error) {
     dispatch(
-      projectSlice.actions.addNewProjectFailed(error.response.data.message)
+      projectSlice.actions.addNewProjectFailed(error.response?.data?.message || "Failed to add project")
     );
   }
 };
+
 export const deleteProject = (id) => async (dispatch) => {
   dispatch(projectSlice.actions.deleteProjectRequest());
   try {
@@ -135,10 +133,11 @@ export const deleteProject = (id) => async (dispatch) => {
     dispatch(projectSlice.actions.clearAllErrors());
   } catch (error) {
     dispatch(
-      projectSlice.actions.deleteProjectFailed(error.response.data.message)
+      projectSlice.actions.deleteProjectFailed(error.response?.data?.message || "Failed to delete project")
     );
   }
 };
+
 export const updateProject = (id, newData) => async (dispatch) => {
   dispatch(projectSlice.actions.updateProjectRequest());
   try {
@@ -153,9 +152,8 @@ export const updateProject = (id, newData) => async (dispatch) => {
     dispatch(projectSlice.actions.updateProjectSuccess(response.data.message));
     dispatch(projectSlice.actions.clearAllErrors());
   } catch (error) {
-    console.log(error);
     dispatch(
-      projectSlice.actions.updateProjectFailed(error.response.data.message)
+      projectSlice.actions.updateProjectFailed(error.response?.data?.message || "Failed to update project")
     );
   }
 };
