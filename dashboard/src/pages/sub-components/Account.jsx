@@ -15,7 +15,7 @@ const Account = () => {
         <div className="mx-auto grid w-full max-w-6xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
           <nav className="grid gap-4 text-sm text-muted-foreground">
             <Link
-              href="#"
+              to="#"
               className={
                 selectedComponent === "Profile"
                   ? "font-semibold text-primary"
@@ -26,7 +26,7 @@ const Account = () => {
               Profile
             </Link>
             <Link
-              href="#"
+              to="#"
               className={
                 selectedComponent === "Update Profile"
                   ? "font-semibold text-primary"
@@ -37,7 +37,7 @@ const Account = () => {
               Update Profile
             </Link>
             <Link
-              href="#"
+              to="#"
               className={
                 selectedComponent === "Update Password"
                   ? "font-semibold text-primary"
@@ -53,16 +53,12 @@ const Account = () => {
               switch (selectedComponent) {
                 case "Profile":
                   return <Profile />;
-                  break;
                 case "Update Profile":
                   return <UpdateProfile />;
-                  break;
                 case "Update Password":
                   return <UpdatePassword />;
-                  break;
                 default:
                   return <Profile />;
-                  break;
               }
             })()}
           </div>
