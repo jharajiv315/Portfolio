@@ -11,7 +11,7 @@ const messageSlice = createSlice({
     message: null,
   },
   reducers: {
-    getAllMessagesRequest(state, action) {
+    getAllMessagesRequest(state) {
       state.messages = [];
       state.error = null;
       state.loading = true;
@@ -22,11 +22,10 @@ const messageSlice = createSlice({
       state.loading = false;
     },
     getAllMessagesFailed(state, action) {
-      state.messages = state.messages;
       state.error = action.payload;
       state.loading = false;
     },
-    deleteMessageRequest(state, action) {
+    deleteMessageRequest(state) {
       state.loading = true;
       state.error = null;
       state.message = null;
@@ -41,15 +40,13 @@ const messageSlice = createSlice({
       state.loading = false;
       state.message = null;
     },
-    resetMessageSlice(state, action) {
+    resetMessageSlice(state) {
       state.error = null;
-      state.messages = state.messages;
       state.message = null;
       state.loading = false;
     },
-    clearAllErrors(state, action) {
+    clearAllErrors(state) {
       state.error = null;
-      state.messages = state.messages;
     },
   },
 });
@@ -67,7 +64,9 @@ export const getAllMessages = () => async (dispatch) => {
     dispatch(messageSlice.actions.clearAllErrors());
   } catch (error) {
     dispatch(
-      messageSlice.actions.getAllMessagesFailed(error.response.data.message)
+      messageSlice.actions.getAllMessagesFailed(
+        error.response?.data?.message || "Failed to fetch messages"
+      )
     );
   }
 };
@@ -85,7 +84,9 @@ export const deleteMessage = (id) => async (dispatch) => {
     dispatch(messageSlice.actions.clearAllErrors());
   } catch (error) {
     dispatch(
-      messageSlice.actions.deleteMessageFailed(error.response.data.message)
+      messageSlice.actions.deleteMessageFailed(
+        error.response?.data?.message || "Failed to delete message"
+      )
     );
   }
 };
