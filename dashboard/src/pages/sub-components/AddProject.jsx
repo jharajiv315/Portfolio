@@ -219,8 +219,8 @@ const AddProject = () => {
                     <div className="text-center">
                       {projectBannerPreview ? (
                         <img
-                          className="mx-auto h-[250px] w-full text-gray-300"
-                          viewBox="0 0 24 24"
+                          className="mx-auto h-[250px] w-full text-gray-300 object-cover rounded-md"
+                          alt="Project Banner"
                           src={
                             projectBannerPreview && `${projectBannerPreview}`
                           }
