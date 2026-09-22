@@ -132,13 +132,14 @@ export const getSingleProject = catchAsyncErrors(async (req, res, next) => {
   const { id } = req.params;
   try {
     const project = await Project.findById(id);
+    if (!project) {
+      return next(new ErrorHandler("Project Not Found!", 404));
+    }
     res.status(200).json({
       success: true,
       project,
     });
   } catch (error) {
-    res.status(400).json({
-      error,
-    });
+    return next(new ErrorHandler("Project Not Found!", 404));
   }
 });
