@@ -143,22 +143,22 @@ Create the corresponding `.env` or `config.env` files in each sub-application di
 Template available at [backend/config/config.env.example](file:///d:/portfolio/backend/config/config.env.example):
 
 ```env
-PORT=4000
+PORT=
 PG_HOST=localhost
 PG_PORT=5432
-PG_DATABASE=portfolio_db
-PG_USER=postgres
+PG_DATABASE=
+PG_USER=
 PG_PASSWORD=your_postgres_password
-PG_URI=postgresql://postgres:your_postgres_password@localhost:5432/portfolio_db
-PORTFOLIO_URL=http://localhost:5173
-DASHBOARD_URL=http://localhost:5174
+PG_URI=postgresql://postgres:your_postgres_password
+PORTFOLIO_URL=
+DASHBOARD_URL=
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 JWT_SECRET_KEY=your_secure_jwt_secret_key
-JWT_EXPIRES=10d
-COOKIE_EXPIRES=10
-COOKIE_EXPIRE=10
+JWT_EXPIRES=
+COOKIE_EXPIRES=
+COOKIE_EXPIRE=
 ```
 
 ### 2. Public Frontend (`frontend/.env`)
