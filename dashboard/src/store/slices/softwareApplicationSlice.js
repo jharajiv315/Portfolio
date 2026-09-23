@@ -95,12 +95,16 @@ export const addNewSoftwareApplication = (data) => async (dispatch) => {
     softwareApplicationSlice.actions.addNewsoftwareApplicationsRequest()
   );
   try {
+    const token = localStorage.getItem("adminToken");
     const response = await axios.post(
       `${API_URL}/api/v1/softwareapplication/add`,
       data,
       {
         withCredentials: true,
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
       }
     );
     dispatch(
@@ -123,10 +127,14 @@ export const deleteSoftwareApplication = (id) => async (dispatch) => {
     softwareApplicationSlice.actions.deletesoftwareApplicationsRequest()
   );
   try {
+    const token = localStorage.getItem("adminToken");
     const response = await axios.delete(
       `${API_URL}/api/v1/softwareapplication/delete/${id}`,
       {
         withCredentials: true,
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
       }
     );
     dispatch(
