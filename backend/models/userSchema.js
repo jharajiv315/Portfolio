@@ -62,6 +62,15 @@ export class UserInstance {
         return resetToken;
     }
 
+    // Sanitize user object for JSON responses (prevent leaking password hash or reset tokens)
+    toJSON() {
+        const copy = { ...this };
+        delete copy.password;
+        delete copy.resetPasswordToken;
+        delete copy.resetPasswordExpire;
+        return copy;
+    }
+
     async deleteOne() {
         const query = `DELETE FROM users WHERE id = $1 RETURNING ${USER_FIELDS};`;
         const result = await pool.query(query, [this.id || this._id]);
