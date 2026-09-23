@@ -8,14 +8,14 @@ import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <Router>
         {/* <ModeToggle /> */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/project/:id" element={<ProjectView />} />
         </Routes>
-        <ToastContainer position="bottom-right" theme="dark" />
+        <ToastContainer position="bottom-right" theme="light" />
       </Router>
     </ThemeProvider>
   );
