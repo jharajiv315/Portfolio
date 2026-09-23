@@ -11,10 +11,9 @@ import ParticlesBackground from "../components/ParticleBackground";
 import developerMascot from "../assets/developer-mascot.png";
 
 const defaultRoles = [
-  "Full-Stack Developer",
-  "Aspiring AIML Engineer",
-  "Software Developer",
-  "Problem Solver",
+  "Computer Science Student · Aspiring AI/ML Engineer",
+  "Full-Stack Developer · Problem Solver",
+  "Software Developer · Creative Technologist",
 ];
 
 export default function Home({ user }) {
@@ -164,39 +163,20 @@ export default function Home({ user }) {
               <span>Available for opportunities</span>
             </motion.div>
 
-            {/* ================= ROLE TYPEWRITER ================= */}
+            {/* STATUS PILL */}
             <motion.div
-              className="text-[#57534E] font-medium tracking-wide text-sm sm:text-base min-h-[1.5em] flex items-center"
-              initial={{
-                opacity: 0,
-                y: 20,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              transition={{
-                duration: 0.8,
-              }}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#E8E1D5] shadow-xs text-xs font-medium text-[#1C1917] mb-5 backdrop-blur-sm"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
             >
-              <span className="text-[#B84A1C] font-semibold mr-1.5">Focus:</span>
-              <span>{roles[index].substring(0, subIndex)}</span>
-              <span
-                className="
-                  inline-block
-                  w-[2px]
-                  h-[1.1em]
-                  ml-1
-                  bg-[#B84A1C]
-                  animate-pulse
-                  align-middle
-                "
-              />
+              <span className="w-2 h-2 rounded-full bg-[#B84A1C] animate-pulse"></span>
+              <span>Available for opportunities</span>
             </motion.div>
 
             {/* ================= MAIN HEADING ================= */}
             <motion.h1
-              className="mt-4 leading-[1.05] tracking-tight font-serif"
+              className="mt-2 leading-[1.05] tracking-tight font-serif"
               initial={{
                 opacity: 0,
                 y: 40,
@@ -249,9 +229,39 @@ export default function Home({ user }) {
               </motion.span>
             </motion.h1>
 
+            {/* ================= SUBTITLE / ROLE TYPEWRITER (MATCHING MOCKUP) ================= */}
+            <motion.div
+              className="mt-3 text-[#1C1917]/90 font-medium text-base sm:text-lg md:text-xl flex items-center min-h-[1.5em]"
+              initial={{
+                opacity: 0,
+                y: 20,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: 0.6,
+                duration: 0.8,
+              }}
+            >
+              <span>{roles[index].substring(0, subIndex)}</span>
+              <span
+                className="
+                  inline-block
+                  w-[2px]
+                  h-[1.1em]
+                  ml-1
+                  bg-[#B84A1C]
+                  animate-pulse
+                  align-middle
+                "
+              />
+            </motion.div>
+
             {/* ================= PARAGRAPH ================= */}
             <motion.p
-              className="mt-6 text-[#57534E] text-base sm:text-lg max-w-xl leading-relaxed font-sans"
+              className="mt-5 text-[#57534E] text-base sm:text-lg max-w-xl leading-relaxed font-sans"
               initial={{
                 opacity: 0,
                 y: 20,
@@ -266,7 +276,7 @@ export default function Home({ user }) {
               }}
             >
               {user?.aboutMe ||
-                "I turn complex ideas into seamless, high-impact web experiences — building modern, scalable, and intelligent applications that make a difference."}
+                "I'm a B.Tech Computer Science student focused on becoming an AI/ML Engineer. I enjoy building software across the full stack, working with data, learning machine learning, and solving algorithmic problems. My approach is simple: understand the fundamentals, build real projects, learn from what breaks, and continuously improve."}
             </motion.p>
 
             {/* ================= BUTTONS ================= */}
@@ -590,6 +600,14 @@ export default function Home({ user }) {
               </div>
               <span className="w-1 h-1 rounded-full bg-[#D8C7B0]"></span>
               <span className="font-serif italic text-[#B84A1C] font-medium">∞ Learning</span>
+
+              {/* MOUSE SCROLL INDICATOR (FROM REFERENCE MOCKUP) */}
+              <div className="hidden sm:flex items-center gap-2 text-xs text-[#78716C] ml-auto">
+                <div className="w-4 h-6 rounded-full border border-[#78716C]/60 flex items-start justify-center p-1">
+                  <div className="w-1 h-1.5 rounded-full bg-[#B84A1C] animate-bounce" />
+                </div>
+                <span>Scroll to explore</span>
+              </div>
             </motion.div>
           </div>
 
@@ -600,9 +618,10 @@ export default function Home({ user }) {
               w-full
               lg:w-[42%]
               xl:w-[40%]
-              items-center
+              items-end
               justify-center
               relative
+              pt-8
             "
             initial={{
               opacity: 0,
