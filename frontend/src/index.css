@@ -77,30 +77,31 @@
       text-rendering: optimizeLegibility;
     }
     body {
-      @apply bg-[#000000] text-white font-poppins;
+      @apply bg-[#FAF7F2] text-[#1C1917] font-poppins;
       overflow-x: hidden;
-      background-color: #000000;
+      background-color: #FAF7F2;
+      color: #1C1917;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
     ::selection {
-      background: rgba(32, 230, 233, 0.26);
-      color: #20e6e9;
+      background: rgba(184, 74, 28, 0.18);
+      color: #B84A1C;
     }
     /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 7px;
     }
     ::-webkit-scrollbar-track {
-      background: #000000;
+      background: #FAF7F2;
     }
     ::-webkit-scrollbar-thumb {
-      background: #141923;
+      background: #D6CABE;
       border-radius: 4px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: #1e2638;
+      background: #B5A593;
     }
   }
 
@@ -127,7 +128,7 @@
     font-size: clamp(2rem, 5vw, 3.75rem);
     line-height: 1.05;
     letter-spacing: -0.015em;
-    color: #27d3d3;
+    color: #1C1917;
   }
 
   .hero-title {
@@ -136,7 +137,7 @@
     font-size: clamp(2.25rem, 5.5vw, 4.25rem);
     line-height: 1.05;
     letter-spacing: -0.02em;
-    color: #ffffff;
+    color: #B84A1C;
     text-wrap: balance;
   }
 
@@ -146,7 +147,7 @@
     font-size: clamp(1.125rem, 2.2vw, 1.75rem);
     line-height: 1.3;
     letter-spacing: -0.01em;
-    color: #ffffff;
+    color: #292524;
   }
 
   .section-heading {
@@ -155,7 +156,7 @@
     font-size: clamp(1.875rem, 3.5vw, 2.75rem);
     line-height: 1.15;
     letter-spacing: -0.015em;
-    color: #ffffff;
+    color: #1C1917;
   }
 
   .section-subtext {
@@ -164,7 +165,7 @@
     font-size: clamp(0.875rem, 1.2vw, 1rem);
     line-height: 1.6;
     letter-spacing: normal;
-    color: #9ca3af;
+    color: #57534E;
   }
 
   .section-pill {
@@ -182,7 +183,7 @@
     font-size: clamp(1.25rem, 1.8vw, 1.5rem);
     line-height: 1.25;
     letter-spacing: -0.01em;
-    color: #ffffff;
+    color: #1C1917;
   }
 
   .card-subtext {
@@ -190,7 +191,7 @@
     font-weight: 500;
     font-size: 0.8125rem;
     line-height: 1.4;
-    color: rgba(34, 211, 238, 0.8);
+    color: #B84A1C;
   }
 
   .body-copy-large {
@@ -198,7 +199,7 @@
     font-weight: 400;
     font-size: clamp(1rem, 1.25vw, 1.125rem);
     line-height: 1.65;
-    color: #d1d5db;
+    color: #57534E;
   }
 
   .body-copy {
@@ -206,7 +207,7 @@
     font-weight: 400;
     font-size: 0.9375rem;
     line-height: 1.65;
-    color: #d1d5db;
+    color: #57534E;
   }
 
   .body-copy-muted {
@@ -214,7 +215,7 @@
     font-weight: 400;
     font-size: 0.8125rem;
     line-height: 1.55;
-    color: #9ca3af;
+    color: #78716C;
   }
 
   .btn-label {
@@ -230,26 +231,31 @@
     font-weight: 400;
     font-size: 0.75rem;
     line-height: 1.2;
-    color: #e5e7eb;
+    color: #292524;
     letter-spacing: normal;
   }
 
-  /* Reference Glassmorphism & Glow utilities */
-  .dark-surface {
-    background: rgba(8, 10, 16, 0.7);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+  /* Reference Glassmorphism & Glow utilities for Theme 2 */
+  .dark-surface,
+  .linen-surface {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(28, 25, 23, 0.08);
+    box-shadow: 0 10px 30px -5px rgba(28, 25, 23, 0.05);
   }
 
-  .cyan-glow {
-    box-shadow: 0 0 25px -4px rgba(32, 230, 233, 0.35);
+  .cyan-glow,
+  .terracotta-glow {
+    box-shadow: 0 10px 25px -4px rgba(184, 74, 28, 0.25);
   }
 
-  .cyan-glow-subtle {
-    box-shadow: 0 0 15px -3px rgba(32, 230, 233, 0.2);
+  .cyan-glow-subtle,
+  .terracotta-glow-subtle {
+    box-shadow: 0 4px 15px -2px rgba(184, 74, 28, 0.15);
   }
 
-  .cyan-text-glow {
-    text-shadow: 0 0 16px rgba(32, 230, 233, 0.4);
+  .cyan-text-glow,
+  .terracotta-text-glow {
+    text-shadow: 0 0 16px rgba(184, 74, 28, 0.25);
   }
