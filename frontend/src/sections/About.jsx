@@ -7,48 +7,34 @@ export default function About({ user }) {
   return (
     <section
       id="about"
-      className="relative min-h-screen overflow-hidden bg-black text-white"
+      className="relative min-h-screen overflow-hidden bg-[#FAF7F2] text-[#1C1917]"
     >
       {/* ================= BACKGROUND GLOWS ================= */}
       <div
         className="
           pointer-events-none
           absolute
-          left-[-180px]
-          top-[80px]
+          left-[-150px]
+          top-[60px]
+          h-[450px]
+          w-[450px]
+          rounded-full
+          bg-[#EFE7D8]/70
+          blur-[130px]
+        "
+      />
+
+      <div
+        className="
+          pointer-events-none
+          absolute
+          right-[-150px]
+          bottom-[-80px]
           h-[500px]
           w-[500px]
           rounded-full
-          bg-cyan-500/20
+          bg-[#E8DFC8]/60
           blur-[140px]
-        "
-      />
-
-      <div
-        className="
-          pointer-events-none
-          absolute
-          right-[-180px]
-          bottom-[-100px]
-          h-[550px]
-          w-[550px]
-          rounded-full
-          bg-cyan-500/20
-          blur-[140px]
-        "
-      />
-
-      <div
-        className="
-          pointer-events-none
-          absolute
-          right-[35%]
-          top-[40%]
-          h-[250px]
-          w-[250px]
-          rounded-full
-          bg-purple-500/10
-          blur-[120px]
         "
       />
 
@@ -77,11 +63,11 @@ export default function About({ user }) {
               className="
                 h-40
                 w-40
-                rounded-xl
+                rounded-2xl
                 border
-                border-cyan-400/30
+                border-[#E8E1D5]
                 object-cover
-                shadow-[0_0_35px_rgba(34,211,238,0.15)]
+                shadow-md
               "
               onError={(e) => {
                 e.currentTarget.src =
@@ -93,22 +79,22 @@ export default function About({ user }) {
           {/* ================= PROFILE DETAILS ================= */}
           <div className="flex-1">
             {/* NAME */}
-            <h2 className="mb-2 font-heading font-bold text-3xl sm:text-4xl md:text-4xl text-cyan-400 tracking-tight">
+            <h2 className="mb-1 font-serif font-bold text-3xl sm:text-4xl text-[#1C1917] tracking-tight">
               {user?.fullName || "Rajiv Jha"}
             </h2>
 
             {/* ROLE */}
-            <h3 className="mb-4 text-base sm:text-lg font-body font-medium text-gray-200">
+            <h3 className="mb-4 text-sm sm:text-base font-sans font-medium text-[#B84A1C]">
               Computer Science Student · Aspiring AIML Engineer
             </h3>
 
             {/* DESCRIPTION */}
-            <p className="max-w-3xl body-copy leading-relaxed text-gray-300">
+            <p className="max-w-3xl text-sm sm:text-base leading-relaxed text-[#57534E]">
               {user?.aboutMe ||
                 "I'm a B.Tech Computer Science student focused on becoming an AIML Engineer. I enjoy building software across the full stack, working with data, learning machine learning, and solving algorithmic problems."}
             </p>
 
-            <p className="mt-3 max-w-3xl body-copy leading-relaxed text-gray-300">
+            <p className="mt-3 max-w-3xl text-sm sm:text-base leading-relaxed text-[#57534E]">
               My technical path is grounded in strong problem-solving fundamentals with Java & DSA, Python for data and machine learning, and modern full-stack development with React, Node.js, and PostgreSQL.
             </p>
 
@@ -127,20 +113,20 @@ export default function About({ user }) {
                 className="
                   rounded-xl
                   border
-                  border-white/10
-                  bg-white/[0.03]
+                  border-[#E8E1D5]
+                  bg-white/90
                   px-5
                   py-4
                   text-center
-                  backdrop-blur-sm
+                  shadow-xs
                   transition-all
                   duration-300
-                  hover:border-cyan-400/40
-                  hover:bg-white/[0.05]
+                  hover:border-[#B84A1C]/40
+                  hover:shadow-md
                 "
               >
-                <p className="text-xs font-body font-normal text-gray-400 uppercase tracking-wider">Experience</p>
-                <p className="mt-1 font-body font-semibold text-sm sm:text-base text-white">Building Real Projects</p>
+                <p className="text-xs font-sans font-medium text-[#78716C] uppercase tracking-wider">Experience</p>
+                <p className="mt-1 font-sans font-semibold text-sm sm:text-base text-[#1C1917]">Building Real Projects</p>
               </div>
 
               {/* SPECIALITY CARD */}
@@ -148,20 +134,20 @@ export default function About({ user }) {
                 className="
                   rounded-xl
                   border
-                  border-white/10
-                  bg-white/[0.03]
+                  border-[#E8E1D5]
+                  bg-white/90
                   px-5
                   py-4
                   text-center
-                  backdrop-blur-sm
+                  shadow-xs
                   transition-all
                   duration-300
-                  hover:border-cyan-400/40
-                  hover:bg-white/[0.05]
+                  hover:border-[#B84A1C]/40
+                  hover:shadow-md
                 "
               >
-                <p className="text-xs font-body font-normal text-gray-400 uppercase tracking-wider">Speciality</p>
-                <p className="mt-1 font-body font-semibold text-sm sm:text-base text-white">AIML + Full-Stack</p>
+                <p className="text-xs font-sans font-medium text-[#78716C] uppercase tracking-wider">Speciality</p>
+                <p className="mt-1 font-sans font-semibold text-sm sm:text-base text-[#1C1917]">AIML + Full-Stack</p>
               </div>
 
               {/* FOCUS CARD */}
@@ -169,20 +155,20 @@ export default function About({ user }) {
                 className="
                   rounded-xl
                   border
-                  border-white/10
-                  bg-white/[0.03]
+                  border-[#E8E1D5]
+                  bg-white/90
                   px-5
                   py-4
                   text-center
-                  backdrop-blur-sm
+                  shadow-xs
                   transition-all
                   duration-300
-                  hover:border-cyan-400/40
-                  hover:bg-white/[0.05]
+                  hover:border-[#B84A1C]/40
+                  hover:shadow-md
                 "
               >
-                <p className="text-xs font-body font-normal text-gray-400 uppercase tracking-wider">Focus</p>
-                <p className="mt-1 font-body font-semibold text-sm sm:text-base text-white">DSA & Production AI</p>
+                <p className="text-xs font-sans font-medium text-[#78716C] uppercase tracking-wider">Focus</p>
+                <p className="mt-1 font-sans font-semibold text-sm sm:text-base text-[#1C1917]">DSA & Production AI</p>
               </div>
             </div>
 
@@ -191,15 +177,19 @@ export default function About({ user }) {
               <a
                 href="#projects"
                 className="
-                  rounded-lg
-                  bg-white
-                  px-5
+                  rounded-full
+                  bg-[#B84A1C]
+                  px-6
                   py-2.5
-                  btn-label
-                  text-black
-                  transition-transform
+                  font-medium
+                  text-sm
+                  text-white
+                  hover:bg-[#A03D14]
+                  shadow-sm
+                  hover:shadow-md
+                  transition-all
                   duration-300
-                  hover:scale-105
+                  hover:scale-102
                 "
               >
                 View Projects
@@ -208,18 +198,21 @@ export default function About({ user }) {
               <a
                 href="#contact"
                 className="
-                  rounded-lg
+                  rounded-full
                   border
-                  border-white/20
-                  bg-white/[0.03]
-                  px-5
+                  border-[#E8E1D5]
+                  bg-white/80
+                  px-6
                   py-2.5
-                  btn-label
-                  text-white
+                  font-medium
+                  text-sm
+                  text-[#1C1917]
+                  hover:bg-white
+                  hover:border-[#1C1917]/30
+                  shadow-xs
+                  hover:shadow-sm
                   transition-all
                   duration-300
-                  hover:border-cyan-400/40
-                  hover:bg-white/10
                 "
               >
                 Get in Touch
@@ -230,7 +223,7 @@ export default function About({ user }) {
 
         {/* ================= ABOUT ME CONTENT ================= */}
         <motion.div
-          className="mt-14"
+          className="mt-16 pt-10 border-t border-[#E8E1D5]"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -239,19 +232,19 @@ export default function About({ user }) {
             delay: 0.15,
           }}
         >
-          <h2 className="mb-4 section-heading text-2xl sm:text-3xl md:text-4xl">
-            About <span className="text-cyan-400">Me</span>
+          <h2 className="mb-5 font-serif font-bold text-2xl sm:text-3xl md:text-4xl text-[#1C1917]">
+            About <span className="text-[#B84A1C] italic font-serif">Me</span>
           </h2>
 
-          <p className="max-w-4xl body-copy leading-relaxed text-gray-300">
+          <p className="max-w-4xl text-sm sm:text-base leading-relaxed text-[#57534E]">
             I'm a B.Tech Computer Science Engineering student (2025–2029) focused on software engineering, data systems, and algorithmic problem-solving.
           </p>
 
-          <p className="mt-4 max-w-4xl body-copy leading-relaxed text-gray-300">
+          <p className="mt-4 max-w-4xl text-sm sm:text-base leading-relaxed text-[#57534E]">
             I learn by building real projects, understanding the mathematical and algorithmic fundamentals behind technology, and continuously iterating. My projects span intelligent full-stack systems, automated guidance tools, and scalable web backends.
           </p>
 
-          <p className="mt-4 max-w-4xl body-copy leading-relaxed text-gray-300">
+          <p className="mt-4 max-w-4xl text-sm sm:text-base leading-relaxed text-[#57534E]">
             Currently, I am diving deep into advanced Data Structures & Algorithms in Java (graphs, backtracking, dynamic programming), alongside exploring practical machine learning workflows with Python, NumPy, Pandas, and PostgreSQL.
           </p>
         </motion.div>
