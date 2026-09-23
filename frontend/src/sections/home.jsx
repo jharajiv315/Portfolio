@@ -63,7 +63,7 @@ export default function Home({ user }) {
         relative
         w-full
         min-h-screen
-        bg-black
+        bg-[#FAF7F2]
         overflow-hidden
         flex
         items-center
@@ -72,62 +72,42 @@ export default function Home({ user }) {
       {/* ================= BACKGROUND ================= */}
       <ParticlesBackground />
 
-      {/* LEFT GLOW */}
+      {/* SUBTLE WARM AMBIENT GLOW TOP-LEFT */}
       <div
         className="
           absolute
           top-0
           left-0
-          w-[70vw]
-          sm:w-[50vw]
-          md:w-[40vw]
-          h-[70vh]
-          sm:h-[50vh]
-          md:h-[40vh]
+          w-[60vw]
           max-w-[500px]
+          h-[50vh]
           max-h-[500px]
           rounded-full
-          bg-gradient-to-r
-          from-[#302b63]
-          via-[#00b8f8]
-          to-[#1cd8d2]
-          opacity-30
-          sm:opacity-20
-          md:opacity-10
+          bg-gradient-to-br
+          from-[#EFE7D8]/60
+          via-[#F5EFEB]/30
+          to-transparent
           blur-[100px]
-          sm:blur-[130px]
-          md:blur-[150px]
-          animate-pulse
           pointer-events-none
         "
       />
 
-      {/* RIGHT GLOW */}
+      {/* SUBTLE WARM AMBIENT GLOW BOTTOM-RIGHT */}
       <div
         className="
           absolute
           bottom-0
           right-0
-          w-[70vw]
-          sm:w-[50vw]
-          md:w-[40vw]
-          h-[70vh]
-          sm:h-[50vh]
-          md:h-[40vh]
+          w-[60vw]
           max-w-[500px]
+          h-[50vh]
           max-h-[500px]
           rounded-full
-          bg-gradient-to-r
-          from-[#302b63]
-          via-[#00b8f8]
-          to-[#1cd8d2]
-          opacity-30
-          sm:opacity-20
-          md:opacity-10
-          blur-[100px]
-          sm:blur-[130px]
-          md:blur-[150px]
-          animate-pulse
+          bg-gradient-to-tl
+          from-[#E8DFC8]/50
+          via-[#F3ECE2]/20
+          to-transparent
+          blur-[120px]
           pointer-events-none
         "
       />
@@ -157,10 +137,12 @@ export default function Home({ user }) {
           className="
             w-full
             flex
+            flex-col
+            lg:flex-row
             items-center
             justify-between
-            gap-8
-            lg:gap-12
+            gap-12
+            lg:gap-14
           "
         >
           {/* ================= LEFT CONTENT ================= */}
@@ -171,9 +153,20 @@ export default function Home({ user }) {
               xl:w-[60%]
             "
           >
+            {/* STATUS PILL */}
+            <motion.div
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#E8E1D5] shadow-xs text-xs font-medium text-[#1C1917] mb-5 backdrop-blur-sm"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <span className="w-2 h-2 rounded-full bg-[#B84A1C] animate-pulse"></span>
+              <span>Available for opportunities</span>
+            </motion.div>
+
             {/* ================= ROLE TYPEWRITER ================= */}
             <motion.div
-              className="hero-role text-white min-h-[1.2em]"
+              className="text-[#57534E] font-medium tracking-wide text-sm sm:text-base min-h-[1.5em] flex items-center"
               initial={{
                 opacity: 0,
                 y: 20,
@@ -186,14 +179,15 @@ export default function Home({ user }) {
                 duration: 0.8,
               }}
             >
-              {roles[index].substring(0, subIndex)}
+              <span className="text-[#B84A1C] font-semibold mr-1.5">Focus:</span>
+              <span>{roles[index].substring(0, subIndex)}</span>
               <span
                 className="
                   inline-block
                   w-[2px]
-                  h-[1em]
+                  h-[1.1em]
                   ml-1
-                  bg-white
+                  bg-[#B84A1C]
                   animate-pulse
                   align-middle
                 "
@@ -202,7 +196,7 @@ export default function Home({ user }) {
 
             {/* ================= MAIN HEADING ================= */}
             <motion.h1
-              className="mt-3 leading-[1.02] tracking-tight"
+              className="mt-4 leading-[1.05] tracking-tight font-serif"
               initial={{
                 opacity: 0,
                 y: 40,
@@ -218,7 +212,7 @@ export default function Home({ user }) {
             >
               {/* HELLO I'M */}
               <motion.span
-                className="block hero-greeting"
+                className="block text-[#1C1917] text-3xl sm:text-4xl md:text-5xl font-light italic font-serif"
                 initial={{
                   opacity: 0,
                   y: 20,
@@ -237,7 +231,7 @@ export default function Home({ user }) {
 
               {/* NAME */}
               <motion.span
-                className="block hero-title mt-1"
+                className="block text-[#B84A1C] text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-serif font-bold mt-1 tracking-tight"
                 initial={{
                   opacity: 0,
                   y: 20,
@@ -257,7 +251,7 @@ export default function Home({ user }) {
 
             {/* ================= PARAGRAPH ================= */}
             <motion.p
-              className="mt-5 body-copy-large text-gray-300 max-w-xl leading-relaxed"
+              className="mt-6 text-[#57534E] text-base sm:text-lg max-w-xl leading-relaxed font-sans"
               initial={{
                 opacity: 0,
                 y: 20,
@@ -302,28 +296,32 @@ export default function Home({ user }) {
               <motion.a
                 href="#projects"
                 whileHover={{
-                  scale: 1.05,
+                  scale: 1.03,
+                  y: -2,
                 }}
                 whileTap={{
                   scale: 0.97,
                 }}
                 className="
-                  px-6
-                  py-2.5
+                  px-7
+                  py-3
                   rounded-full
-                  btn-label
+                  font-medium
+                  text-sm
                   text-white
-                  bg-gradient-to-r
-                  from-[#1cd8d2]
-                  via-[#00b8f8]
-                  to-[#302b63]
-                  shadow-lg
-                  hover:shadow-[0_0_30px_rgba(0,184,248,0.45)]
+                  bg-[#B84A1C]
+                  hover:bg-[#A03D14]
+                  shadow-md
+                  hover:shadow-[0_8px_20px_rgba(184,74,28,0.25)]
                   transition-all
                   duration-300
+                  flex
+                  items-center
+                  gap-2
                 "
               >
-                View My Work
+                <span>View My Work</span>
+                <span>→</span>
               </motion.a>
 
               {/* RESUME */}
@@ -333,21 +331,25 @@ export default function Home({ user }) {
                   target="_blank"
                   rel="noreferrer"
                   whileHover={{
-                    scale: 1.05,
+                    scale: 1.03,
+                    y: -2,
                   }}
                   whileTap={{
                     scale: 0.97,
                   }}
                   className="
-                    px-6
-                    py-2.5
+                    px-7
+                    py-3
                     rounded-full
-                    btn-label
-                    text-black
-                    bg-white
-                    hover:bg-gray-200
-                    shadow-lg
-                    hover:shadow-[0_0_25px_rgba(255,255,255,0.35)]
+                    font-medium
+                    text-sm
+                    text-[#1C1917]
+                    bg-white/80
+                    hover:bg-white
+                    border
+                    border-[#E8E1D5]
+                    shadow-xs
+                    hover:shadow-md
                     transition-all
                     duration-300
                   "
@@ -358,21 +360,25 @@ export default function Home({ user }) {
                 <motion.a
                   href="#contact"
                   whileHover={{
-                    scale: 1.05,
+                    scale: 1.03,
+                    y: -2,
                   }}
                   whileTap={{
                     scale: 0.97,
                   }}
                   className="
-                    px-6
-                    py-2.5
+                    px-7
+                    py-3
                     rounded-full
-                    btn-label
-                    text-black
-                    bg-white
-                    hover:bg-gray-200
-                    shadow-lg
-                    hover:shadow-[0_0_25px_rgba(255,255,255,0.35)]
+                    font-medium
+                    text-sm
+                    text-[#1C1917]
+                    bg-white/80
+                    hover:bg-white
+                    border
+                    border-[#E8E1D5]
+                    shadow-xs
+                    hover:shadow-md
                     transition-all
                     duration-300
                   "
@@ -388,7 +394,7 @@ export default function Home({ user }) {
                 mt-7
                 flex
                 items-center
-                gap-4
+                gap-3.5
               "
               initial={{
                 opacity: 0,
@@ -410,28 +416,28 @@ export default function Home({ user }) {
                 rel="noopener noreferrer"
                 aria-label="X"
                 whileHover={{
-                  scale: 1.18,
-                  y: -3,
+                  scale: 1.1,
+                  y: -2,
                 }}
                 whileTap={{
-                  scale: 0.9,
+                  scale: 0.95,
                 }}
                 className="
-                  w-11
-                  h-11
+                  w-10
+                  h-10
                   flex
                   items-center
                   justify-center
                   rounded-full
                   border
-                  border-white/10
-                  bg-white/5
-                  text-white
-                  text-lg
-                  hover:text-white
-                  hover:border-white/40
-                  hover:bg-white/10
-                  hover:shadow-[0_0_25px_rgba(255,255,255,0.45)]
+                  border-[#E8E1D5]
+                  bg-white/80
+                  text-[#1C1917]
+                  text-base
+                  hover:text-[#B84A1C]
+                  hover:border-[#B84A1C]/50
+                  hover:bg-white
+                  hover:shadow-sm
                   transition-all
                   duration-300
                 "
@@ -446,28 +452,28 @@ export default function Home({ user }) {
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
                 whileHover={{
-                  scale: 1.18,
-                  y: -3,
+                  scale: 1.1,
+                  y: -2,
                 }}
                 whileTap={{
-                  scale: 0.9,
+                  scale: 0.95,
                 }}
                 className="
-                  w-11
-                  h-11
+                  w-10
+                  h-10
                   flex
                   items-center
                   justify-center
                   rounded-full
                   border
-                  border-white/10
-                  bg-white/5
-                  text-white
-                  text-xl
+                  border-[#E8E1D5]
+                  bg-white/80
+                  text-[#1C1917]
+                  text-base
                   hover:text-[#0A66C2]
-                  hover:border-[#0A66C2]/50
-                  hover:bg-[#0A66C2]/10
-                  hover:shadow-[0_0_25px_rgba(10,102,194,0.6)]
+                  hover:border-[#0A66C2]/40
+                  hover:bg-white
+                  hover:shadow-sm
                   transition-all
                   duration-300
                 "
@@ -482,27 +488,28 @@ export default function Home({ user }) {
                 rel="noopener noreferrer"
                 aria-label="GitHub"
                 whileHover={{
-                  scale: 1.18,
-                  y: -3,
+                  scale: 1.1,
+                  y: -2,
                 }}
                 whileTap={{
-                  scale: 0.9,
+                  scale: 0.95,
                 }}
                 className="
-                  w-11
-                  h-11
+                  w-10
+                  h-10
                   flex
                   items-center
                   justify-center
                   rounded-full
                   border
-                  border-white/10
-                  bg-white/5
-                  text-white
-                  text-xl
-                  hover:border-white/40
-                  hover:bg-white/10
-                  hover:shadow-[0_0_25px_rgba(255,255,255,0.45)]
+                  border-[#E8E1D5]
+                  bg-white/80
+                  text-[#1C1917]
+                  text-base
+                  hover:text-[#1C1917]
+                  hover:border-[#1C1917]/50
+                  hover:bg-white
+                  hover:shadow-sm
                   transition-all
                   duration-300
                 "
@@ -516,28 +523,28 @@ export default function Home({ user }) {
                   href={`mailto:${user.email}`}
                   aria-label="Email"
                   whileHover={{
-                    scale: 1.18,
-                    y: -3,
+                    scale: 1.1,
+                    y: -2,
                   }}
                   whileTap={{
-                    scale: 0.9,
+                    scale: 0.95,
                   }}
                   className="
-                    w-11
-                    h-11
+                    w-10
+                    h-10
                     flex
                     items-center
                     justify-center
                     rounded-full
                     border
-                    border-white/10
-                    bg-white/5
-                    text-white
-                    text-lg
-                    hover:text-[#20E6E9]
-                    hover:border-[#20E6E9]/40
-                    hover:bg-[#20E6E9]/10
-                    hover:shadow-[0_0_25px_rgba(32,230,233,0.45)]
+                    border-[#E8E1D5]
+                    bg-white/80
+                    text-[#1C1917]
+                    text-base
+                    hover:text-[#B84A1C]
+                    hover:border-[#B84A1C]/50
+                    hover:bg-white
+                    hover:shadow-sm
                     transition-all
                     duration-300
                   "
@@ -546,13 +553,51 @@ export default function Home({ user }) {
                 </motion.a>
               )}
             </motion.div>
+
+            {/* ================= EDITORIAL STATS ROW (MATCHING REFERENCE MOCKUP) ================= */}
+            <motion.div
+              className="
+                mt-12
+                pt-6
+                border-t
+                border-[#E8E1D5]
+                flex
+                flex-wrap
+                items-center
+                gap-4
+                sm:gap-8
+                text-xs
+                sm:text-sm
+                text-[#57534E]
+              "
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.2, duration: 0.8 }}
+            >
+              <div className="flex items-baseline gap-1.5">
+                <span className="font-bold text-[#1C1917] text-base font-serif">3+</span>
+                <span>Projects</span>
+              </div>
+              <span className="w-1 h-1 rounded-full bg-[#D8C7B0]"></span>
+              <div className="flex items-baseline gap-1.5">
+                <span className="font-bold text-[#1C1917] text-base font-serif">2x</span>
+                <span>Hackathon Finalist</span>
+              </div>
+              <span className="w-1 h-1 rounded-full bg-[#D8C7B0]"></span>
+              <div className="flex items-baseline gap-1.5">
+                <span className="font-bold text-[#1C1917] text-base font-serif">5+</span>
+                <span>Technologies</span>
+              </div>
+              <span className="w-1 h-1 rounded-full bg-[#D8C7B0]"></span>
+              <span className="font-serif italic text-[#B84A1C] font-medium">∞ Learning</span>
+            </motion.div>
           </div>
 
-          {/* ================= RIGHT AVATAR (3D ROBOT AVATAR FROM REFERENCE) ================= */}
+          {/* ================= RIGHT AVATAR WITH ARCHITECTURAL ARCH ================= */}
           <motion.div
             className="
-              hidden
-              lg:flex
+              flex
+              w-full
               lg:w-[42%]
               xl:w-[40%]
               items-center
@@ -561,11 +606,11 @@ export default function Home({ user }) {
             "
             initial={{
               opacity: 0,
-              x: 80,
+              y: 40,
             }}
             animate={{
               opacity: 1,
-              x: 0,
+              y: 0,
             }}
             transition={{
               delay: 0.5,
@@ -573,52 +618,53 @@ export default function Home({ user }) {
               ease: "easeOut",
             }}
           >
-            {/* AVATAR GLOW */}
-            <motion.div
+            {/* ARCHITECTURAL ARCH BACKDROP (AS SEEN IN REFERENCE MOCKUP) */}
+            <div
               className="
                 absolute
                 w-[300px]
-                h-[300px]
+                sm:w-[380px]
+                lg:w-[390px]
                 xl:w-[430px]
-                xl:h-[430px]
-                rounded-full
-                bg-[#00b8f8]
-                opacity-15
-                blur-[100px]
+                h-[380px]
+                sm:h-[480px]
+                lg:h-[500px]
+                xl:h-[530px]
+                rounded-t-full
+                bg-gradient-to-b
+                from-[#ECE4D4]
+                via-[#F6F0E6]
+                to-[#FAF7F2]
+                border
+                border-[#E2D6C3]
+                shadow-sm
+                bottom-0
                 pointer-events-none
               "
-              animate={{
-                scale: [1, 1.08, 1],
-                opacity: [0.12, 0.22, 0.12],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
             />
 
             {/* AVATAR IMAGE */}
             <motion.img
               src={developerMascot}
-              alt="Rajiv Jha developer mascot"
+              alt="Rajiv Jha developer avatar"
               className="
                 relative
                 z-10
                 w-full
-                max-w-[360px]
+                max-w-[320px]
+                sm:max-w-[380px]
                 lg:max-w-[420px]
-                xl:max-w-[480px]
+                xl:max-w-[460px]
                 h-auto
                 object-contain
                 select-none
-                drop-shadow-[0_10px_25px_rgba(0,184,248,0.15)]
+                drop-shadow-[0_20px_35px_rgba(28,25,23,0.14)]
               "
               animate={{
-                y: [0, -12, 0],
+                y: [0, -10, 0],
               }}
               transition={{
-                duration: 4,
+                duration: 4.5,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
