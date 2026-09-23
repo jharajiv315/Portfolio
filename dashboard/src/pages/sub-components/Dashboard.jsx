@@ -116,36 +116,43 @@ const Dashboard = () => {
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-2 xl:grid-cols-2">
           <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
             <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-              <Card className="sm:col-span-2">
+              <Card className="sm:col-span-2 shadow-xs border-border bg-card">
                 <CardHeader className="pb-3">
-                  <CardDescription className="max-w-lg text-balance leading-relaxed">
-                    {user.aboutMe}
+                  <span className="text-[11px] uppercase tracking-wider text-primary font-semibold mb-1">
+                    Profile Bio
+                  </span>
+                  <CardDescription className="max-w-lg text-balance leading-relaxed text-sm text-foreground/80">
+                    {user?.aboutMe || "B.Tech Computer Science student focused on AIML Engineering and modern full-stack development."}
                   </CardDescription>
                 </CardHeader>
                 <CardFooter>
-                  <Button>Visit Portfolio</Button>
+                  <Button asChild className="rounded-full shadow-sm">
+                    <a href="https://portfolio-beta-ochre-90.vercel.app" target="_blank" rel="noopener noreferrer">
+                      Visit Live Portfolio ↗
+                    </a>
+                  </Button>
                 </CardFooter>
               </Card>
-              <Card className="flex flex-col justify-center">
+              <Card className="flex flex-col justify-center shadow-xs border-border bg-card">
                 <CardHeader className="pb-2">
-                  <CardTitle>Projects Completed</CardTitle>
-                  <CardTitle className="text-6xl">
-                    {projects && projects.length}
+                  <CardTitle className="text-sm font-sans font-medium text-muted-foreground">Projects Completed</CardTitle>
+                  <CardTitle className="text-5xl font-serif font-bold text-primary">
+                    {projects ? projects.length : 0}
                   </CardTitle>
                 </CardHeader>
                 <CardFooter>
-                  <Button onClick={gotoMangeProjects}>Manage Projects</Button>
+                  <Button variant="outline" className="rounded-full text-xs" onClick={gotoMangeProjects}>Manage Projects</Button>
                 </CardFooter>
               </Card>
-              <Card className="flex flex-col justify-center">
+              <Card className="flex flex-col justify-center shadow-xs border-border bg-card">
                 <CardHeader className="pb-2">
-                  <CardTitle>Skills</CardTitle>
-                  <CardTitle className="text-6xl">
-                    {skills && skills.length}
+                  <CardTitle className="text-sm font-sans font-medium text-muted-foreground">Skills Recorded</CardTitle>
+                  <CardTitle className="text-5xl font-serif font-bold text-primary">
+                    {skills ? skills.length : 0}
                   </CardTitle>
                 </CardHeader>
                 <CardFooter>
-                  <Button onClick={gotoMangeSkills}>Manage Skill</Button>
+                  <Button variant="outline" className="rounded-full text-xs" onClick={gotoMangeSkills}>Manage Skills</Button>
                 </CardFooter>
               </Card>
             </div>
