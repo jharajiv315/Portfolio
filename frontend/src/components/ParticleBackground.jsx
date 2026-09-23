@@ -10,7 +10,11 @@ export default function ParticlesBackground() {
 
     let particles = [];
     const particleCount = 50;
-    const colors = ["rgba(255,255,255,0.7)"];
+    const colors = [
+      "rgba(184, 74, 28, 0.22)",
+      "rgba(120, 100, 85, 0.18)",
+      "rgba(196, 112, 63, 0.20)",
+    ];
 
     class Particle {
       constructor() {
@@ -18,14 +22,14 @@ export default function ParticlesBackground() {
         this.y = Math.random() * canvas.height;
         this.radius = Math.random() * 2 + 1;
         this.color = colors[Math.floor(Math.random() * colors.length)];
-        this.speedX = (Math.random() - 0.5) * 0.5;
-        this.speedY = (Math.random() - 0.5) * 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.4;
+        this.speedY = (Math.random() - 0.5) * 0.4;
       }
 
       draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.shadowBlur = 10;
+        ctx.shadowBlur = 6;
         ctx.shadowColor = this.color;
         ctx.fillStyle = this.color;
         ctx.fill();
