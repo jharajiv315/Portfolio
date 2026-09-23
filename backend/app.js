@@ -18,6 +18,7 @@ dotenv.config({ path: "./config/config.env" });
 const allowedOrigins = [
   process.env.PORTFOLIO_URL,
   process.env.DASHBOARD_URL,
+  "https://portfolio-beta-ochre-90.vercel.app",
   "http://localhost:5173",
   "http://localhost:5174",
   "http://localhost:3000",
@@ -29,10 +30,17 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== "production") {
+      if (!origin) return callback(null, true);
+
+      const isAllowed =
+        allowedOrigins.includes(origin) ||
+        origin.endsWith(".vercel.app") ||
+        process.env.NODE_ENV !== "production";
+
+      if (isAllowed) {
         return callback(null, true);
       }
-      return callback(null, true);
+      return callback(new Error(`CORS policy violation: ${origin} not allowed`));
     },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
