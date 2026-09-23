@@ -1,8 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
+import developerMascot from "../assets/developer-mascot.png";
 
 export default function About({ user }) {
-  const avatarSrc = user?.avatar?.url || "/me.jpg";
+  const avatarSrc = user?.avatar?.url || developerMascot;
 
   return (
     <section
@@ -68,10 +69,10 @@ export default function About({ user }) {
                 border-[#E8E1D5]
                 object-cover
                 shadow-md
+                bg-[#FAF7F2]
               "
               onError={(e) => {
-                e.currentTarget.src =
-                  "https://images.unsplash.com/photo-1534972195531-a756b11269d5?q=80&w=800&auto=format&fit=crop";
+                e.currentTarget.src = developerMascot;
               }}
             />
           </div>
