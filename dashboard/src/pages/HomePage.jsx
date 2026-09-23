@@ -216,6 +216,7 @@ const HomePage = () => {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="sm:max-w-xs">
+            <nav className="grid gap-6 text-lg font-medium">
               <Link
                 to="/"
                 onClick={() => setActive("Dashboard")}
