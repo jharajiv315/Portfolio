@@ -61,16 +61,9 @@ export default function About({ user }) {
             <img
               src={avatarSrc}
               alt={user?.fullName || "Rajiv Jha"}
-              className="
-                h-40
-                w-40
-                rounded-2xl
-                border
-                border-[#E8E1D5]
-                object-cover
-                shadow-md
-                bg-[#FAF7F2]
-              "
+              className={`h-40 w-40 rounded-2xl border border-[#E8E1D5] shadow-md bg-[#FAF7F2] ${
+                avatarSrc === developerMascot ? "object-contain p-2" : "object-cover"
+              }`}
               onError={(e) => {
                 e.currentTarget.src = developerMascot;
               }}
