@@ -104,15 +104,12 @@ export default function Contact({ user }) {
     name: "",
     email: "",
     service: "Web Development",
-    budget: "",
     idea: "",
   });
 
   const [submitted, setSubmitted] = useState(false);
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const isOthers = formData.service === "Others" || formData.service === "Something in mind?";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -128,13 +125,9 @@ export default function Contact({ user }) {
     setStatus("");
 
     try {
-      const subject = `[${formData.service}]${
-        formData.budget ? ` (Budget: ${formData.budget})` : ""
-      } Inquiry from ${formData.name}`;
+      const subject = `[${formData.service}] Inquiry from ${formData.name}`;
 
-      const messageContent = `Client Email: ${formData.email}\nService Requested: ${formData.service}\n${
-        formData.budget ? `Budget: ${formData.budget}\n` : ""
-      }\nProject Idea / Inquiry:\n${formData.idea}`;
+      const messageContent = `Client Email: ${formData.email}\nService Requested: ${formData.service}\n\nProject Idea / Inquiry:\n${formData.idea}`;
 
       const res = await axios.post(
         `${API_URL}/api/v1/message/send`,
@@ -156,7 +149,6 @@ export default function Contact({ user }) {
         name: "",
         email: "",
         service: "Web Development",
-        budget: "",
         idea: "",
       });
     } catch (err) {
@@ -224,30 +216,30 @@ export default function Contact({ user }) {
 
           {/* ================= RIGHT COLUMN: LET'S WORK TOGETHER FORM ================= */}
           <motion.div
-            className="lg:col-span-7 w-full max-w-[560px] mx-auto lg:ml-auto"
+            className="lg:col-span-7 w-full max-w-[500px] mx-auto lg:ml-auto"
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: "easeOut" }}
           >
             <div
-              className="rounded-3xl p-6 sm:p-8 relative overflow-hidden bg-white/95 border border-[#E8E1D5] shadow-[0_20px_45px_-10px_rgba(28,25,23,0.08)]"
+              className="rounded-3xl p-5 sm:p-7 relative overflow-hidden bg-white/95 border border-[#E8E1D5] shadow-[0_20px_45px_-10px_rgba(28,25,23,0.08)]"
             >
               {/* Form Header */}
-              <div className="mb-6">
-                <h2 className="font-serif font-bold text-[28px] sm:text-[34px] lg:text-[38px] leading-[1.1] text-[#1C1917] tracking-tight">
+              <div className="mb-4">
+                <h2 className="font-serif font-bold text-[24px] sm:text-[28px] lg:text-[32px] leading-[1.1] text-[#1C1917] tracking-tight">
                   Let's Work <span className="text-[#B84A1C] italic font-serif">Together</span>
                 </h2>
-                <p className="mt-2 font-sans font-normal text-[13px] sm:text-[14px] leading-[1.6] text-[#57534E] max-w-[480px]">
+                <p className="mt-1.5 font-sans font-normal text-xs sm:text-[13.5px] leading-[1.5] text-[#57534E]">
                   Have a project in mind or want to collaborate? Fill out the form below and I'll get back to you promptly.
                 </p>
               </div>
 
               {/* Contact Form */}
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-3.5">
                 {/* 1. Your Name */}
                 <div>
-                  <label className="block font-sans font-semibold text-[12px] text-[#1C1917] mb-1.5">
+                  <label className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
                     Your Name <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
                   </label>
                   <input
@@ -257,13 +249,13 @@ export default function Contact({ user }) {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Your Name"
-                    className="w-full h-[46px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-[13px] sm:text-[13.5px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out"
+                    className="w-full h-[40px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-xs sm:text-[13px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out"
                   />
                 </div>
 
                 {/* 2. Your Email */}
                 <div>
-                  <label className="block font-sans font-semibold text-[12px] text-[#1C1917] mb-1.5">
+                  <label className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
                     Your Email <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
                   </label>
                   <input
@@ -273,20 +265,20 @@ export default function Contact({ user }) {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Your Email"
-                    className="w-full h-[46px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-[13px] sm:text-[13.5px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out"
+                    className="w-full h-[40px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-xs sm:text-[13px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out"
                   />
                 </div>
 
                 {/* 3. Service Needed */}
                 <div>
-                  <label className="block font-sans font-semibold text-[12px] text-[#1C1917] mb-1.5">
+                  <label className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
                     Service Needed <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
                   </label>
                   <select
                     name="service"
                     value={formData.service}
                     onChange={handleChange}
-                    className="w-full h-[46px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] font-sans text-[13px] sm:text-[13.5px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out cursor-pointer"
+                    className="w-full h-[40px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] font-sans text-xs sm:text-[13px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out cursor-pointer"
                   >
                     <option value="Web Development" className="bg-[#FAF7F2] text-[#1C1917]">
                       Web Development
@@ -309,33 +301,9 @@ export default function Contact({ user }) {
                   </select>
                 </div>
 
-                {/* 4. Your Budget */}
-                {!isOthers && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0, y: -4 }}
-                    animate={{ opacity: 1, height: "auto", y: 0 }}
-                    exit={{ opacity: 0, height: 0, y: -4 }}
-                    transition={{ duration: 0.25, ease: "easeOut" }}
-                    className="overflow-hidden"
-                  >
-                    <label className="block font-sans font-semibold text-[12px] text-[#1C1917] mb-1.5">
-                      Your Budget <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="budget"
-                      required={!isOthers}
-                      value={formData.budget}
-                      onChange={handleChange}
-                      placeholder="Your Budget (e.g. ₹10,000 / $200+)"
-                      className="w-full h-[46px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-[13px] sm:text-[13.5px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out"
-                    />
-                  </motion.div>
-                )}
-
-                {/* 5. Explain Your Idea */}
+                {/* 4. Explain Your Idea */}
                 <div>
-                  <label className="block font-sans font-semibold text-[12px] text-[#1C1917] mb-1.5">
+                  <label className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
                     Explain Your Idea <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
                   </label>
                   <textarea
@@ -343,8 +311,8 @@ export default function Contact({ user }) {
                     required
                     value={formData.idea}
                     onChange={handleChange}
-                    placeholder="Explain your idea..."
-                    className="w-full h-[112px] px-3.5 py-2.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-[13px] sm:text-[13.5px] leading-relaxed hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out resize-none"
+                    placeholder="Explain your idea or inquiry..."
+                    className="w-full h-[90px] px-3.5 py-2.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-xs sm:text-[13px] leading-relaxed hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out resize-none"
                   />
                 </div>
 
@@ -368,19 +336,19 @@ export default function Contact({ user }) {
                   </motion.div>
                 )}
 
-                {/* 6. Submit Button */}
-                <div className="pt-2">
+                {/* 5. Submit Button */}
+                <div className="pt-1">
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full h-[48px] rounded-full font-medium text-[13.5px] sm:text-[14px] text-white bg-[#B84A1C] hover:bg-[#A03D14] shadow-md hover:shadow-[0_8px_20px_rgba(184,74,28,0.25)] transition-all duration-150 ease-out hover:-translate-y-[1px] active:translate-y-0 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                    className="w-full h-[42px] rounded-full font-medium text-xs sm:text-[13.5px] text-white bg-[#B84A1C] hover:bg-[#A03D14] shadow-md hover:shadow-[0_8px_20px_rgba(184,74,28,0.25)] transition-all duration-150 ease-out hover:-translate-y-[1px] active:translate-y-0 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                   >
                     {loading ? (
                       <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     ) : (
                       <>
                         <span>Send Message</span>
-                        <Send size={15} />
+                        <Send size={14} />
                       </>
                     )}
                   </button>
