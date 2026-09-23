@@ -19,6 +19,8 @@ import { getAllMessages } from "./store/slices/messageSlice";
 import ManageTimeline from "./pages/ManageTimeline";
 import { getAllProjects } from "./store/slices/projectSlice";
 import ViewProject from "./pages/ViewProject";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { Navigate } from "react-router-dom";
 
 function App() {
   const dispatch = useDispatch();
@@ -34,15 +36,58 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/password/forgot" element={<ForgotPassword />} />
         <Route path="/password/reset/:token" element={<ResetPassword />} />
-        <Route path="/manage/skills" element={<ManageSkills />} />
-        <Route path="/manage/timeline" element={<ManageTimeline />} />
-        <Route path="/manage/projects" element={<ManageProjects />} />
-        <Route path="/view/project/:id" element={<ViewProject />} />
-        <Route path="/update/project/:id" element={<UpdateProject />} />
+        <Route
+          path="/manage/skills"
+          element={
+            <ProtectedRoute>
+              <ManageSkills />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/manage/timeline"
+          element={
+            <ProtectedRoute>
+              <ManageTimeline />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/manage/projects"
+          element={
+            <ProtectedRoute>
+              <ManageProjects />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/view/project/:id"
+          element={
+            <ProtectedRoute>
+              <ViewProject />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/update/project/:id"
+          element={
+            <ProtectedRoute>
+              <UpdateProject />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <ToastContainer position="bottom-right" theme="dark" />
     </Router>
