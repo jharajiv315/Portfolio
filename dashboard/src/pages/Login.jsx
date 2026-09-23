@@ -36,9 +36,9 @@ const Login = () => {
       <div className=" min-h-[100vh] flex items-center justify-center py-12">
         <div className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">
-            <h1 className="text-3xl font-bold">Login</h1>
-            <p className="text-balance text-muted-foreground">
-              Enter your email below to login to your account
+            <h1 className="text-3xl font-serif font-bold text-foreground">Admin Login</h1>
+            <p className="text-balance text-muted-foreground text-sm">
+              Enter your credentials to access your administrative portfolio dashboard
             </p>
           </div>
           <div className="grid gap-4">
@@ -47,10 +47,11 @@ const Login = () => {
               <Input
                 id="email"
                 type="email"
-                placeholder="m@example.com"
+                placeholder="jharajiv315@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                className="rounded-xl"
               />
             </div>
             <div className="grid gap-2">
@@ -58,25 +59,29 @@ const Login = () => {
                 <Label>Password</Label>
                 <Link
                   to="/password/forgot"
-                  className="ml-auto inline-block text-sm underline"
+                  className="ml-auto inline-block text-xs text-primary hover:underline"
                 >
-                  Forgot your password?
+                  Forgot password?
                 </Link>
               </div>
               <Input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleLogin(email, password);
+                }}
+                className="rounded-xl"
               />
             </div>
             {loading ? (
-              <SpecialLoadingButton content={"Loggin In"} />
+              <SpecialLoadingButton content={"Logging In"} />
             ) : (
               <Button
                 onClick={() => handleLogin(email, password)}
-                className="w-full"
+                className="w-full rounded-full shadow-sm"
               >
-                Login
+                Sign In
               </Button>
             )}
           </div>
