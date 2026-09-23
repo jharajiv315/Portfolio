@@ -7,6 +7,16 @@ import crypto from "crypto";
 import { sendEmail } from "../utils/sendEmail.js";
 
 export const register = catchAsyncErrors(async (req, res, next) => {
+  const existingUsers = await User.find();
+  if (existingUsers && existingUsers.length > 0) {
+    return next(
+      new ErrorHandler(
+        "Registration is closed. Administrator account is already configured.",
+        403
+      )
+    );
+  }
+
   if (!req.files || Object.keys(req.files).length === 0) {
     return next(new ErrorHandler("Avatar and Resume are Required!", 400));
   }
@@ -105,15 +115,21 @@ export const login = catchAsyncErrors(async (req, res, next) => {
 });
 
 export const logout = catchAsyncErrors(async (req, res, next) => {
+  const cookieOptions = {
+    httpOnly: true,
+    expires: new Date(0),
+  };
+  if (process.env.NODE_ENV === "production") {
+    cookieOptions.sameSite = "None";
+    cookieOptions.secure = true;
+  }
+
   res
     .status(200)
-    .cookie("token", "", {
-      httpOnly: true,
-      expires: new Date(Date.now()),
-    })
+    .cookie("token", "", cookieOptions)
     .json({
       success: true,
-      message: "Logged Out!",
+      message: "Logged Out Successfully!",
     });
 });
 
@@ -239,9 +255,28 @@ export const updatePassword = catchAsyncErrors(async (req, res, next) => {
 });
 
 export const getUserForPortfolio = catchAsyncErrors(async (req, res, next) => {
-  // In PostgreSQL, retrieves the portfolio owner (first user record or by query/param)
+  // In PostgreSQL, retrieves the public portfolio owner data with strict field whitelisting
   const users = await User.find();
-  const user = users[0] || null;
+  const rawUser = users[0] || null;
+  let user = null;
+
+  if (rawUser) {
+    user = {
+      _id: rawUser._id || rawUser.id,
+      id: rawUser.id,
+      fullName: rawUser.fullName,
+      email: rawUser.email,
+      aboutMe: rawUser.aboutMe,
+      avatar: rawUser.avatar,
+      resume: rawUser.resume,
+      portfolioURL: rawUser.portfolioURL,
+      githubURL: rawUser.githubURL,
+      instagramURL: rawUser.instagramURL,
+      twitterURL: rawUser.twitterURL,
+      linkedinURL: rawUser.linkedInURL,
+      facebookURL: rawUser.facebookURL,
+    };
+  }
 
   res.status(200).json({
     success: true,
