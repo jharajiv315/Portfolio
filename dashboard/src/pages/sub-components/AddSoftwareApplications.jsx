@@ -61,13 +61,21 @@ const AddSoftwareApplications = () => {
           className="w-[100%] px-5 md:w-[650px]"
         >
           <div className="space-y-12">
-            <div className="border-b border-gray-900/10 pb-12">
-              <h2 className="font-semibold leading-7 text-gray-900 text-3xl text-center">
-                ADD SOFTWARE APPLICATION
-              </h2>
-              <div className="mt-10 flex flex-col gap-5">
+            <div className="border-b border-border pb-8">
+              <div className="text-center">
+                <span className="text-[11px] uppercase tracking-wider text-primary font-semibold block mb-1">
+                  Tools & Developer Software
+                </span>
+                <h2 className="font-serif font-bold text-2xl sm:text-3xl text-foreground tracking-tight">
+                  Add Software Application
+                </h2>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Add software tools, development environments, and applications you utilize
+                </p>
+              </div>
+              <div className="mt-8 flex flex-col gap-5">
                 <div className="w-full sm:col-span-4">
-                  <label className="block text-sm font-medium leading-6 text-gray-900">
+                  <label className="block text-xs uppercase tracking-wider font-semibold text-muted-foreground mb-1.5">
                     Application Name
                   </label>
                   <div className="mt-2">
