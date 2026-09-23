@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   FaJava,
   FaPython,
@@ -10,6 +10,7 @@ import {
   FaGitAlt,
   FaGithub,
   FaFigma,
+  FaDocker,
 } from "react-icons/fa";
 import {
   SiCplusplus,
@@ -18,10 +19,13 @@ import {
   SiNumpy,
   SiPandas,
   SiExpress,
+  SiPostman,
+  SiIntellijidea,
 } from "react-icons/si";
+import { VscVscode } from "react-icons/vsc";
 import { Cpu } from "lucide-react";
 
-// Helper icon resolver for backend skill titles
+// Robust icon map for both skills and popular software tools
 const iconMap = {
   java: <FaJava />,
   python: <FaPython />,
@@ -32,54 +36,114 @@ const iconMap = {
   css: <FaCss3Alt />,
   react: <FaReact />,
   "node.js": <FaNodeJs />,
+  nodejs: <FaNodeJs />,
   "express.js": <SiExpress />,
+  express: <SiExpress />,
   postgresql: <SiPostgresql />,
+  postgres: <SiPostgresql />,
   mongodb: <SiMongodb />,
   numpy: <SiNumpy />,
   pandas: <SiPandas />,
   git: <FaGitAlt />,
   github: <FaGithub />,
   figma: <FaFigma />,
+  docker: <FaDocker />,
+  postman: <SiPostman />,
+  "visual studio code": <VscVscode />,
+  vscode: <VscVscode />,
+  "intellij idea": <SiIntellijidea />,
+  intellij: <SiIntellijidea />,
 };
 
-function SkillItem({ skill }) {
-  const titleLower = (skill.title || skill.name || "").toLowerCase();
-  const IconComponent = iconMap[titleLower];
-  const svgUrl = skill.svg?.url;
+// Fallback software apps in case database data is still loading
+const DEFAULT_APPS = [
+  { name: "Git", svg: { url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" } },
+  { name: "GitHub", svg: { url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" } },
+  { name: "Visual Studio Code", svg: { url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" } },
+  { name: "Figma", svg: { url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" } },
+  { name: "PostgreSQL", svg: { url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" } },
+  { name: "MongoDB", svg: { url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" } },
+  { name: "Cloudinary", svg: { url: "https://res.cloudinary.com/cloudinary/image/upload/dpr_auto/w_80/v1/logo/for_white_bg/cloudinary_icon_for_white_bg.svg" } },
+  { name: "Intellij IDEA", svg: { url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/intellij/intellij-original.svg" } },
+];
+
+// Fallback skills in case database data is still loading
+const DEFAULT_SKILLS = [
+  { title: "Java" },
+  { title: "Python" },
+  { title: "JavaScript" },
+  { title: "React" },
+  { title: "Node.js" },
+  { title: "Express.js" },
+  { title: "C++" },
+  { title: "HTML" },
+  { title: "CSS" },
+  { title: "PostgreSQL" },
+  { title: "MongoDB" },
+  { title: "Git" },
+];
+
+function TechnologyItem({ item }) {
+  const [imgError, setImgError] = useState(false);
+  const name = item.name || item.title || "";
+  const nameLower = name.toLowerCase().trim();
+  const IconComponent = iconMap[nameLower];
+  const svgUrl = item.svg?.url;
 
   return (
-    <div className="skill-item">
+    <div className="skill-item" title={name}>
       <div className="skill-icon">
-        {IconComponent ? (
-          IconComponent
-        ) : svgUrl ? (
+        {svgUrl && !imgError ? (
           <img
             src={svgUrl}
-            alt={skill.title || skill.name}
+            alt={name}
+            onError={() => setImgError(true)}
             className="w-10 h-10 object-contain filter drop-shadow-[0_0_8px_rgba(184,74,28,0.25)]"
+            loading="lazy"
           />
+        ) : IconComponent ? (
+          IconComponent
         ) : (
           <Cpu />
         )}
       </div>
-      <span className="skill-name">{skill.title || skill.name}</span>
+      <span className="skill-name">{name}</span>
     </div>
   );
 }
 
-export default function Skills({ skills = [], softwareApplications = [] }) {
-  const trackRef = useRef(null);
+// Utility to expand small lists to prevent empty gaps on wide (4K) monitors
+const repeatListToFill = (list, minLength = 16) => {
+  if (!list || list.length === 0) return [];
+  let result = [...list];
+  while (result.length < minLength) {
+    result = [...result, ...list];
+  }
+  return result;
+};
 
-  // Combine skills and applications dynamically from backend
-  const combinedSkills = [...skills, ...softwareApplications];
-  const displayList = combinedSkills.length > 0 ? combinedSkills : [];
+export default function Skills({ skills = [], softwareApplications = [] }) {
+  const skillsTrackRef = useRef(null);
+  const appsTrackRef = useRef(null);
+
+  // Use dynamic backend data, with graceful fallback
+  const rawSkills = skills && skills.length > 0 ? skills : DEFAULT_SKILLS;
+  const rawApps =
+    softwareApplications && softwareApplications.length > 0
+      ? softwareApplications
+      : DEFAULT_APPS;
+
+  const displaySkills = repeatListToFill(rawSkills, 16);
+  const displayApps = repeatListToFill(rawApps, 16);
 
   useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
+    const skillsTrack = skillsTrackRef.current;
+    const appsTrack = appsTrackRef.current;
+    if (!skillsTrack && !appsTrack) return;
 
-    let x = 0;
-    let direction = 1; // 1: Right to Left (Scroll Down), -1: Left to Right (Scroll Up)
+    let xSkills = 0;
+    let xApps = 0;
+    let direction = 1; // 1: Scroll Down, -1: Scroll Up
     let lastScrollY = window.scrollY;
     let animationFrameId;
     let lastTime = performance.now();
@@ -90,11 +154,7 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
       const diff = currentScrollY - lastScrollY;
 
       if (Math.abs(diff) > 3) {
-        if (diff > 0) {
-          direction = 1;
-        } else {
-          direction = -1;
-        }
+        direction = diff > 0 ? 1 : -1;
         lastScrollY = currentScrollY;
       }
     };
@@ -105,21 +165,34 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
       const deltaTime = (currentTime - lastTime) / 1000;
       lastTime = currentTime;
 
-      const halfWidth = track.scrollWidth / 2;
-
-      if (halfWidth > 0) {
-        if (direction === 1) {
-          x -= speed * deltaTime;
-          if (x <= -halfWidth) {
-            x += halfWidth;
+      // Track 1: Skills (moving Right-to-Left)
+      if (skillsTrack) {
+        const halfWidthSkills = skillsTrack.scrollWidth / 2;
+        if (halfWidthSkills > 0) {
+          if (direction === 1) {
+            xSkills -= speed * deltaTime;
+            if (xSkills <= -halfWidthSkills) xSkills += halfWidthSkills;
+          } else {
+            xSkills += speed * deltaTime;
+            if (xSkills >= 0) xSkills -= halfWidthSkills;
           }
-        } else {
-          x += speed * deltaTime;
-          if (x >= 0) {
-            x -= halfWidth;
-          }
+          skillsTrack.style.transform = `translate3d(${xSkills}px, 0, 0)`;
         }
-        track.style.transform = `translate3d(${x}px, 0, 0)`;
+      }
+
+      // Track 2: Apps (moving Left-to-Right for elegant contrasting motion)
+      if (appsTrack) {
+        const halfWidthApps = appsTrack.scrollWidth / 2;
+        if (halfWidthApps > 0) {
+          if (direction === 1) {
+            xApps += speed * deltaTime;
+            if (xApps >= 0) xApps -= halfWidthApps;
+          } else {
+            xApps -= speed * deltaTime;
+            if (xApps <= -halfWidthApps) xApps += halfWidthApps;
+          }
+          appsTrack.style.transform = `translate3d(${xApps}px, 0, 0)`;
+        }
       }
 
       animationFrameId = requestAnimationFrame(animate);
@@ -131,7 +204,7 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
       window.removeEventListener("scroll", handleScroll);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [displayList.length]);
+  }, [displaySkills.length, displayApps.length]);
 
   return (
     <section id="skills" className="skills-section">
@@ -140,40 +213,72 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
       <div className="skill-glow skill-glow-center" />
       <div className="skill-glow skill-glow-right" />
 
-      {/* ================= HEADING ================= */}
+      {/* ================= SECTION 1: MY SKILLS ================= */}
       <div className="skills-heading">
         <h2>
           My <span>Skills</span>
         </h2>
-        <p>Modern Applications | Modern Technologies</p>
+        <p>Languages, Frameworks & Core Foundations</p>
       </div>
 
-      {/* ================= MOVING SKILLS ================= */}
+      {/* Moving Track: Skills */}
       <div className="skills-wrapper">
-        {/* Left Fade */}
         <div className="skills-fade-left" />
-
-        {/* Right Fade */}
         <div className="skills-fade-right" />
 
-        {/* Moving Track */}
-        <div className="skills-track" ref={trackRef}>
+        <div className="skills-track" ref={skillsTrackRef}>
           {/* First Row */}
           <div className="skills-list">
-            {displayList.map((skill, index) => (
-              <SkillItem
-                key={`skill-first-${skill._id || index}`}
-                skill={skill}
+            {displaySkills.map((skill, index) => (
+              <TechnologyItem
+                key={`skill-first-${skill._id || skill.title || index}-${index}`}
+                item={skill}
               />
             ))}
           </div>
 
-          {/* Duplicate Row */}
+          {/* Duplicate Row for Seamless Loop */}
           <div className="skills-list" aria-hidden="true">
-            {displayList.map((skill, index) => (
-              <SkillItem
-                key={`skill-second-${skill._id || index}`}
-                skill={skill}
+            {displaySkills.map((skill, index) => (
+              <TechnologyItem
+                key={`skill-second-${skill._id || skill.title || index}-${index}`}
+                item={skill}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ================= SECTION 2: MY APPS ================= */}
+      <div className="skills-heading apps-heading">
+        <h2>
+          My <span>Apps</span>
+        </h2>
+        <p>Software Applications & Development Environments</p>
+      </div>
+
+      {/* Moving Track: Apps (contrasting counter-flow animation) */}
+      <div className="skills-wrapper">
+        <div className="skills-fade-left" />
+        <div className="skills-fade-right" />
+
+        <div className="skills-track" ref={appsTrackRef}>
+          {/* First Row */}
+          <div className="skills-list">
+            {displayApps.map((app, index) => (
+              <TechnologyItem
+                key={`app-first-${app._id || app.name || index}-${index}`}
+                item={app}
+              />
+            ))}
+          </div>
+
+          {/* Duplicate Row for Seamless Loop */}
+          <div className="skills-list" aria-hidden="true">
+            {displayApps.map((app, index) => (
+              <TechnologyItem
+                key={`app-second-${app._id || app.name || index}-${index}`}
+                item={app}
               />
             ))}
           </div>
@@ -186,7 +291,7 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
           position: relative;
           width: 100%;
           margin: 0;
-          padding: 70px 0 70px 0;
+          padding: 80px 0 80px 0;
           overflow: hidden;
           background: #FAF7F2;
           color: #1C1917;
@@ -229,9 +334,14 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
           position: relative;
           z-index: 2;
           width: 100%;
-          margin: 0 0 36px 0;
+          margin: 0 0 32px 0;
           padding: 0 20px;
           text-align: center;
+        }
+
+        .skills-heading.apps-heading {
+          margin-top: 52px;
+          margin-bottom: 32px;
         }
 
         .skills-heading h2 {
@@ -265,7 +375,7 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
           position: relative;
           width: 100%;
           margin: 0;
-          padding: 24px 0;
+          padding: 16px 0;
           overflow: hidden;
         }
 
@@ -333,6 +443,9 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
           white-space: nowrap;
           text-align: center;
           letter-spacing: normal;
+          max-width: 95px;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         .skills-fade-left {
@@ -359,11 +472,15 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
 
         @media (max-width: 768px) {
           .skills-section {
-            padding-top: 50px;
-            padding-bottom: 50px;
+            padding-top: 55px;
+            padding-bottom: 55px;
           }
           .skills-heading {
-            margin-bottom: 25px;
+            margin-bottom: 22px;
+          }
+          .skills-heading.apps-heading {
+            margin-top: 40px;
+            margin-bottom: 22px;
           }
           .skills-heading h2 {
             font-size: 28px;
@@ -386,6 +503,7 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
           }
           .skill-name {
             font-size: 11px;
+            max-width: 80px;
           }
           .skills-fade-left,
           .skills-fade-right {
