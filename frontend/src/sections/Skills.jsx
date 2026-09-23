@@ -56,7 +56,7 @@ function SkillItem({ skill }) {
           <img
             src={svgUrl}
             alt={skill.title || skill.name}
-            className="w-10 h-10 object-contain filter drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]"
+            className="w-10 h-10 object-contain filter drop-shadow-[0_0_8px_rgba(184,74,28,0.25)]"
           />
         ) : (
           <Cpu />
