@@ -31,39 +31,33 @@ export default function Footer({ user }) {
           transition={{ duration: 0.6, delay: 0.15 }}
           className="flex items-center gap-6 text-lg sm:text-xl text-[#57534E] mb-6"
         >
-          {user?.twitterURL && (
-            <a
-              href={user.twitterURL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[#B84A1C] transition-colors duration-200 hover:scale-110 transform"
-              aria-label="Twitter / X"
-            >
-              <FaXTwitter />
-            </a>
-          )}
-          {user?.linkedInURL && (
-            <a
-              href={user.linkedInURL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[#0A66C2] transition-colors duration-200 hover:scale-110 transform"
-              aria-label="LinkedIn"
-            >
-              <FaLinkedin />
-            </a>
-          )}
-          {user?.githubURL && (
-            <a
-              href={user.githubURL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[#1C1917] transition-colors duration-200 hover:scale-110 transform"
-              aria-label="GitHub"
-            >
-              <FaGithub />
-            </a>
-          )}
+          <a
+            href={user?.twitterURL || "https://twitter.com"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-[#B84A1C] transition-colors duration-200 hover:scale-110 transform"
+            aria-label="Twitter / X"
+          >
+            <FaXTwitter />
+          </a>
+          <a
+            href={user?.linkedInURL || "https://linkedin.com"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-[#0A66C2] transition-colors duration-200 hover:scale-110 transform"
+            aria-label="LinkedIn"
+          >
+            <FaLinkedin />
+          </a>
+          <a
+            href={user?.githubURL || "https://github.com/jharajiv315"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-[#1C1917] transition-colors duration-200 hover:scale-110 transform"
+            aria-label="GitHub"
+          >
+            <FaGithub />
+          </a>
         </motion.div>
 
         {/* Quote */}
