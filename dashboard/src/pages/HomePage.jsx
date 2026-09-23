@@ -50,12 +50,15 @@ const HomePage = () => {
     }
   }, [isAuthenticated]);
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <aside className="fixed inset-y-0 left-0 hidden w-14 flex-col border-r bg-background sm:flex z-50">
+    <div className="flex min-h-screen w-full flex-col bg-background text-foreground">
+      <aside className="fixed inset-y-0 left-0 hidden w-14 flex-col border-r border-border bg-card sm:flex z-50 shadow-xs">
         <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
-          <Link className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base">
-            <Package2 className="h-4 w-4 transition-all group-hover:scale-110" />
-            <span className="sr-only">Acme Inc</span>
+          <Link
+            to="/"
+            onClick={() => setActive("Dashboard")}
+            className="group flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-base font-serif font-bold text-primary-foreground shadow-sm hover:scale-105 transition-all"
+          >
+            R
           </Link>
           <TooltipProvider>
             <Tooltip>
@@ -213,12 +216,12 @@ const HomePage = () => {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="sm:max-w-xs">
-            <nav className="grid gap-6 text-lg font-medium">
               <Link
-                className={`group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base`}
+                to="/"
+                onClick={() => setActive("Dashboard")}
+                className="group flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-serif font-bold text-primary-foreground shadow-sm"
               >
-                <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
-                <span className="sr-only">Acme Inc</span>
+                R
               </Link>
               <Link
                 href="#"
@@ -312,14 +315,25 @@ const HomePage = () => {
         </Sheet>
 
         <div className="flex items-center gap-4 md:grow-0 sm:ml-16 sm:mt-5">
-          <img
-            src={user && user.avatar && user.avatar.url}
-            alt="avatar"
-            className="w-20 h-20 rounded-full max-[900px]:hidden"
-          />
-          <h1 className="text-4xl max-[900px]:text-2xl">
-            Welcome back, {user.fullName}
-          </h1>
+          {user?.avatar?.url ? (
+            <img
+              src={user.avatar.url}
+              alt="avatar"
+              className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl border border-border object-cover shadow-sm bg-card max-[900px]:hidden"
+            />
+          ) : (
+            <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl border border-border bg-card flex items-center justify-center font-serif font-bold text-2xl text-primary shadow-sm max-[900px]:hidden">
+              {user?.fullName?.charAt(0) || "R"}
+            </div>
+          )}
+          <div>
+            <span className="text-[11px] uppercase tracking-wider text-primary font-semibold block">
+              Admin Control Center
+            </span>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-foreground tracking-tight">
+              Welcome back, {user?.fullName || "Rajiv"}
+            </h1>
+          </div>
         </div>
       </header>
       {(() => {
