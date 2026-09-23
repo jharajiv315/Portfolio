@@ -10,23 +10,23 @@ export default function Testimonials({ testimonials = [] }) {
   return (
     <section
       id="testimonials"
-      className="relative w-full bg-black text-white py-20 px-4 sm:px-6 lg:px-8 overflow-hidden"
+      className="relative w-full bg-[#FAF7F2] text-[#1C1917] py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
     >
       {/* Background Glows */}
-      <div className="pointer-events-none absolute left-[-150px] top-[20%] h-[400px] w-[400px] rounded-full bg-cyan-500/10 blur-[140px]" />
-      <div className="pointer-events-none absolute right-[-150px] bottom-[20%] h-[400px] w-[400px] rounded-full bg-purple-500/10 blur-[140px]" />
+      <div className="pointer-events-none absolute left-[-150px] top-[20%] h-[400px] w-[400px] rounded-full bg-[#EFE7D8]/70 blur-[140px]" />
+      <div className="pointer-events-none absolute right-[-150px] bottom-[20%] h-[400px] w-[400px] rounded-full bg-[#E8DFC8]/60 blur-[140px]" />
 
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 section-pill mb-3">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#E8E1D5] text-[#B84A1C] text-xs font-semibold uppercase tracking-wider mb-4 shadow-xs">
             <Sparkles size={13} />
             Endorsements
           </div>
-          <h2 className="section-heading">
-            What People <span className="text-cyan-400">Say</span>
+          <h2 className="font-serif font-bold text-3xl sm:text-4xl md:text-5xl text-[#1C1917] tracking-tight">
+            What People <span className="text-[#B84A1C] italic font-serif">Say</span>
           </h2>
-          <p className="mt-3 section-subtext max-w-xl mx-auto">
+          <p className="mt-3 text-sm sm:text-base text-[#57534E] max-w-xl mx-auto leading-relaxed">
             Feedback and recommendations from mentors, teammates, and tech communities.
           </p>
         </div>
@@ -40,37 +40,37 @@ export default function Testimonials({ testimonials = [] }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.15 }}
-              className="bg-zinc-950/80 border border-zinc-800/80 p-6 rounded-2xl backdrop-blur-xl shadow-xl hover:border-cyan-500/40 hover:shadow-[0_0_30px_rgba(34,211,238,0.15)] transition-all flex flex-col justify-between"
+              className="bg-white/95 border border-[#E8E1D5] p-6 sm:p-7 rounded-2xl shadow-xs hover:border-[#B84A1C]/40 hover:shadow-md transition-all flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <Quote size={28} className="text-cyan-400/60" />
-                  <div className="flex items-center gap-1 text-amber-400">
+                  <Quote size={28} className="text-[#B84A1C]/60" />
+                  <div className="flex items-center gap-1 text-[#D97706]">
                     {[...Array(t.rating || 5)].map((_, i) => (
                       <Star key={i} size={14} fill="currentColor" />
                     ))}
                   </div>
                 </div>
-                <p className="text-gray-300 font-body text-sm leading-relaxed mb-6 italic">
+                <p className="text-[#57534E] font-sans text-sm leading-relaxed mb-6 italic">
                   "{t.content || t.description || t.quote}"
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-zinc-900 flex items-center gap-3">
+              <div className="pt-4 border-t border-[#E8E1D5] flex items-center gap-3">
                 {t.avatar?.url ? (
                   <img
                     src={t.avatar.url}
                     alt={t.name}
-                    className="w-10 h-10 rounded-full object-cover border border-cyan-500/40"
+                    className="w-10 h-10 rounded-full object-cover border border-[#E8E1D5]"
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white font-heading font-semibold text-sm">
+                  <div className="w-10 h-10 rounded-full bg-[#FAF7F2] border border-[#E8E1D5] flex items-center justify-center text-[#B84A1C] font-serif font-bold text-sm">
                     {t.name ? t.name.charAt(0) : "U"}
                   </div>
                 )}
                 <div>
-                  <h4 className="text-sm sm:text-base font-heading font-semibold text-white">{t.name}</h4>
-                  <p className="text-xs font-body text-cyan-400/80">
+                  <h4 className="text-sm sm:text-base font-serif font-bold text-[#1C1917]">{t.name}</h4>
+                  <p className="text-xs font-sans text-[#B84A1C] font-medium">
                     {t.role || t.designation || "Colleague"}
                   </p>
                 </div>
