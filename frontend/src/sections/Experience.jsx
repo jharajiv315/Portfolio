@@ -23,25 +23,25 @@ function DesktopExperienceCard({ exp, progress }) {
         scale,
         y,
       }}
-      className="w-full bg-zinc-950/95 border border-cyan-500/30 p-5 rounded-2xl shadow-[0_0_35px_rgba(0,0,0,0.9)] backdrop-blur-xl transition-all duration-300 hover:border-cyan-400 hover:shadow-[0_0_30px_rgba(34,211,238,0.25)] relative"
+      className="w-full bg-white/95 border border-[#E8E1D5] p-5 rounded-2xl shadow-xs backdrop-blur-xl transition-all duration-300 hover:border-[#B84A1C]/50 hover:shadow-md relative"
     >
       {/* Connecting Pin pointing to timeline dot */}
       <div
         className={`absolute ${
           isTop ? "-bottom-3" : "-top-3"
-        } left-1/2 -translate-x-1/2 w-0.5 h-3 bg-cyan-400/70`}
+        } left-1/2 -translate-x-1/2 w-0.5 h-3 bg-[#B84A1C]/70`}
       />
 
-      <div className="text-[11px] font-body font-medium text-cyan-400 flex items-center justify-between mb-1.5">
+      <div className="text-[11px] font-sans font-semibold text-[#B84A1C] flex items-center justify-between mb-1.5">
         <span className="truncate max-w-[140px]">{exp.company}</span>
-        <span className="text-gray-400 text-[11px] font-normal">{exp.period}</span>
+        <span className="text-[#78716C] text-[11px] font-normal">{exp.period}</span>
       </div>
 
-      <h3 className="text-sm sm:text-base font-heading font-bold text-white mb-1.5 leading-snug">
+      <h3 className="text-sm sm:text-base font-serif font-bold text-[#1C1917] mb-1.5 leading-snug">
         {exp.role}
       </h3>
 
-      <p className="text-gray-300 text-xs sm:text-sm font-body font-normal leading-relaxed mb-3 line-clamp-3">
+      <p className="text-[#57534E] text-xs sm:text-sm font-sans leading-relaxed mb-3 line-clamp-3">
         {exp.description}
       </p>
 
@@ -50,7 +50,7 @@ function DesktopExperienceCard({ exp, progress }) {
           {exp.skills.slice(0, 3).map((skill, i) => (
             <span
               key={i}
-              className="px-2 py-0.5 text-[10px] font-body font-normal rounded bg-cyan-950/70 text-cyan-300 border border-cyan-500/20"
+              className="px-2 py-0.5 text-[10px] font-sans font-medium rounded-full bg-[#FAF7F2] text-[#1C1917] border border-[#E8E1D5]"
             >
               {skill}
             </span>
@@ -137,11 +137,11 @@ export default function Experience({ timelines = [] }) {
     <section
       id="experience"
       ref={sectionRef}
-      className="relative w-full bg-black text-white py-20 px-4 sm:px-6 lg:px-8 overflow-hidden"
+      className="relative w-full bg-[#FAF7F2] text-[#1C1917] py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
     >
       {/* ================= BACKGROUND GLOWS ================= */}
-      <div className="pointer-events-none absolute left-[-150px] top-[10%] h-[500px] w-[500px] rounded-full bg-cyan-500/15 blur-[150px]" />
-      <div className="pointer-events-none absolute right-[-150px] top-[50%] h-[500px] w-[500px] rounded-full bg-purple-500/15 blur-[150px]" />
+      <div className="pointer-events-none absolute left-[-150px] top-[10%] h-[500px] w-[500px] rounded-full bg-[#EFE7D8]/70 blur-[150px]" />
+      <div className="pointer-events-none absolute right-[-150px] top-[50%] h-[500px] w-[500px] rounded-full bg-[#E8DFC8]/60 blur-[150px]" />
 
       <div className="relative z-10 mx-auto max-w-6xl w-full">
         {/* SECTION HEADER */}
@@ -152,16 +152,16 @@ export default function Experience({ timelines = [] }) {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 section-pill mb-3">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#E8E1D5] text-[#B84A1C] text-xs font-semibold uppercase tracking-wider mb-4 shadow-xs">
               <Sparkles size={13} />
               Career Journey
             </div>
 
-            <h2 className="section-heading">
-              My <span className="text-cyan-400">Experience</span>
+            <h2 className="font-serif font-bold text-3xl sm:text-4xl md:text-5xl text-[#1C1917] tracking-tight">
+              My <span className="text-[#B84A1C] italic font-serif">Experience</span>
             </h2>
 
-            <p className="mt-3 section-subtext max-w-2xl mx-auto">
+            <p className="mt-3 text-sm sm:text-base text-[#57534E] max-w-2xl mx-auto leading-relaxed">
               Academic progression, competitive programming milestones, and technical development.
             </p>
           </motion.div>
@@ -183,20 +183,20 @@ export default function Experience({ timelines = [] }) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-30px" }}
                   transition={{ duration: 0.5, delay: index * 0.15 }}
-                  className="w-full bg-zinc-950/90 border border-cyan-500/30 p-5 rounded-2xl shadow-[0_0_35px_rgba(0,0,0,0.9)] backdrop-blur-xl transition-all duration-300 hover:border-cyan-400 hover:shadow-[0_0_30px_rgba(34,211,238,0.25)] hover:-translate-y-1 relative"
+                  className="w-full bg-white/95 border border-[#E8E1D5] p-5 rounded-2xl shadow-xs backdrop-blur-xl transition-all duration-300 hover:border-[#B84A1C]/50 hover:shadow-md hover:-translate-y-1 relative"
                 >
-                  <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0.5 h-3 bg-cyan-400/70" />
+                  <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0.5 h-3 bg-[#B84A1C]/70" />
 
-                  <div className="text-[11px] font-body font-medium text-cyan-400 flex items-center justify-between mb-1.5">
+                  <div className="text-[11px] font-sans font-semibold text-[#B84A1C] flex items-center justify-between mb-1.5">
                     <span>{exp.company}</span>
-                    <span className="text-gray-400 text-[11px] font-normal">{exp.period}</span>
+                    <span className="text-[#78716C] text-[11px] font-normal">{exp.period}</span>
                   </div>
 
-                  <h3 className="text-sm sm:text-base font-heading font-bold text-white mb-1.5 leading-snug">
+                  <h3 className="text-sm sm:text-base font-serif font-bold text-[#1C1917] mb-1.5 leading-snug">
                     {exp.role}
                   </h3>
 
-                  <p className="text-gray-300 text-xs sm:text-sm font-body font-normal leading-relaxed mb-3">
+                  <p className="text-[#57534E] text-xs sm:text-sm font-sans leading-relaxed mb-3">
                     {exp.description}
                   </p>
 
@@ -204,7 +204,7 @@ export default function Experience({ timelines = [] }) {
                     {exp.skills.map((skill, i) => (
                       <span
                         key={i}
-                        className="px-2 py-0.5 text-[10px] font-body font-normal rounded bg-cyan-950/70 text-cyan-300 border border-cyan-500/20"
+                        className="px-2 py-0.5 text-[10px] font-sans font-medium rounded-full bg-[#FAF7F2] text-[#1C1917] border border-[#E8E1D5]"
                       >
                         {skill}
                       </span>
@@ -217,13 +217,13 @@ export default function Experience({ timelines = [] }) {
 
           {/* 2. MIDDLE TIMELINE LINE & DOTS ROW */}
           <div className="relative w-full py-4 flex items-center">
-            <div className="w-full h-[3px] bg-zinc-800 rounded-full overflow-hidden absolute left-0 right-0">
+            <div className="w-full h-[3px] bg-[#E8E1D5] rounded-full overflow-hidden absolute left-0 right-0">
               <motion.div
                 style={{
                   scaleX: scaleLine,
                   transformOrigin: "left",
                 }}
-                className="w-full h-full bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 shadow-[0_0_15px_rgba(34,211,238,0.9)]"
+                className="w-full h-full bg-gradient-to-r from-[#B84A1C] via-[#D97706] to-[#B84A1C] shadow-sm"
               />
             </div>
 
@@ -237,8 +237,8 @@ export default function Experience({ timelines = [] }) {
                     transition={{ duration: 0.4, delay: index * 0.15 }}
                     className="relative flex items-center justify-center cursor-pointer group"
                   >
-                    <div className="w-7 h-7 rounded-full bg-cyan-400/20 animate-ping absolute" />
-                    <div className="w-5 h-5 rounded-full bg-white border-2 border-cyan-400 shadow-[0_0_18px_rgba(34,211,238,1)] transition-transform duration-300 group-hover:scale-125" />
+                    <div className="w-7 h-7 rounded-full bg-[#B84A1C]/20 animate-ping absolute" />
+                    <div className="w-5 h-5 rounded-full bg-white border-2 border-[#B84A1C] shadow-sm transition-transform duration-300 group-hover:scale-125" />
                   </motion.div>
                 </div>
               ))}
@@ -259,20 +259,20 @@ export default function Experience({ timelines = [] }) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-30px" }}
                   transition={{ duration: 0.5, delay: index * 0.15 }}
-                  className="w-full bg-zinc-950/90 border border-cyan-500/30 p-5 rounded-2xl shadow-[0_0_35px_rgba(0,0,0,0.9)] backdrop-blur-xl transition-all duration-300 hover:border-cyan-400 hover:shadow-[0_0_30px_rgba(34,211,238,0.25)] hover:translate-y-1 relative"
+                  className="w-full bg-white/95 border border-[#E8E1D5] p-5 rounded-2xl shadow-xs backdrop-blur-xl transition-all duration-300 hover:border-[#B84A1C]/50 hover:shadow-md hover:translate-y-1 relative"
                 >
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-0.5 h-3 bg-cyan-400/70" />
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-0.5 h-3 bg-[#B84A1C]/70" />
 
-                  <div className="text-[11px] font-body font-medium text-cyan-400 flex items-center justify-between mb-1.5">
+                  <div className="text-[11px] font-sans font-semibold text-[#B84A1C] flex items-center justify-between mb-1.5">
                     <span className="truncate max-w-[140px]">{exp.company}</span>
-                    <span className="text-gray-400 text-[11px] font-normal">{exp.period}</span>
+                    <span className="text-[#78716C] text-[11px] font-normal">{exp.period}</span>
                   </div>
 
-                  <h3 className="text-sm sm:text-base font-heading font-bold text-white mb-1.5 leading-snug">
+                  <h3 className="text-sm sm:text-base font-serif font-bold text-[#1C1917] mb-1.5 leading-snug">
                     {exp.role}
                   </h3>
 
-                  <p className="text-gray-300 text-xs sm:text-sm font-body font-normal leading-relaxed mb-3 line-clamp-3">
+                  <p className="text-[#57534E] text-xs sm:text-sm font-sans leading-relaxed mb-3 line-clamp-3">
                     {exp.description}
                   </p>
 
@@ -280,7 +280,7 @@ export default function Experience({ timelines = [] }) {
                     {exp.skills.slice(0, 3).map((skill, i) => (
                       <span
                         key={i}
-                        className="px-2 py-0.5 text-[10px] font-body font-normal rounded bg-cyan-950/70 text-cyan-300 border border-cyan-500/20"
+                        className="px-2 py-0.5 text-[10px] font-sans font-medium rounded-full bg-[#FAF7F2] text-[#1C1917] border border-[#E8E1D5]"
                       >
                         {skill}
                       </span>
@@ -294,13 +294,13 @@ export default function Experience({ timelines = [] }) {
 
         {/* ================= MOBILE / TABLET VERTICAL TIMELINE ================= */}
         <div className="block lg:hidden relative py-4">
-          <div className="absolute top-0 bottom-0 left-4 sm:left-6 w-[3px] bg-zinc-800 rounded-full overflow-hidden">
+          <div className="absolute top-0 bottom-0 left-4 sm:left-6 w-[3px] bg-[#E8E1D5] rounded-full overflow-hidden">
             <motion.div
               style={{
                 scaleY: scaleLine,
                 transformOrigin: "top",
               }}
-              className="w-full h-full bg-gradient-to-b from-cyan-400 via-blue-400 to-purple-400 shadow-[0_0_15px_rgba(34,211,238,0.9)]"
+              className="w-full h-full bg-gradient-to-b from-[#B84A1C] via-[#D97706] to-[#B84A1C]"
             />
           </div>
 
@@ -312,25 +312,25 @@ export default function Experience({ timelines = [] }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-30px" }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="relative bg-zinc-950/90 border border-cyan-500/30 p-5 rounded-2xl shadow-xl backdrop-blur-xl transition-all duration-300 hover:border-cyan-400/60"
+                className="relative bg-white/95 border border-[#E8E1D5] p-5 rounded-2xl shadow-xs backdrop-blur-xl transition-all duration-300 hover:border-[#B84A1C]/50"
               >
                 <div className="absolute -left-[39px] sm:-left-[47px] top-6 flex items-center justify-center">
-                  <div className="w-4 h-4 rounded-full bg-white border-2 border-cyan-400 shadow-[0_0_14px_rgba(34,211,238,1)]" />
+                  <div className="w-4 h-4 rounded-full bg-white border-2 border-[#B84A1C] shadow-sm" />
                 </div>
 
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                  <span className="px-2.5 py-0.5 rounded-full text-xs font-body font-medium bg-cyan-950/70 text-cyan-300 border border-cyan-500/30">
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-sans font-semibold bg-[#FAF7F2] text-[#B84A1C] border border-[#E8E1D5]">
                     {exp.company}
                   </span>
-                  <span className="text-xs text-gray-400 font-body flex items-center gap-1">
+                  <span className="text-xs text-[#78716C] font-sans flex items-center gap-1">
                     <Calendar size={12} />
                     {exp.period}
                   </span>
                 </div>
 
-                <h3 className="text-sm sm:text-base font-heading font-bold text-white mb-1.5 leading-snug">{exp.role}</h3>
+                <h3 className="text-sm sm:text-base font-serif font-bold text-[#1C1917] mb-1.5 leading-snug">{exp.role}</h3>
 
-                <p className="text-gray-300 text-xs sm:text-sm font-body font-normal leading-relaxed mb-3">
+                <p className="text-[#57534E] text-xs sm:text-sm font-sans leading-relaxed mb-3">
                   {exp.description}
                 </p>
 
@@ -338,7 +338,7 @@ export default function Experience({ timelines = [] }) {
                   {exp.skills.map((skill, i) => (
                     <span
                       key={i}
-                      className="px-2 py-0.5 text-[10px] sm:text-xs font-body font-normal rounded bg-zinc-900 text-cyan-300 border border-cyan-500/20"
+                      className="px-2 py-0.5 text-[10px] sm:text-xs font-sans font-medium rounded-full bg-[#FAF7F2] text-[#1C1917] border border-[#E8E1D5]"
                     >
                       {skill}
                     </span>
