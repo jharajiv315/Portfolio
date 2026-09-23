@@ -56,14 +56,14 @@ export default function OverlayMenu({ isOpen, onClose }) {
             ease: [0.4, 0, 0.2, 1],
           }}
           style={{
-            backgroundColor: "rgba(0,0,0,0.95)",
+            backgroundColor: "rgba(250, 247, 242, 0.98)",
           }}
-          className="fixed inset-0 flex items-center justify-center z-50"
+          className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-xl"
         >
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-6 right-6 text-white text-3xl"
+            className="absolute top-6 right-6 text-[#1C1917] hover:text-[#B84A1C] text-3xl transition-colors p-2"
             aria-label="Close menu"
           >
             <FiX />
@@ -89,7 +89,7 @@ export default function OverlayMenu({ isOpen, onClose }) {
                 <a
                   href={`#${item.toLowerCase()}`}
                   onClick={onClose}
-                  className="text-3xl sm:text-4xl text-white font-heading font-semibold hover:text-cyan-400 transition-colors duration-300 tracking-tight"
+                  className="text-3xl sm:text-4xl text-[#1C1917] font-heading font-semibold hover:text-[#B84A1C] transition-colors duration-300 tracking-tight"
                 >
                   {item}
                 </a>
