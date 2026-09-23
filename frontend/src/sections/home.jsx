@@ -163,17 +163,6 @@ export default function Home({ user }) {
               <span>Available for opportunities</span>
             </motion.div>
 
-            {/* STATUS PILL */}
-            <motion.div
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#E8E1D5] shadow-xs text-xs font-medium text-[#1C1917] mb-5 backdrop-blur-sm"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <span className="w-2 h-2 rounded-full bg-[#B84A1C] animate-pulse"></span>
-              <span>Available for opportunities</span>
-            </motion.div>
-
             {/* ================= MAIN HEADING ================= */}
             <motion.h1
               className="mt-2 leading-[1.05] tracking-tight font-serif"
