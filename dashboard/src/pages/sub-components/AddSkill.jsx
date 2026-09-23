@@ -56,14 +56,22 @@ const AddSkill = () => {
           onSubmit={handleAddNewSkill}
         >
           <div className="space-y-12">
-            <div className="border-b border-gray-900/10 pb-12">
-              <h2 className="font-semibold leading-7 text-gray-900 text-3xl text-center">
-                ADD A NEW SKILL
-              </h2>
-              <div className="mt-10 flex flex-col gap-5">
+            <div className="border-b border-border pb-8">
+              <div className="text-center">
+                <span className="text-[11px] uppercase tracking-wider text-primary font-semibold block mb-1">
+                  Skills & Capabilities
+                </span>
+                <h2 className="font-serif font-bold text-2xl sm:text-3xl text-foreground tracking-tight">
+                  Add New Skill
+                </h2>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Register a technical skill, programming language, or engineering competency
+                </p>
+              </div>
+              <div className="mt-8 flex flex-col gap-5">
                 <div className="w-full sm:col-span-4">
-                  <label className="block text-sm font-medium leading-6 text-gray-900">
-                    Title
+                  <label className="block text-xs uppercase tracking-wider font-semibold text-muted-foreground mb-1.5">
+                    Skill Title
                   </label>
                   <div className="mt-2">
                     <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
