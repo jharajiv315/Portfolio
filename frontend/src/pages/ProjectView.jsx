@@ -47,7 +47,6 @@ export const ProjectView = () => {
     : [];
 
   return (
-  return (
     <div className="relative min-h-screen bg-[#FAF7F2] text-[#1C1917] py-12 px-5 sm:px-8">
       <CustomCursor />
       <ParticleBackground />
