@@ -186,10 +186,10 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
           position: relative;
           width: 100%;
           margin: 0;
-          padding: 55px 0 55px 0;
+          padding: 70px 0 70px 0;
           overflow: hidden;
-          background: #000000;
-          color: #ffffff;
+          background: #FAF7F2;
+          color: #1C1917;
           isolation: isolate;
         }
 
@@ -206,7 +206,7 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
           height: 360px;
           left: -200px;
           top: -80px;
-          background: rgba(0, 190, 180, 0.24);
+          background: rgba(239, 231, 216, 0.7);
         }
 
         .skill-glow-center {
@@ -214,7 +214,7 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
           height: 300px;
           left: 43%;
           top: 90px;
-          background: rgba(120, 20, 170, 0.16);
+          background: rgba(184, 74, 28, 0.08);
         }
 
         .skill-glow-right {
@@ -222,14 +222,14 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
           height: 420px;
           right: -230px;
           bottom: -170px;
-          background: rgba(0, 190, 180, 0.22);
+          background: rgba(232, 223, 200, 0.6);
         }
 
         .skills-heading {
           position: relative;
           z-index: 2;
           width: 100%;
-          margin: 0 0 32px 0;
+          margin: 0 0 36px 0;
           padding: 0 20px;
           text-align: center;
         }
@@ -237,16 +237,18 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
         .skills-heading h2 {
           margin: 0;
           padding: 0;
-          color: #ffffff;
+          color: #1C1917;
           font-family: var(--font-heading);
-          font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+          font-size: clamp(2rem, 3.8vw, 3rem);
           line-height: 1.15;
           font-weight: 700;
           letter-spacing: -0.015em;
         }
 
         .skills-heading h2 span {
-          color: #22d3ee;
+          color: #B84A1C;
+          font-style: italic;
+          font-family: var(--font-heading);
         }
 
         .skills-heading p {
@@ -254,7 +256,7 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
           padding: 0;
           font-family: var(--font-body);
           font-weight: 400;
-          color: #9ca3af;
+          color: #78716C;
           font-size: clamp(0.875rem, 1.2vw, 1rem);
           line-height: 1.6;
         }
@@ -263,7 +265,7 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
           position: relative;
           width: 100%;
           margin: 0;
-          padding: 18px 0;
+          padding: 24px 0;
           overflow: hidden;
         }
 
@@ -278,49 +280,55 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
         .skills-list {
           display: flex;
           align-items: center;
-          gap: 55px;
+          gap: 28px;
           margin: 0;
-          padding: 0 55px 0 0;
+          padding: 0 28px 0 0;
           flex-shrink: 0;
         }
 
         .skill-item {
-          width: 100px;
-          min-width: 100px;
-          height: 100px;
+          width: 110px;
+          min-width: 110px;
+          height: 110px;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          gap: 9px;
+          gap: 10px;
           flex-shrink: 0;
-          transition: transform 0.3s ease, opacity 0.3s ease;
+          background: rgba(255, 255, 255, 0.88);
+          border: 1px solid #E8E1D5;
+          border-radius: 20px;
+          box-shadow: 0 2px 8px rgba(28, 25, 23, 0.04);
+          transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .skill-item:hover {
-          transform: translateY(-6px) scale(1.05);
+          transform: translateY(-6px) scale(1.04);
+          border-color: rgba(184, 74, 28, 0.4);
+          box-shadow: 0 10px 24px rgba(184, 74, 28, 0.12);
+          background: #ffffff;
         }
 
         .skill-icon {
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 45px;
-          color: #22d3ee;
-          filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.25));
-          transition: transform 0.3s ease, filter 0.3s ease;
+          font-size: 38px;
+          color: #B84A1C;
+          transition: transform 0.3s ease, color 0.3s ease;
         }
 
         .skill-item:hover .skill-icon {
           transform: scale(1.1);
-          filter: drop-shadow(0 0 16px rgba(34, 211, 238, 0.65));
+          color: #A03D14;
         }
 
         .skill-name {
-          color: #d1d5db;
+          color: #1C1917;
           font-family: var(--font-body);
           font-size: 12px;
-          font-weight: 400;
+          font-weight: 500;
           line-height: 1.2;
           white-space: nowrap;
           text-align: center;
@@ -335,7 +343,7 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
           width: 140px;
           z-index: 10;
           pointer-events: none;
-          background: linear-gradient(to right, #000000 0%, rgba(0, 0, 0, 0.95) 25%, rgba(0, 0, 0, 0.65) 55%, transparent 100%);
+          background: linear-gradient(to right, #FAF7F2 0%, rgba(250, 247, 242, 0.95) 25%, rgba(250, 247, 242, 0.6) 55%, transparent 100%);
         }
 
         .skills-fade-right {
@@ -346,13 +354,13 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
           width: 140px;
           z-index: 10;
           pointer-events: none;
-          background: linear-gradient(to left, #000000 0%, rgba(0, 0, 0, 0.95) 25%, rgba(0, 0, 0, 0.65) 55%, transparent 100%);
+          background: linear-gradient(to left, #FAF7F2 0%, rgba(250, 247, 242, 0.95) 25%, rgba(250, 247, 242, 0.6) 55%, transparent 100%);
         }
 
         @media (max-width: 768px) {
           .skills-section {
-            padding-top: 45px;
-            padding-bottom: 45px;
+            padding-top: 50px;
+            padding-bottom: 50px;
           }
           .skills-heading {
             margin-bottom: 25px;
@@ -364,24 +372,24 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
             font-size: 13px;
           }
           .skills-list {
-            gap: 35px;
-            padding-right: 35px;
+            gap: 20px;
+            padding-right: 20px;
           }
           .skill-item {
-            width: 80px;
-            min-width: 80px;
-            height: 90px;
+            width: 90px;
+            min-width: 90px;
+            height: 95px;
+            border-radius: 16px;
           }
           .skill-icon {
-            font-size: 36px;
+            font-size: 32px;
           }
           .skill-name {
             font-size: 11px;
-            font-weight: 400;
           }
           .skills-fade-left,
           .skills-fade-right {
-            width: 65px;
+            width: 60px;
           }
         }
 
