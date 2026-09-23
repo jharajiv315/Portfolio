@@ -40,7 +40,7 @@ export default function IntroAnimation({ onFinish, onComplete }) {
     <AnimatePresence onExitComplete={handleDone}>
       {visible && (
         <motion.div
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black text-white overflow-hidden"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#FAF7F2] text-[#1C1917] overflow-hidden"
           initial={{ opacity: 1 }}
           exit={{
             opacity: 0,
@@ -54,7 +54,7 @@ export default function IntroAnimation({ onFinish, onComplete }) {
           <AnimatePresence mode="wait">
             <motion.h1
               key={index}
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-[#1C1917] flex items-center gap-2"
               initial={{
                 opacity: 0,
                 y: 20,
@@ -72,7 +72,8 @@ export default function IntroAnimation({ onFinish, onComplete }) {
                 ease: "easeOut",
               }}
             >
-              {greetings[index]}
+              <span>{greetings[index]}</span>
+              <span className="inline-block w-2.5 h-2.5 rounded-full bg-[#B84A1C]"></span>
             </motion.h1>
           </AnimatePresence>
         </motion.div>
