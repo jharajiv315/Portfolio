@@ -26,7 +26,7 @@ export default function Home() {
   } = usePortfolioData();
 
   return (
-    <div className="relative bg-black text-white min-h-screen selection:bg-cyan-500 selection:text-black">
+    <div className="relative bg-[#FAF7F2] text-[#1C1917] min-h-screen selection:bg-[#B84A1C]/20 selection:text-[#B84A1C]">
       {/* Multilingual Intro Animation */}
       {!introFinished && (
         <IntroAnimation
@@ -66,8 +66,8 @@ export default function Home() {
 
       {/* Subtle Error Banner if API is completely unavailable */}
       {error && (
-        <div className="fixed bottom-4 left-4 z-50 p-3 rounded-xl bg-zinc-950/90 border border-red-500/40 text-red-300 text-xs shadow-2xl backdrop-blur-md flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
+        <div className="fixed bottom-4 left-4 z-50 p-3 rounded-xl bg-white/95 border border-red-300 text-red-800 text-xs shadow-xl backdrop-blur-md flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
           <span>{error}</span>
         </div>
       )}
