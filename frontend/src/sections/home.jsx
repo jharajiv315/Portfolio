@@ -152,9 +152,9 @@ export default function Home({ user }) {
               xl:w-[60%]
             "
           >
-            {/* STATUS PILL */}
+            {/* STATUS INDICATOR */}
             <motion.div
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#E8E1D5] shadow-xs text-xs font-medium text-[#1C1917] mb-5 backdrop-blur-sm"
+              className="inline-flex items-center gap-2 text-xs font-medium text-[#78716C] mb-4"
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
