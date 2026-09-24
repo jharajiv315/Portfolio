@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { ArrowLeft, Github, ExternalLink, Sparkles, Layers, Cpu } from "lucide-react";
+import { ArrowLeft, Github, ExternalLink, Layers, Cpu } from "lucide-react";
 import CustomCursor from "../components/CustomCursor";
 import ParticleBackground from "../components/ParticleBackground";
 
@@ -79,10 +79,9 @@ export const ProjectView = () => {
           <div className="flex flex-col gap-10">
             {/* Header / Title */}
             <div>
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#E8E1D5] text-[#B84A1C] text-xs font-semibold uppercase tracking-wider mb-3 shadow-xs">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>{project.stack || "Full-Stack Development"}</span>
-              </div>
+              <p className="text-xs font-semibold text-[#B84A1C] uppercase tracking-wider mb-2">
+                {project.stack || "Full-Stack Development"}
+              </p>
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#1C1917] mb-3 tracking-tight">
                 {project.title}
               </h1>
