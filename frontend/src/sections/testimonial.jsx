@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Sparkles, Quote, Star } from "lucide-react";
+import { Quote, Star } from "lucide-react";
 
 export default function Testimonials({ testimonials = [] }) {
   if (!testimonials || testimonials.length === 0) {
@@ -19,10 +19,6 @@ export default function Testimonials({ testimonials = [] }) {
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#E8E1D5] text-[#B84A1C] text-xs font-semibold uppercase tracking-wider mb-4 shadow-xs">
-            <Sparkles size={13} />
-            Endorsements
-          </div>
           <h2 className="font-serif font-bold text-3xl sm:text-4xl md:text-5xl text-[#1C1917] tracking-tight">
             What People <span className="text-[#B84A1C] italic font-serif">Say</span>
           </h2>
