@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ExternalLink, Sparkles, ArrowUpRight, Globe } from "lucide-react";
+import { ExternalLink, ArrowUpRight, Globe } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -62,8 +62,7 @@ function ProjectCard({ project, index, total, range, targetScale, progress }) {
             {/* Header / Number & Category */}
             <div>
               <div className="flex items-center justify-between gap-3 mb-2">
-                <span className="text-[#B84A1C] font-sans text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5">
-                  <Sparkles size={13} className="animate-pulse" />
+                <span className="text-[#B84A1C] font-sans text-xs font-semibold uppercase tracking-wider">
                   {project.stack || "Full-Stack Project"}
                 </span>
                 <span className="text-[#78716C] font-mono text-xs font-medium">
@@ -265,11 +264,6 @@ export default function Projects({ projects = [], user }) {
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
         >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#E8E1D5] text-[#B84A1C] text-xs font-semibold uppercase tracking-wider mb-4 shadow-xs">
-            <Sparkles size={13} />
-            Portfolio Showcase
-          </div>
-
           <h2 className="font-serif font-bold text-3xl sm:text-4xl md:text-5xl text-[#1C1917] tracking-tight">
             My <span className="text-[#B84A1C] italic font-serif">Projects</span>
           </h2>
