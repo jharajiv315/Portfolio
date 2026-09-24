@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Sparkles, Calendar } from "lucide-react";
+import { Calendar } from "lucide-react";
 
 // =====================================================
 // TOP/BOTTOM CARD COMPONENT (Progressive Scroll-Linked)
@@ -152,11 +152,6 @@ export default function Experience({ timelines = [] }) {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#E8E1D5] text-[#B84A1C] text-xs font-semibold uppercase tracking-wider mb-4 shadow-xs">
-              <Sparkles size={13} />
-              Career Journey
-            </div>
-
             <h2 className="font-serif font-bold text-3xl sm:text-4xl md:text-5xl text-[#1C1917] tracking-tight">
               My <span className="text-[#B84A1C] italic font-serif">Experience</span>
             </h2>
