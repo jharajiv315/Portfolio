@@ -46,7 +46,7 @@ export const register = catchAsyncErrors(async (req, res, next) => {
   // POSTING RESUME TO CLOUDINARY
   const cloudinaryResponseForResume = await cloudinary.uploader.upload(
     resume.tempFilePath,
-    { folder: "PORTFOLIO RESUME" }
+    { folder: "PORTFOLIO RESUME", resource_type: "auto" }
   );
   if (!cloudinaryResponseForResume || cloudinaryResponseForResume.error) {
     console.error(
@@ -194,14 +194,19 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
     const resumeFileId = user?.resume?.public_id;
     if (resumeFileId && resumeFileId !== "default_resume") {
       try {
-        await cloudinary.uploader.destroy(resumeFileId);
+        await cloudinary.uploader.destroy(resumeFileId, { resource_type: "raw" });
       } catch (err) {
-        console.warn("Could not delete previous resume:", err.message);
+        try {
+          await cloudinary.uploader.destroy(resumeFileId, { resource_type: "image" });
+        } catch (e) {
+          console.warn("Could not delete previous resume:", e.message);
+        }
       }
     }
     try {
       const newResume = await cloudinary.uploader.upload(resume.tempFilePath, {
         folder: "PORTFOLIO RESUME",
+        resource_type: "auto",
       });
       newUserData.resume = {
         public_id: newResume.public_id,
