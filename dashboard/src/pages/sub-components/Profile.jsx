@@ -32,11 +32,13 @@ const Profile = () => {
                   <Label className="text-xs uppercase tracking-wider font-semibold text-muted-foreground">
                     Profile Image
                   </Label>
-                  <img
-                    src={user && user.avatar && user.avatar.url}
-                    alt="avatar"
-                    className="w-full h-auto sm:w-72 sm:h-72 rounded-2xl border border-border object-cover bg-card shadow-xs"
-                  />
+                  <div className="w-full sm:w-72 h-80 rounded-2xl border border-border overflow-hidden bg-card shadow-xs">
+                    <img
+                      src={user && user.avatar && user.avatar.url}
+                      alt="avatar"
+                      className="w-full h-full object-cover object-top"
+                    />
+                  </div>
                 </div>
                 <div className="grid gap-2 w-full sm:w-72">
                   <Label className="text-xs uppercase tracking-wider font-semibold text-muted-foreground">
@@ -45,18 +47,20 @@ const Profile = () => {
                   {user?.resume?.url ? (
                     isImage(user.resume.url) ? (
                       <Link to={user.resume.url} target="_blank">
-                        <img
-                          src={user.resume.url}
-                          alt="resume preview"
-                          className="w-full h-auto sm:w-72 sm:h-72 rounded-2xl border border-border object-cover bg-card shadow-xs hover:border-primary/40 transition-colors"
-                        />
+                        <div className="w-full sm:w-72 h-80 rounded-2xl border border-border overflow-hidden bg-card shadow-xs">
+                          <img
+                            src={user.resume.url}
+                            alt="resume preview"
+                            className="w-full h-full object-cover object-top"
+                          />
+                        </div>
                       </Link>
                     ) : (
                       <a
                         href={user.resume.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-full h-48 sm:w-72 sm:h-72 rounded-2xl border border-border bg-card shadow-xs hover:border-primary/50 transition-all flex flex-col items-center justify-center p-6 text-center gap-3 group"
+                        className="w-full sm:w-72 h-80 rounded-2xl border border-border bg-card shadow-xs hover:border-primary/50 transition-all flex flex-col items-center justify-center p-6 text-center gap-3 group"
                       >
                         <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
                           <FileText className="w-8 h-8" />
@@ -75,7 +79,7 @@ const Profile = () => {
                       </a>
                     )
                   ) : (
-                    <div className="w-full h-48 sm:w-72 sm:h-72 rounded-2xl border border-dashed border-border bg-muted/20 flex flex-col items-center justify-center p-6 text-center text-muted-foreground gap-2">
+                    <div className="w-full sm:w-72 h-80 rounded-2xl border border-dashed border-border bg-muted/20 flex flex-col items-center justify-center p-6 text-center text-muted-foreground gap-2">
                       <FileText className="w-8 h-8 opacity-40" />
                       <p className="text-xs">No resume uploaded</p>
                     </div>
