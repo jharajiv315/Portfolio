@@ -7,6 +7,7 @@ import {
 } from "react-icons/fa6";
 import { FaEnvelope } from "react-icons/fa";
 
+import { toast } from "react-toastify";
 import ParticlesBackground from "../components/ParticleBackground";
 import developerMascot from "../assets/developer-mascot.png";
 
@@ -49,11 +50,29 @@ export default function Home({ user }) {
     return () => clearTimeout(timeout);
   }, [subIndex, index, deleting, roles]);
 
-  const hasValidResume =
+  const resumeUrl =
     user?.resume &&
     user.resume.url &&
     user.resume.url.trim() !== "" &&
-    !user.resume.url.includes("[ADD RESUME");
+    !user.resume.url.includes("[ADD RESUME")
+      ? user.resume.url
+      : null;
+
+  const handleResumeClick = (e) => {
+    if (resumeUrl) {
+      // Resume exists: open directly in new tab and let default navigation proceed
+      return;
+    }
+    // Fallback if resume is not yet uploaded
+    e.preventDefault();
+    toast.info("Resume document is being updated. You can request a copy directly via the contact form below!", {
+      autoClose: 4000,
+    });
+    const contactEl = document.getElementById("contact");
+    if (contactEl) {
+      contactEl.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <section
@@ -323,68 +342,43 @@ export default function Home({ user }) {
                 <span>→</span>
               </motion.a>
 
-              {/* RESUME */}
-              {hasValidResume ? (
-                <motion.a
-                  href={user.resume.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  whileHover={{
-                    scale: 1.03,
-                    y: -2,
-                  }}
-                  whileTap={{
-                    scale: 0.97,
-                  }}
-                  className="
-                    px-7
-                    py-3
-                    rounded-full
-                    font-medium
-                    text-sm
-                    text-[#1C1917]
-                    bg-white/80
-                    hover:bg-white
-                    border
-                    border-[#E8E1D5]
-                    shadow-xs
-                    hover:shadow-md
-                    transition-all
-                    duration-300
-                  "
-                >
-                  My Resume
-                </motion.a>
-              ) : (
-                <motion.a
-                  href="#contact"
-                  whileHover={{
-                    scale: 1.03,
-                    y: -2,
-                  }}
-                  whileTap={{
-                    scale: 0.97,
-                  }}
-                  className="
-                    px-7
-                    py-3
-                    rounded-full
-                    font-medium
-                    text-sm
-                    text-[#1C1917]
-                    bg-white/80
-                    hover:bg-white
-                    border
-                    border-[#E8E1D5]
-                    shadow-xs
-                    hover:shadow-md
-                    transition-all
-                    duration-300
-                  "
-                >
-                  My Resume
-                </motion.a>
-              )}
+              {/* RESUME BUTTON */}
+              <motion.a
+                href={resumeUrl || "#contact"}
+                target={resumeUrl ? "_blank" : undefined}
+                rel={resumeUrl ? "noopener noreferrer" : undefined}
+                onClick={handleResumeClick}
+                whileHover={{
+                  scale: 1.03,
+                  y: -2,
+                }}
+                whileTap={{
+                  scale: 0.97,
+                }}
+                className="
+                  px-7
+                  py-3
+                  rounded-full
+                  font-medium
+                  text-sm
+                  text-[#1C1917]
+                  bg-white/80
+                  hover:bg-white
+                  border
+                  border-[#E8E1D5]
+                  shadow-xs
+                  hover:shadow-md
+                  transition-all
+                  duration-300
+                  inline-flex
+                  items-center
+                  gap-2
+                  cursor-pointer
+                "
+              >
+                <span>My Resume</span>
+                <span className="text-xs text-[#B84A1C]">↗</span>
+              </motion.a>
             </motion.div>
 
             {/* ================= SOCIAL ICONS ================= */}
