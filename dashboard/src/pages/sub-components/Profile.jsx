@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { Textarea } from "@/components/ui/textarea";
 import { Link } from "react-router-dom";
 import { FileText, ExternalLink } from "lucide-react";
+import { downloadResumeDocument } from "@/lib/utils";
 
 const isImage = (url) => {
   if (!url || typeof url !== "string") return false;
@@ -56,11 +57,15 @@ const Profile = () => {
                         </div>
                       </Link>
                     ) : (
-                      <a
-                        href={user.resume.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full sm:w-72 h-80 rounded-2xl border border-border bg-card shadow-xs hover:border-primary/50 transition-all flex flex-col items-center justify-center p-6 text-center gap-3 group"
+                      <button
+                        type="button"
+                        onClick={() =>
+                          downloadResumeDocument(
+                            user.resume.url,
+                            user?.fullName || "Rajiv_Jha"
+                          )
+                        }
+                        className="w-full sm:w-72 h-80 rounded-2xl border border-border bg-card shadow-xs hover:border-primary/50 transition-all flex flex-col items-center justify-center p-6 text-center gap-3 group cursor-pointer"
                       >
                         <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
                           <FileText className="w-8 h-8" />
@@ -70,13 +75,13 @@ const Profile = () => {
                             Resume Document Attached
                           </p>
                           <span className="text-xs text-muted-foreground uppercase font-mono">
-                            {user.resume.url.split(".").pop()?.toUpperCase() || "DOCUMENT"}
+                            {user.resume.url.toLowerCase().endsWith(".pdf") ? "PDF" : "DOCX"}
                           </span>
                         </div>
                         <span className="inline-flex items-center gap-1.5 text-xs text-primary font-medium group-hover:underline">
-                          View / Download <ExternalLink className="w-3.5 h-3.5" />
+                          Download Document <ExternalLink className="w-3.5 h-3.5" />
                         </span>
-                      </a>
+                      </button>
                     )
                   ) : (
                     <div className="w-full sm:w-72 h-80 rounded-2xl border border-dashed border-border bg-muted/20 flex flex-col items-center justify-center p-6 text-center text-muted-foreground gap-2">
