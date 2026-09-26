@@ -44,9 +44,17 @@ export const register = catchAsyncErrors(async (req, res, next) => {
   }
 
   // POSTING RESUME TO CLOUDINARY
+  const originalResumeName = resume.name
+    ? resume.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, "_")
+    : "resume";
   const cloudinaryResponseForResume = await cloudinary.uploader.upload(
     resume.tempFilePath,
-    { folder: "PORTFOLIO RESUME", resource_type: "auto" }
+    {
+      folder: "PORTFOLIO RESUME",
+      resource_type: "auto",
+      public_id: `${Date.now()}_${originalResumeName}`,
+      use_filename: true,
+    }
   );
   if (!cloudinaryResponseForResume || cloudinaryResponseForResume.error) {
     console.error(
@@ -204,9 +212,14 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
       }
     }
     try {
+      const originalResumeName = resume.name
+        ? resume.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, "_")
+        : "resume";
       const newResume = await cloudinary.uploader.upload(resume.tempFilePath, {
         folder: "PORTFOLIO RESUME",
         resource_type: "auto",
+        public_id: `${Date.now()}_${originalResumeName}`,
+        use_filename: true,
       });
       newUserData.resume = {
         public_id: newResume.public_id,
