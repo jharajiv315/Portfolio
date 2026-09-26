@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import SpecialLoadingButton from "./SpecialLoadingButton";
 import { Link } from "react-router-dom";
 import { FileText, ExternalLink } from "lucide-react";
+import { downloadResumeDocument } from "@/lib/utils";
 
 const isImage = (url) => {
   if (!url || typeof url !== "string") return false;
@@ -175,14 +176,18 @@ const UpdateProfile = () => {
                           </span>
                         </div>
                         {user?.resume?.url && (
-                          <a
-                            href={user.resume.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 text-xs text-primary font-medium hover:underline"
+                          <button
+                            type="button"
+                            onClick={() =>
+                              downloadResumeDocument(
+                                user.resume.url,
+                                user?.fullName || "Rajiv_Jha"
+                              )
+                            }
+                            className="inline-flex items-center gap-1.5 text-xs text-primary font-medium hover:underline cursor-pointer"
                           >
-                            View Current <ExternalLink className="w-3.5 h-3.5" />
-                          </a>
+                            Download Current <ExternalLink className="w-3.5 h-3.5" />
+                          </button>
                         )}
                       </div>
                     )
