@@ -57,17 +57,20 @@ export default function About({ user }) {
           transition={{ duration: 0.8 }}
         >
           {/* ================= PROFILE IMAGE ================= */}
-          <div className="shrink-0">
-            <img
-              src={avatarSrc}
-              alt={user?.fullName || "Rajiv Jha"}
-              className={`h-40 w-40 rounded-2xl border border-[#E8E1D5] shadow-md bg-[#FAF7F2] ${
-                avatarSrc === developerMascot ? "object-contain p-2" : "object-cover object-top"
-              }`}
-              onError={(e) => {
-                e.currentTarget.src = developerMascot;
-              }}
-            />
+          <div className="shrink-0 w-full sm:w-64 md:w-72 max-w-[280px]">
+            <div className="relative aspect-[3/4] w-full rounded-3xl border border-[#E8E1D5] bg-white shadow-lg overflow-hidden group">
+              <img
+                src={avatarSrc}
+                alt={user?.fullName || "Rajiv Jha"}
+                className={`w-full h-full ${
+                  avatarSrc === developerMascot ? "object-contain p-6" : "object-cover object-top"
+                } transition-transform duration-500 group-hover:scale-103`}
+                onError={(e) => {
+                  e.currentTarget.src = developerMascot;
+                }}
+              />
+              <div className="absolute inset-0 rounded-3xl ring-1 ring-inset ring-black/5 pointer-events-none" />
+            </div>
           </div>
 
           {/* ================= PROFILE DETAILS ================= */}
@@ -188,6 +191,39 @@ export default function About({ user }) {
               >
                 View Projects
               </a>
+
+              {user?.resume?.url &&
+                user.resume.url.trim() !== "" &&
+                !user.resume.url.includes("[ADD RESUME") && (
+                  <a
+                    href={user.resume.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="
+                      rounded-full
+                      border
+                      border-[#B84A1C]/30
+                      bg-[#B84A1C]/5
+                      px-6
+                      py-2.5
+                      font-medium
+                      text-sm
+                      text-[#B84A1C]
+                      hover:bg-[#B84A1C]
+                      hover:text-white
+                      shadow-xs
+                      hover:shadow-sm
+                      transition-all
+                      duration-300
+                      inline-flex
+                      items-center
+                      gap-1.5
+                    "
+                  >
+                    <span>My Resume</span>
+                    <span className="text-xs">↗</span>
+                  </a>
+                )}
 
               <a
                 href="#contact"
