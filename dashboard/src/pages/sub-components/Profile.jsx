@@ -4,6 +4,12 @@ import { Label } from "@/components/ui/label";
 import { useSelector } from "react-redux";
 import { Textarea } from "@/components/ui/textarea";
 import { Link } from "react-router-dom";
+import { FileText, ExternalLink } from "lucide-react";
+
+const isImage = (url) => {
+  if (!url || typeof url !== "string") return false;
+  return url.match(/\.(jpeg|jpg|gif|png|webp|svg)($|\?)/i) || url.startsWith("data:image/");
+};
 
 const Profile = () => {
   const { user } = useSelector((state) => state.user);
@@ -36,13 +42,44 @@ const Profile = () => {
                   <Label className="text-xs uppercase tracking-wider font-semibold text-muted-foreground">
                     Attached Resume
                   </Label>
-                  <Link to={user && user.resume && user.resume.url} target="_blank">
-                    <img
-                      src={user && user.resume && user.resume.url}
-                      alt="resume preview"
-                      className="w-full h-auto sm:w-72 sm:h-72 rounded-2xl border border-border object-cover bg-card shadow-xs hover:border-primary/40 transition-colors"
-                    />
-                  </Link>
+                  {user?.resume?.url ? (
+                    isImage(user.resume.url) ? (
+                      <Link to={user.resume.url} target="_blank">
+                        <img
+                          src={user.resume.url}
+                          alt="resume preview"
+                          className="w-full h-auto sm:w-72 sm:h-72 rounded-2xl border border-border object-cover bg-card shadow-xs hover:border-primary/40 transition-colors"
+                        />
+                      </Link>
+                    ) : (
+                      <a
+                        href={user.resume.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full h-48 sm:w-72 sm:h-72 rounded-2xl border border-border bg-card shadow-xs hover:border-primary/50 transition-all flex flex-col items-center justify-center p-6 text-center gap-3 group"
+                      >
+                        <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
+                          <FileText className="w-8 h-8" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-foreground">
+                            Resume Document Attached
+                          </p>
+                          <span className="text-xs text-muted-foreground uppercase font-mono">
+                            {user.resume.url.split(".").pop()?.toUpperCase() || "DOCUMENT"}
+                          </span>
+                        </div>
+                        <span className="inline-flex items-center gap-1.5 text-xs text-primary font-medium group-hover:underline">
+                          View / Download <ExternalLink className="w-3.5 h-3.5" />
+                        </span>
+                      </a>
+                    )
+                  ) : (
+                    <div className="w-full h-48 sm:w-72 sm:h-72 rounded-2xl border border-dashed border-border bg-muted/20 flex flex-col items-center justify-center p-6 text-center text-muted-foreground gap-2">
+                      <FileText className="w-8 h-8 opacity-40" />
+                      <p className="text-xs">No resume uploaded</p>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="grid gap-2">
