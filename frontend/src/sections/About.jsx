@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import developerMascot from "../assets/developer-mascot.png";
+import { downloadResumeDocument } from "../lib/utils";
 
 export default function About({ user }) {
   const avatarSrc = user?.avatar?.url || developerMascot;
@@ -195,10 +196,14 @@ export default function About({ user }) {
               {user?.resume?.url &&
                 user.resume.url.trim() !== "" &&
                 !user.resume.url.includes("[ADD RESUME") && (
-                  <a
-                    href={user.resume.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    type="button"
+                    onClick={() =>
+                      downloadResumeDocument(
+                        user.resume.url,
+                        user?.fullName || "Rajiv Jha"
+                      )
+                    }
                     className="
                       rounded-full
                       border
@@ -218,11 +223,12 @@ export default function About({ user }) {
                       inline-flex
                       items-center
                       gap-1.5
+                      cursor-pointer
                     "
                   >
                     <span>My Resume</span>
                     <span className="text-xs">↗</span>
-                  </a>
+                  </button>
                 )}
 
               <a
