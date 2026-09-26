@@ -320,7 +320,7 @@ const HomePage = () => {
             <img
               src={user.avatar.url}
               alt="avatar"
-              className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl border border-border object-cover shadow-sm bg-card max-[900px]:hidden"
+              className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl border border-border object-cover object-top shadow-sm bg-card max-[900px]:hidden"
             />
           ) : (
             <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl border border-border bg-card flex items-center justify-center font-serif font-bold text-2xl text-primary shadow-sm max-[900px]:hidden">
