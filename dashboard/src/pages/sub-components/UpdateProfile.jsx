@@ -124,16 +124,21 @@ const UpdateProfile = () => {
             <div className="grid gap-4">
               <div className="flex items-start lg:justify-between lg:items-center flex-col lg:flex-row gap-5">
                 <div className="grid gap-2 w-full sm:w-72">
-                  <Label>Profile Image</Label>
-                  <img
-                    src={avatarPreview ? avatarPreview : "/avatarHolder.jpg"}
-                    alt="avatar"
-                    className="w-full h-auto sm:w-72 sm:h-72 rounded-2xl"
-                  />
+                  <Label className="text-xs uppercase tracking-wider font-semibold text-muted-foreground">
+                    Profile Image
+                  </Label>
+                  <div className="w-full sm:w-72 h-80 rounded-2xl border border-border overflow-hidden bg-card shadow-xs relative">
+                    <img
+                      src={avatarPreview ? avatarPreview : "/avatarHolder.jpg"}
+                      alt="avatar"
+                      className="w-full h-full object-cover object-top"
+                    />
+                  </div>
                   <div className="relative">
                     <input
                       type="file"
                       onChange={avatarHandler}
+                      accept="image/*"
                       className="avatar-update-btn"
                     />
                   </div>
@@ -148,14 +153,16 @@ const UpdateProfile = () => {
                         to={user && user.resume && user.resume.url}
                         target="_blank"
                       >
-                        <img
-                          src={resumePreview}
-                          alt="resume preview"
-                          className="w-full h-auto sm:w-72 sm:h-72 rounded-2xl border border-border object-cover bg-card shadow-xs"
-                        />
+                        <div className="w-full sm:w-72 h-80 rounded-2xl border border-border overflow-hidden bg-card shadow-xs">
+                          <img
+                            src={resumePreview}
+                            alt="resume preview"
+                            className="w-full h-full object-cover object-top"
+                          />
+                        </div>
                       </Link>
                     ) : (
-                      <div className="w-full h-48 sm:w-72 sm:h-72 rounded-2xl border border-border bg-card shadow-xs flex flex-col items-center justify-center p-6 text-center gap-3">
+                      <div className="w-full sm:w-72 h-80 rounded-2xl border border-border bg-card shadow-xs flex flex-col items-center justify-center p-6 text-center gap-3">
                         <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
                           <FileText className="w-8 h-8" />
                         </div>
@@ -180,7 +187,7 @@ const UpdateProfile = () => {
                       </div>
                     )
                   ) : (
-                    <div className="w-full h-48 sm:w-72 sm:h-72 rounded-2xl border border-dashed border-border bg-muted/20 flex flex-col items-center justify-center p-6 text-center text-muted-foreground gap-2">
+                    <div className="w-full sm:w-72 h-80 rounded-2xl border border-dashed border-border bg-muted/20 flex flex-col items-center justify-center p-6 text-center text-muted-foreground gap-2">
                       <FileText className="w-8 h-8 opacity-40" />
                       <p className="text-xs">No resume uploaded</p>
                     </div>
