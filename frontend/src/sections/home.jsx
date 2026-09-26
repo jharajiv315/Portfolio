@@ -8,6 +8,7 @@ import {
 import { FaEnvelope } from "react-icons/fa";
 
 import { toast } from "react-toastify";
+import { downloadResumeDocument } from "../lib/utils";
 import ParticlesBackground from "../components/ParticleBackground";
 import developerMascot from "../assets/developer-mascot.png";
 
@@ -58,13 +59,13 @@ export default function Home({ user }) {
       ? user.resume.url
       : null;
 
-  const handleResumeClick = (e) => {
+  const handleResumeClick = async (e) => {
+    e.preventDefault();
     if (resumeUrl) {
-      // Resume exists: open directly in new tab and let default navigation proceed
+      await downloadResumeDocument(resumeUrl, user?.fullName || "Rajiv Jha");
       return;
     }
     // Fallback if resume is not yet uploaded
-    e.preventDefault();
     toast.info("Resume document is being updated. You can request a copy directly via the contact form below!", {
       autoClose: 4000,
     });
