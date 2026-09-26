@@ -13,6 +13,12 @@ import { toast } from "react-toastify";
 import { Textarea } from "@/components/ui/textarea";
 import SpecialLoadingButton from "./SpecialLoadingButton";
 import { Link } from "react-router-dom";
+import { FileText, ExternalLink } from "lucide-react";
+
+const isImage = (url) => {
+  if (!url || typeof url !== "string") return false;
+  return url.match(/\.(jpeg|jpg|gif|png|webp|svg)($|\?)/i) || url.startsWith("data:image/");
+};
 
 const UpdateProfile = () => {
   const { user, loading, error, isUpdated, message } = useSelector(
@@ -133,21 +139,57 @@ const UpdateProfile = () => {
                   </div>
                 </div>
                 <div className="grid gap-2 w-full sm:w-72">
-                  <Label>Resume</Label>
-                  <Link
-                    to={user && user.resume && user.resume.url}
-                    target="_blank"
-                  >
-                    <img
-                      src={resumePreview ? resumePreview : "/avatarHolder.jpg"}
-                      alt="avatar"
-                      className="w-full  h-auto sm:w-72 sm:h-72 rounded-2xl"
-                    />
-                  </Link>
+                  <Label className="text-xs uppercase tracking-wider font-semibold text-muted-foreground">
+                    Resume Document
+                  </Label>
+                  {resumePreview ? (
+                    isImage(resumePreview) ? (
+                      <Link
+                        to={user && user.resume && user.resume.url}
+                        target="_blank"
+                      >
+                        <img
+                          src={resumePreview}
+                          alt="resume preview"
+                          className="w-full h-auto sm:w-72 sm:h-72 rounded-2xl border border-border object-cover bg-card shadow-xs"
+                        />
+                      </Link>
+                    ) : (
+                      <div className="w-full h-48 sm:w-72 sm:h-72 rounded-2xl border border-border bg-card shadow-xs flex flex-col items-center justify-center p-6 text-center gap-3">
+                        <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                          <FileText className="w-8 h-8" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-foreground truncate max-w-[200px]">
+                            {resume?.name || "Resume Document"}
+                          </p>
+                          <span className="text-xs text-muted-foreground uppercase font-mono">
+                            {resume?.name?.split(".").pop()?.toUpperCase() || (user?.resume?.url?.split(".").pop()?.toUpperCase() || "READY")}
+                          </span>
+                        </div>
+                        {user?.resume?.url && (
+                          <a
+                            href={user.resume.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-xs text-primary font-medium hover:underline"
+                          >
+                            View Current <ExternalLink className="w-3.5 h-3.5" />
+                          </a>
+                        )}
+                      </div>
+                    )
+                  ) : (
+                    <div className="w-full h-48 sm:w-72 sm:h-72 rounded-2xl border border-dashed border-border bg-muted/20 flex flex-col items-center justify-center p-6 text-center text-muted-foreground gap-2">
+                      <FileText className="w-8 h-8 opacity-40" />
+                      <p className="text-xs">No resume uploaded</p>
+                    </div>
+                  )}
                   <div className="relative">
                     <input
                       type="file"
                       onChange={resumeHandler}
+                      accept=".pdf,.doc,.docx,image/*"
                       className="avatar-update-btn"
                     />
                   </div>
