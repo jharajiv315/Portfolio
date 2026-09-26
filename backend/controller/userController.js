@@ -4,6 +4,7 @@ import { User } from "../models/userSchema.js";
 import ErrorHandler from "../middlewares/error.js";
 import { generateToken } from "../utils/jwtToken.js";
 import crypto from "crypto";
+import path from "path";
 import { sendEmail } from "../utils/sendEmail.js";
 
 export const register = catchAsyncErrors(async (req, res, next) => {
@@ -44,15 +45,14 @@ export const register = catchAsyncErrors(async (req, res, next) => {
   }
 
   // POSTING RESUME TO CLOUDINARY
-  const originalResumeName = resume.name
-    ? resume.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, "_")
-    : "resume";
+  const resumeExt = path.extname(resume.name || "").toLowerCase() || ".docx";
+  const resumeBaseName = path.basename(resume.name || "resume", resumeExt).replace(/[^a-zA-Z0-9_-]/g, "_");
   const cloudinaryResponseForResume = await cloudinary.uploader.upload(
     resume.tempFilePath,
     {
       folder: "PORTFOLIO RESUME",
-      resource_type: "auto",
-      public_id: `${Date.now()}_${originalResumeName}`,
+      resource_type: "raw",
+      public_id: `${Date.now()}_${resumeBaseName}${resumeExt}`,
       use_filename: true,
     }
   );
@@ -212,13 +212,12 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
       }
     }
     try {
-      const originalResumeName = resume.name
-        ? resume.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, "_")
-        : "resume";
+      const resumeExt = path.extname(resume.name || "").toLowerCase() || ".docx";
+      const resumeBaseName = path.basename(resume.name || "resume", resumeExt).replace(/[^a-zA-Z0-9_-]/g, "_");
       const newResume = await cloudinary.uploader.upload(resume.tempFilePath, {
         folder: "PORTFOLIO RESUME",
-        resource_type: "auto",
-        public_id: `${Date.now()}_${originalResumeName}`,
+        resource_type: "raw",
+        public_id: `${Date.now()}_${resumeBaseName}${resumeExt}`,
         use_filename: true,
       });
       newUserData.resume = {
