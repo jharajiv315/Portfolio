@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
 import cors from "cors";
+import os from "os";
 import dbConnection from "./database/dbConnection.js";
 import { errorMiddleware } from "./middlewares/error.js";
 import userRouter from "./routes/userRouter.js";
@@ -15,32 +16,37 @@ import projectRouter from "./routes/projectRouter.js";
 const app = express();
 dotenv.config({ path: "./config/config.env" });
 
+// Security: Hide server technology header & trust proxy for accurate client IP behind reverse proxies
+app.disable("x-powered-by");
+app.set("trust proxy", 1);
+
 const allowedOrigins = [
   process.env.PORTFOLIO_URL,
   process.env.DASHBOARD_URL,
   "https://portfolio-beta-ochre-90.vercel.app",
-  "http://localhost:5173",
-  "http://localhost:5174",
-  "http://localhost:3000",
-  "http://localhost:3001",
-  "http://127.0.0.1:5173",
-  "http://127.0.0.1:5174",
+  "https://portfolio-dashboard-seven-delta.vercel.app",
+  ...(process.env.NODE_ENV !== "production"
+    ? [
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "http://127.0.0.1:5173",
+        "http://127.0.0.1:5174",
+      ]
+    : []),
 ].filter(Boolean);
 
 app.use(
   cors({
     origin: (origin, callback) => {
+      // Allow server-to-server or non-browser tools (no origin header)
       if (!origin) return callback(null, true);
 
-      const isAllowed =
-        allowedOrigins.includes(origin) ||
-        origin.endsWith(".vercel.app") ||
-        process.env.NODE_ENV !== "production";
-
-      if (isAllowed) {
+      if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
-      return callback(new Error(`CORS policy violation: ${origin} not allowed`));
+      return callback(null, false);
     },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
@@ -55,9 +61,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   fileUpload({
     useTempFiles: true,
-    tempFileDir: "/tmp/",
+    tempFileDir: os.tmpdir(),
   })
 );
+
+// Production health check endpoint
+app.get("/api/v1/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    uptime: Math.floor(process.uptime()),
+  });
+});
 
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/timeline", timelineRouter);
