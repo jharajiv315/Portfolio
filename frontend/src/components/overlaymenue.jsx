@@ -14,7 +14,6 @@ export default function OverlayMenu({ isOpen, onClose }) {
     "Skills",
     "Projects",
     "Experience",
-    "Testimonials",
     "Contact",
   ];
 
@@ -58,12 +57,12 @@ export default function OverlayMenu({ isOpen, onClose }) {
           style={{
             backgroundColor: "rgba(250, 247, 242, 0.98)",
           }}
-          className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-xl"
+          className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-xl pt-[max(1.5rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))] px-6"
         >
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-6 right-6 text-[#1C1917] hover:text-[#B84A1C] text-3xl transition-colors p-2"
+            className="absolute top-5 right-5 sm:top-6 sm:right-6 text-[#1C1917] hover:text-[#B84A1C] text-3xl transition-colors p-3 min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer rounded-full hover:bg-black/5"
             aria-label="Close menu"
           >
             <FiX />
@@ -71,7 +70,7 @@ export default function OverlayMenu({ isOpen, onClose }) {
 
           {/* Menu Items & Action */}
           <div className="flex flex-col items-center">
-            <ul className="space-y-4 sm:space-y-5 text-center mb-8">
+            <ul className="space-y-3 sm:space-y-4 text-center mb-8">
               {menuItems.map((item, index) => (
                 <motion.li
                   key={item}
@@ -90,7 +89,7 @@ export default function OverlayMenu({ isOpen, onClose }) {
                   <a
                     href={`#${item.toLowerCase()}`}
                     onClick={onClose}
-                    className="text-2xl sm:text-3xl text-[#1C1917] font-serif font-bold hover:text-[#B84A1C] transition-colors duration-200 tracking-tight"
+                    className="inline-block py-2 px-6 min-h-[44px] text-2xl sm:text-3xl text-[#1C1917] font-serif font-bold hover:text-[#B84A1C] transition-colors duration-200 tracking-tight"
                   >
                     {item}
                   </a>
@@ -106,7 +105,7 @@ export default function OverlayMenu({ isOpen, onClose }) {
               <a
                 href="#contact"
                 onClick={onClose}
-                className="inline-flex items-center gap-2 bg-[#B84A1C] hover:bg-[#9C3E16] text-white px-7 py-2.5 rounded-full font-sans font-medium shadow-md shadow-[#B84A1C]/25 text-sm active:scale-95 transition-all"
+                className="inline-flex items-center gap-2 bg-[#B84A1C] hover:bg-[#9C3E16] text-white px-7 py-3 min-h-[44px] rounded-full font-sans font-medium shadow-md shadow-[#B84A1C]/25 text-sm active:scale-95 transition-all"
               >
                 Reach Out
               </a>
