@@ -70,6 +70,15 @@ function CosmicParticles() {
       particles.push(new Star());
     }
 
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion) {
+      particles.forEach((p) => p.draw());
+      return () => window.removeEventListener("resize", resize);
+    }
+
     const loop = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       particles.forEach((p) => {
@@ -121,18 +130,27 @@ export default function Contact({ user }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const trimmedName = formData.name.trim();
+    const trimmedEmail = formData.email.trim();
+    const trimmedIdea = formData.idea.trim();
+
+    if (!trimmedName || !trimmedEmail || !trimmedIdea) {
+      toast.error("Please fill in all required fields.");
+      return;
+    }
+
     setLoading(true);
     setStatus("");
 
     try {
-      const subject = `[${formData.service}] Inquiry from ${formData.name}`;
+      const subject = `[${formData.service}] Inquiry from ${trimmedName}`;
 
-      const messageContent = `Client Email: ${formData.email}\nService Requested: ${formData.service}\n\nProject Idea / Inquiry:\n${formData.idea}`;
+      const messageContent = `Client Email: ${trimmedEmail}\nService Requested: ${formData.service}\n\nProject Idea / Inquiry:\n${trimmedIdea}`;
 
       const res = await axios.post(
         `${API_URL}/api/v1/message/send`,
         {
-          senderName: formData.name,
+          senderName: trimmedName,
           subject,
           message: messageContent,
         },
@@ -239,10 +257,11 @@ export default function Contact({ user }) {
               <form onSubmit={handleSubmit} className="space-y-3.5">
                 {/* 1. Your Name */}
                 <div>
-                  <label className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
+                  <label htmlFor="contact-name" className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
                     Your Name <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
                   </label>
                   <input
+                    id="contact-name"
                     type="text"
                     name="name"
                     required
@@ -255,10 +274,11 @@ export default function Contact({ user }) {
 
                 {/* 2. Your Email */}
                 <div>
-                  <label className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
+                  <label htmlFor="contact-email" className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
                     Your Email <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
                   </label>
                   <input
+                    id="contact-email"
                     type="email"
                     name="email"
                     required
@@ -271,10 +291,11 @@ export default function Contact({ user }) {
 
                 {/* 3. Service Needed */}
                 <div>
-                  <label className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
+                  <label htmlFor="contact-service" className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
                     Service Needed <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
                   </label>
                   <select
+                    id="contact-service"
                     name="service"
                     value={formData.service}
                     onChange={handleChange}
@@ -303,10 +324,11 @@ export default function Contact({ user }) {
 
                 {/* 4. Explain Your Idea */}
                 <div>
-                  <label className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
+                  <label htmlFor="contact-idea" className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
                     Explain Your Idea <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
                   </label>
                   <textarea
+                    id="contact-idea"
                     name="idea"
                     required
                     value={formData.idea}
