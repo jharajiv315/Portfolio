@@ -10,10 +10,10 @@ import { Link } from "react-router-dom";
 
 function ProjectCard({ project, index, total, progress, shouldReduceMotion }) {
   const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
-  const stepY = isMobile ? 14 : 26;
-  const exitY = isMobile ? -80 : -130;
+  const stepY = isMobile ? 18 : 28;
+  const exitY = isMobile ? -540 : -660;
 
-  // Generate deterministic continuous motion ranges
+  // Generate deterministic continuous motion ranges with clean dwell plateaus
   const { inputRange, yRange, scaleRange, opacityRange } = useMemo(() => {
     if (total <= 1) {
       return {
@@ -26,56 +26,73 @@ function ProjectCard({ project, index, total, progress, shouldReduceMotion }) {
 
     const T = total - 1;
     const step = 1 / T;
-    const inputs = [];
-    const ys = [];
-    const scales = [];
-    const opacities = [];
 
-    for (let j = 0; j <= T; j++) {
-      const s = j * step;
-      inputs.push(s);
+    const points = [0];
+    for (let k = 0; k < T; k++) {
+      const dwellEnd = k * step + step * 0.50;
+      const transEnd = (k + 1) * step;
+      points.push(Number(dwellEnd.toFixed(4)));
+      points.push(Number(transEnd.toFixed(4)));
+    }
 
-      if (j < index) {
-        // Card is waiting behind the active card j
-        const d = index - j;
-        if (d === 1) {
-          ys.push(stepY);
-          scales.push(0.96);
-          opacities.push(0.88);
-        } else if (d === 2) {
-          ys.push(stepY * 2);
-          scales.push(0.92);
-          opacities.push(0.65);
-        } else {
-          ys.push(stepY * 2.5);
-          scales.push(0.88);
-          opacities.push(0);
-        }
-      } else if (j === index) {
-        // Card is the active foreground card
-        ys.push(0);
-        scales.push(1.0);
-        opacities.push(1.0);
+    const inputRange = Array.from(new Set(points)).sort((a, b) => a - b);
+    const yRange = [];
+    const scaleRange = [];
+    const opacityRange = [];
+
+    for (const p of inputRange) {
+      if (p >= (index + 1) * step) {
+        // Card has completely exited upward
+        yRange.push(exitY);
+        scaleRange.push(0.95);
+        opacityRange.push(0);
+      } else if (p >= index * step + step * 0.50) {
+        // Card is currently transitioning out (exiting upward)
+        const start = index * step + step * 0.50;
+        const end = (index + 1) * step;
+        const t = (p - start) / (end - start);
+        yRange.push(Math.round(exitY * t));
+        scaleRange.push(Number((1.0 - 0.05 * t).toFixed(3)));
+        opacityRange.push(Number((1.0 - t).toFixed(3)));
+      } else if (p >= index * step) {
+        // Card is active in the foreground and dwelling
+        yRange.push(0);
+        scaleRange.push(1.0);
+        opacityRange.push(1.0);
       } else {
-        // j > index: card has already exited
-        ys.push(exitY);
-        scales.push(0.95);
-        opacities.push(0);
+        // Card is waiting in the stack behind (p < index * step)
+        const currentActive = Math.floor(p / step);
+        const isCurrentlyTransitioning = p > (currentActive * step + step * 0.50);
+
+        if (!isCurrentlyTransitioning) {
+          const d = index - currentActive;
+          yRange.push(stepY * Math.min(d, 2));
+          scaleRange.push(Math.max(0.92, 1 - 0.04 * d));
+          opacityRange.push(1.0);
+        } else {
+          const start = currentActive * step + step * 0.50;
+          const end = (currentActive + 1) * step;
+          const t = (p - start) / (end - start);
+          const startD = index - currentActive;
+          const endD = startD - 1;
+          const startY = stepY * Math.min(startD, 2);
+          const endY = stepY * Math.min(endD, 2);
+          const startScale = Math.max(0.92, 1 - 0.04 * startD);
+          const endScale = Math.max(0.92, 1 - 0.04 * endD);
+          yRange.push(Math.round(startY + (endY - startY) * t));
+          scaleRange.push(Number((startScale + (endScale - startScale) * t).toFixed(3)));
+          opacityRange.push(1.0);
+        }
       }
     }
 
-    return {
-      inputRange: inputs,
-      yRange: ys,
-      scaleRange: scales,
-      opacityRange: opacities,
-    };
+    return { inputRange, yRange, scaleRange, opacityRange };
   }, [index, total, stepY, exitY]);
 
   const y = useTransform(progress, inputRange, yRange);
   const scale = useTransform(progress, inputRange, scaleRange);
   const opacity = useTransform(progress, inputRange, opacityRange);
-  const pointerEvents = useTransform(opacity, (o) => (o > 0.85 ? "auto" : "none"));
+  const pointerEvents = useTransform(y, (latestY) => (Math.abs(latestY) < 20 ? "auto" : "none"));
 
   const techList = project?.technologies
     ? (Array.isArray(project.technologies)
@@ -104,7 +121,7 @@ function ProjectCard({ project, index, total, progress, shouldReduceMotion }) {
   const isExternalLive = liveUrl.startsWith("http");
 
   const cardContent = (
-    <div className="w-full rounded-2xl sm:rounded-3xl bg-white/95 border border-[#E8E1D5] p-4 xs:p-6 sm:p-8 md:p-10 shadow-[0_8px_30px_rgba(28,25,23,0.06)] backdrop-blur-xl relative overflow-hidden transition-all duration-500 hover:shadow-[0_16px_40px_rgba(184,74,28,0.12)] hover:border-[#B84A1C]/40">
+    <div className="w-full rounded-2xl sm:rounded-3xl bg-white border border-[#E8E1D5] p-4 xs:p-6 sm:p-8 md:p-10 shadow-[0_12px_40px_rgba(28,25,23,0.08)] relative overflow-hidden transition-all duration-500 hover:shadow-[0_20px_45px_rgba(184,74,28,0.14)] hover:border-[#B84A1C]/40">
       {/* Glow ambient inside card */}
       <div className="absolute -top-32 -right-32 w-80 h-80 rounded-full bg-gradient-to-br from-[#EFE7D8]/60 via-[#F5EFEB]/30 to-transparent blur-3xl pointer-events-none" />
       <div className="absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-[#E8DFC8]/40 blur-3xl pointer-events-none" />
@@ -295,7 +312,7 @@ function ProjectCard({ project, index, total, progress, shouldReduceMotion }) {
         y,
         scale,
         opacity,
-        zIndex: total - index,
+        zIndex: (total - index) * 10,
         pointerEvents,
       }}
       className="absolute inset-x-0 mx-auto w-full max-w-5xl"
@@ -327,7 +344,7 @@ export default function Projects({ projects = [], user }) {
   return (
     <section
       id="projects"
-      className="relative w-full bg-[#FAF7F2] text-[#1C1917] pt-20 pb-24 px-4 sm:px-6 lg:px-8 overflow-x-clip"
+      className="relative w-full bg-[#FAF7F2] text-[#1C1917] pt-20 pb-24 px-4 sm:px-6 lg:px-8"
     >
       {/* ================= BACKGROUND GLOWS (Clipped safely without breaking sticky) ================= */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
