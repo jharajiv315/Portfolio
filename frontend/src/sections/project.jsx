@@ -70,27 +70,20 @@ function ProjectCard({ project, index, total, progress, shouldReduceMotion }) {
         opacityRange.push(1.0);
       } else {
         // Card is waiting in the stack behind (p < index * step)
-        const currentActive = Math.floor(p / step);
-        const isCurrentlyTransitioning = p > (currentActive * step + step * 0.45);
-
-        if (!isCurrentlyTransitioning) {
-          const d = index - currentActive;
-          yRange.push(stepY * Math.min(d, 2));
-          scaleRange.push(Math.max(0.92, 1 - 0.04 * d));
-          opacityRange.push(1.0);
+        // Only start fading in when the card immediately in front starts exiting!
+        const enterStart = (index - 1) * step + step * 0.45;
+        const enterEnd = index * step;
+        if (p <= enterStart) {
+          // Deep in stack: INVISIBLE to prevent ANY text collision or bleed-through!
+          yRange.push(stepY);
+          scaleRange.push(0.96);
+          opacityRange.push(0);
         } else {
-          const start = currentActive * step + step * 0.45;
-          const end = (currentActive + 1) * step;
-          const t = (p - start) / (end - start);
-          const startD = index - currentActive;
-          const endD = startD - 1;
-          const startY = stepY * Math.min(startD, 2);
-          const endY = stepY * Math.min(endD, 2);
-          const startScale = Math.max(0.92, 1 - 0.04 * startD);
-          const endScale = Math.max(0.92, 1 - 0.04 * endD);
-          yRange.push(Math.round(startY + (endY - startY) * t));
-          scaleRange.push(Number((startScale + (endScale - startScale) * t).toFixed(3)));
-          opacityRange.push(1.0);
+          // Rising into active focus as previous card exits
+          const t = (p - enterStart) / (enterEnd - enterStart);
+          yRange.push(Math.round(stepY * (1 - t)));
+          scaleRange.push(Number((0.96 + 0.04 * t).toFixed(3)));
+          opacityRange.push(Number((0.3 + 0.7 * t).toFixed(3)));
         }
       }
     }
@@ -101,8 +94,7 @@ function ProjectCard({ project, index, total, progress, shouldReduceMotion }) {
   const y = useTransform(progress, inputRange, yRange);
   const scale = useTransform(progress, inputRange, scaleRange);
   const opacity = useTransform(progress, inputRange, opacityRange);
-  const pointerEvents = useTransform(y, (latestY) => (Math.abs(latestY) < 20 ? "auto" : "none"));
-  const cardZIndex = useTransform(y, (latestY) => (latestY < -350 ? 1 : (total - index) * 10));
+  const pointerEvents = useTransform(opacity, (o) => (o > 0.85 ? "auto" : "none"));
 
   const rawTechList = project?.technologies
     ? (Array.isArray(project.technologies)
@@ -324,10 +316,12 @@ function ProjectCard({ project, index, total, progress, shouldReduceMotion }) {
         y,
         scale,
         opacity,
-        zIndex: cardZIndex,
+        zIndex: (total - index) * 10,
         pointerEvents,
       }}
-      className="absolute inset-x-0 mx-auto w-full max-w-5xl"
+      className={`absolute inset-x-0 mx-auto w-full max-w-5xl ${
+        index === 0 ? "z-30" : index === 1 ? "z-20" : "z-10"
+      }`}
     >
       {cardContent}
     </motion.div>
