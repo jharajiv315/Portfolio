@@ -140,7 +140,8 @@ export default function Home({ user }) {
           min-h-screen
           max-w-7xl
           mx-auto
-          px-6
+          px-4
+          min-[380px]:px-6
           sm:px-10
           md:px-16
           lg:px-20
@@ -625,11 +626,13 @@ export default function Home({ user }) {
             <div
               className="
                 absolute
-                w-[300px]
+                w-[270px]
+                min-[380px]:w-[300px]
                 sm:w-[380px]
                 lg:w-[390px]
                 xl:w-[430px]
-                h-[380px]
+                h-[340px]
+                min-[380px]:h-[380px]
                 sm:h-[480px]
                 lg:h-[500px]
                 xl:h-[530px]
@@ -654,7 +657,8 @@ export default function Home({ user }) {
                 relative
                 z-10
                 w-full
-                max-w-[320px]
+                max-w-[270px]
+                min-[380px]:max-w-[320px]
                 sm:max-w-[380px]
                 lg:max-w-[420px]
                 xl:max-w-[460px]
