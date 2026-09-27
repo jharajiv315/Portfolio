@@ -1,5 +1,5 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef, useMemo } from "react";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { ExternalLink, ArrowUpRight, Globe } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -8,9 +8,74 @@ import { Link } from "react-router-dom";
 // INDIVIDUAL PROJECT CARD (Sticky Scroll Stack)
 // =====================================================
 
-function ProjectCard({ project, index, total, range, targetScale, progress }) {
-  const containerRef = useRef(null);
-  const scale = useTransform(progress, range, [1, targetScale]);
+function ProjectCard({ project, index, total, progress, shouldReduceMotion }) {
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
+  const stepY = isMobile ? 14 : 26;
+  const exitY = isMobile ? -80 : -130;
+
+  // Generate deterministic continuous motion ranges
+  const { inputRange, yRange, scaleRange, opacityRange } = useMemo(() => {
+    if (total <= 1) {
+      return {
+        inputRange: [0, 1],
+        yRange: [0, 0],
+        scaleRange: [1, 1],
+        opacityRange: [1, 1],
+      };
+    }
+
+    const T = total - 1;
+    const step = 1 / T;
+    const inputs = [];
+    const ys = [];
+    const scales = [];
+    const opacities = [];
+
+    for (let j = 0; j <= T; j++) {
+      const s = j * step;
+      inputs.push(s);
+
+      if (j < index) {
+        // Card is waiting behind the active card j
+        const d = index - j;
+        if (d === 1) {
+          ys.push(stepY);
+          scales.push(0.96);
+          opacities.push(0.88);
+        } else if (d === 2) {
+          ys.push(stepY * 2);
+          scales.push(0.92);
+          opacities.push(0.65);
+        } else {
+          ys.push(stepY * 2.5);
+          scales.push(0.88);
+          opacities.push(0);
+        }
+      } else if (j === index) {
+        // Card is the active foreground card
+        ys.push(0);
+        scales.push(1.0);
+        opacities.push(1.0);
+      } else {
+        // j > index: card has already exited
+        ys.push(exitY);
+        scales.push(0.95);
+        opacities.push(0);
+      }
+    }
+
+    return {
+      inputRange: inputs,
+      yRange: ys,
+      scaleRange: scales,
+      opacityRange: opacities,
+    };
+  }, [index, total, stepY, exitY]);
+
+  const y = useTransform(progress, inputRange, yRange);
+  const scale = useTransform(progress, inputRange, scaleRange);
+  const opacity = useTransform(progress, inputRange, opacityRange);
+  const pointerEvents = useTransform(opacity, (o) => (o > 0.85 ? "auto" : "none"));
 
   const techList = project?.technologies
     ? (Array.isArray(project.technologies)
@@ -38,206 +103,218 @@ function ProjectCard({ project, index, total, range, targetScale, progress }) {
 
   const isExternalLive = liveUrl.startsWith("http");
 
-  return (
-    <div
-      ref={containerRef}
-      className="sticky top-20 sm:top-24 flex items-center justify-center w-full mb-10 sm:mb-20"
-      style={{
-        zIndex: index + 1,
-      }}
-    >
-      <motion.div
-        style={{
-          scale,
-        }}
-        className="w-full max-w-5xl mx-auto rounded-2xl sm:rounded-3xl bg-white/95 border border-[#E8E1D5] p-4 xs:p-6 sm:p-8 md:p-10 shadow-[0_8px_30px_rgba(28,25,23,0.06)] backdrop-blur-xl relative overflow-hidden transition-all duration-500 hover:shadow-[0_16px_40px_rgba(184,74,28,0.12)] hover:border-[#B84A1C]/40"
-      >
-        {/* Glow ambient inside card */}
-        <div className="absolute -top-32 -right-32 w-80 h-80 rounded-full bg-gradient-to-br from-[#EFE7D8]/60 via-[#F5EFEB]/30 to-transparent blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-[#E8DFC8]/40 blur-3xl pointer-events-none" />
+  const cardContent = (
+    <div className="w-full rounded-2xl sm:rounded-3xl bg-white/95 border border-[#E8E1D5] p-4 xs:p-6 sm:p-8 md:p-10 shadow-[0_8px_30px_rgba(28,25,23,0.06)] backdrop-blur-xl relative overflow-hidden transition-all duration-500 hover:shadow-[0_16px_40px_rgba(184,74,28,0.12)] hover:border-[#B84A1C]/40">
+      {/* Glow ambient inside card */}
+      <div className="absolute -top-32 -right-32 w-80 h-80 rounded-full bg-gradient-to-br from-[#EFE7D8]/60 via-[#F5EFEB]/30 to-transparent blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-[#E8DFC8]/40 blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          {/* LEFT COLUMN: Project Details */}
-          <div className="lg:col-span-5 flex flex-col justify-between h-full space-y-5">
-            {/* Header / Number & Category */}
-            <div>
-              <div className="flex items-center justify-between gap-3 mb-2">
-                <span className="text-[#B84A1C] font-sans text-xs font-semibold uppercase tracking-wider">
-                  {project.stack || "Full-Stack Project"}
-                </span>
-                <span className="text-[#78716C] font-mono text-xs font-medium">
-                  {displayNum} / {totalNum}
-                </span>
-              </div>
-
-              <h3 className="text-2xl sm:text-3xl font-serif font-bold text-[#1C1917] hover:text-[#B84A1C] transition-colors leading-tight">
-                {project.title}
-              </h3>
-
-              <p className="text-[#78716C] text-sm mt-1 font-medium">
-                {project.stack || "Production Architecture"}
-              </p>
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        {/* LEFT COLUMN: Project Details */}
+        <div className="lg:col-span-5 flex flex-col justify-between h-full space-y-5">
+          {/* Header / Number & Category */}
+          <div>
+            <div className="flex items-center justify-between gap-3 mb-2">
+              <span className="text-[#B84A1C] font-sans text-xs font-semibold uppercase tracking-wider">
+                {project.stack || "Full-Stack Project"}
+              </span>
+              <span className="text-[#78716C] font-mono text-xs font-medium">
+                {displayNum} / {totalNum}
+              </span>
             </div>
 
-            {/* Description */}
-            <p className="text-[#57534E] text-sm sm:text-base line-clamp-4 leading-relaxed">
-              {project.description}
+            <h3 className="text-2xl sm:text-3xl font-serif font-bold text-[#1C1917] hover:text-[#B84A1C] transition-colors leading-tight">
+              {project.title}
+            </h3>
+
+            <p className="text-[#78716C] text-sm mt-1 font-medium">
+              {project.stack || "Production Architecture"}
             </p>
-
-            {/* Tech Stack Pills */}
-            <div className="flex flex-wrap gap-2 pt-1">
-              {techList.map((item, i) => (
-                <span
-                  key={i}
-                  className="px-3 py-1 text-xs font-sans font-medium rounded-full bg-[#FAF7F2] text-[#1C1917] border border-[#E8E1D5]"
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3 pt-3">
-              {/* Live Preview / Details Button */}
-              {isExternalLive ? (
-                <a
-                  href={liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-medium text-xs sm:text-sm text-white bg-[#B84A1C] hover:bg-[#A03D14] transition-all shadow-md hover:shadow-[0_8px_20px_rgba(184,74,28,0.25)] hover:scale-102 active:scale-98"
-                >
-                  <Globe size={15} />
-                  Live Demo
-                  <ArrowUpRight size={15} />
-                </a>
-              ) : (
-                <Link
-                  to={liveUrl}
-                  className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-medium text-xs sm:text-sm text-white bg-[#B84A1C] hover:bg-[#A03D14] transition-all shadow-md hover:shadow-[0_8px_20px_rgba(184,74,28,0.25)] hover:scale-102 active:scale-98"
-                >
-                  <Globe size={15} />
-                  View Details
-                  <ArrowUpRight size={15} />
-                </Link>
-              )}
-
-              {/* GitHub Repo Button */}
-              {hasGitRepo && (
-                <a
-                  href={project.gitRepoLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-medium text-xs sm:text-sm text-[#1C1917] bg-white/80 border border-[#E8E1D5] hover:border-[#1C1917]/30 hover:bg-white transition-all shadow-xs hover:shadow-sm hover:scale-102 active:scale-98"
-                >
-                  <FaGithub size={15} />
-                  Source Code
-                </a>
-              )}
-            </div>
           </div>
 
-          {/* RIGHT COLUMN: Browser Mockup Preview */}
-          <div className="lg:col-span-7">
+          {/* Description */}
+          <p className="text-[#57534E] text-sm sm:text-base line-clamp-4 leading-relaxed">
+            {project.description}
+          </p>
+
+          {/* Tech Stack Pills */}
+          <div className="flex flex-wrap gap-2 pt-1">
+            {techList.map((item, i) => (
+              <span
+                key={i}
+                className="px-3 py-1 text-xs font-sans font-medium rounded-full bg-[#FAF7F2] text-[#1C1917] border border-[#E8E1D5]"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-wrap items-center gap-3 pt-3">
+            {/* Live Preview / Details Button */}
             {isExternalLive ? (
               <a
                 href={liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block relative rounded-2xl overflow-hidden border border-[#E8E1D5] bg-[#FAF7F2] shadow-lg transition-all duration-500 hover:border-[#B84A1C]/50 hover:shadow-xl"
+                className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-medium text-xs sm:text-sm text-white bg-[#B84A1C] hover:bg-[#A03D14] transition-all shadow-md hover:shadow-[0_8px_20px_rgba(184,74,28,0.25)] hover:scale-102 active:scale-98"
               >
-                {/* Browser Window Mockup Top Bar */}
-                <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 bg-[#ECE5D8] border-b border-[#E0D5C3]">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#E06C75]" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#E5C07B]" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#98C379]" />
-                  </div>
-                  <div className="text-[10px] sm:text-[11px] font-mono text-[#57534E] bg-white/90 px-2.5 sm:px-3 py-0.5 rounded-md border border-[#DDD3C2] flex items-center gap-1.5 truncate max-w-[130px] xs:max-w-[180px] sm:max-w-[280px]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#B84A1C] animate-pulse" />
-                    {liveUrl.replace("https://", "").replace("http://", "")}
-                  </div>
-                  <div className="text-[#78716C]">
-                    <ExternalLink size={14} className="group-hover:text-[#B84A1C] transition-colors" />
-                  </div>
-                </div>
-
-                {/* Project Screenshot Image */}
-                <div className="relative aspect-[16/10] overflow-hidden bg-[#EFEBE4]">
-                  <img
-                    src={project.projectBanner?.url || "/placeholder.jpg"}
-                    alt={project.title}
-                    className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-103"
-                    loading="lazy"
-                    onError={(e) => {
-                      e.currentTarget.src =
-                        "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop";
-                    }}
-                  />
-
-                  {/* Hover Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-6">
-                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold text-white bg-[#B84A1C] shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                      Open Live Deployment <ArrowUpRight size={14} />
-                    </span>
-                  </div>
-                </div>
+                <Globe size={15} />
+                Live Demo
+                <ArrowUpRight size={15} />
               </a>
             ) : (
               <Link
                 to={liveUrl}
-                className="group block relative rounded-2xl overflow-hidden border border-[#E8E1D5] bg-[#FAF7F2] shadow-lg transition-all duration-500 hover:border-[#B84A1C]/50 hover:shadow-xl"
+                className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-medium text-xs sm:text-sm text-white bg-[#B84A1C] hover:bg-[#A03D14] transition-all shadow-md hover:shadow-[0_8px_20px_rgba(184,74,28,0.25)] hover:scale-102 active:scale-98"
               >
-                <div className="flex items-center justify-between px-4 py-2.5 bg-[#ECE5D8] border-b border-[#E0D5C3]">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#E06C75]" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#E5C07B]" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#98C379]" />
-                  </div>
-                  <div className="text-[11px] font-mono text-[#57534E] bg-white/90 px-3 py-0.5 rounded-md border border-[#DDD3C2] flex items-center gap-1.5 truncate max-w-[200px] sm:max-w-[280px]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#B84A1C] animate-pulse" />
-                    {project.title.toLowerCase().replace(/\s+/g, "-")}
-                  </div>
-                  <div className="text-[#78716C]">
-                    <ExternalLink size={14} className="group-hover:text-[#B84A1C] transition-colors" />
-                  </div>
-                </div>
-
-                <div className="relative aspect-[16/10] overflow-hidden bg-[#EFEBE4]">
-                  <img
-                    src={project.projectBanner?.url || "/placeholder.jpg"}
-                    alt={project.title}
-                    className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-103"
-                    loading="lazy"
-                    onError={(e) => {
-                      e.currentTarget.src =
-                        "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop";
-                    }}
-                  />
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-6">
-                    <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold text-white bg-[#B84A1C] shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                      View Project Details <ArrowUpRight size={14} />
-                    </span>
-                  </div>
-                </div>
+                <Globe size={15} />
+                View Details
+                <ArrowUpRight size={15} />
               </Link>
+            )}
+
+            {/* GitHub Repo Button */}
+            {hasGitRepo && (
+              <a
+                href={project.gitRepoLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-medium text-xs sm:text-sm text-[#1C1917] bg-white/80 border border-[#E8E1D5] hover:border-[#1C1917]/30 hover:bg-white transition-all shadow-xs hover:shadow-sm hover:scale-102 active:scale-98"
+              >
+                <FaGithub size={15} />
+                Source Code
+              </a>
             )}
           </div>
         </div>
-      </motion.div>
+
+        {/* RIGHT COLUMN: Browser Mockup Preview */}
+        <div className="lg:col-span-7">
+          {isExternalLive ? (
+            <a
+              href={liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group block relative rounded-2xl overflow-hidden border border-[#E8E1D5] bg-[#FAF7F2] shadow-lg transition-all duration-500 hover:border-[#B84A1C]/50 hover:shadow-xl"
+            >
+              {/* Browser Window Mockup Top Bar */}
+              <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 bg-[#ECE5D8] border-b border-[#E0D5C3]">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#E06C75]" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#E5C07B]" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#98C379]" />
+                </div>
+                <div className="text-[10px] sm:text-[11px] font-mono text-[#57534E] bg-white/90 px-2.5 sm:px-3 py-0.5 rounded-md border border-[#DDD3C2] flex items-center gap-1.5 truncate max-w-[130px] xs:max-w-[180px] sm:max-w-[280px]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#B84A1C] animate-pulse" />
+                  {liveUrl.replace("https://", "").replace("http://", "")}
+                </div>
+                <div className="text-[#78716C]">
+                  <ExternalLink size={14} className="group-hover:text-[#B84A1C] transition-colors" />
+                </div>
+              </div>
+
+              {/* Project Screenshot Image */}
+              <div className="relative aspect-[16/10] overflow-hidden bg-[#EFEBE4]">
+                <img
+                  src={project.projectBanner?.url || "/placeholder.jpg"}
+                  alt={project.title}
+                  className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-103"
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.src =
+                      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop";
+                  }}
+                />
+
+                {/* Hover Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-6">
+                  <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold text-white bg-[#B84A1C] shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                    Open Live Deployment <ArrowUpRight size={14} />
+                  </span>
+                </div>
+              </div>
+            </a>
+          ) : (
+            <Link
+              to={liveUrl}
+              className="group block relative rounded-2xl overflow-hidden border border-[#E8E1D5] bg-[#FAF7F2] shadow-lg transition-all duration-500 hover:border-[#B84A1C]/50 hover:shadow-xl"
+            >
+              <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 bg-[#ECE5D8] border-b border-[#E0D5C3]">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#E06C75]" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#E5C07B]" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#98C379]" />
+                </div>
+                <div className="text-[10px] sm:text-[11px] font-mono text-[#57534E] bg-white/90 px-2.5 sm:px-3 py-0.5 rounded-md border border-[#DDD3C2] flex items-center gap-1.5 truncate max-w-[130px] xs:max-w-[180px] sm:max-w-[280px]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#B84A1C] animate-pulse" />
+                  {project.title.toLowerCase().replace(/\s+/g, "-")}
+                </div>
+                <div className="text-[#78716C]">
+                  <ExternalLink size={14} className="group-hover:text-[#B84A1C] transition-colors" />
+                </div>
+              </div>
+
+              <div className="relative aspect-[16/10] overflow-hidden bg-[#EFEBE4]">
+                <img
+                  src={project.projectBanner?.url || "/placeholder.jpg"}
+                  alt={project.title}
+                  className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-103"
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.src =
+                      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop";
+                  }}
+                />
+
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-6">
+                  <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold text-white bg-[#B84A1C] shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                    View Project Details <ArrowUpRight size={14} />
+                  </span>
+                </div>
+              </div>
+            </Link>
+          )}
+        </div>
+      </div>
     </div>
+  );
+
+  // If reduced motion is requested, render without transform overlays
+  if (shouldReduceMotion) {
+    return (
+      <div className="w-full max-w-5xl mx-auto mb-10 sm:mb-16">
+        {cardContent}
+      </div>
+    );
+  }
+
+  return (
+    <motion.div
+      style={{
+        y,
+        scale,
+        opacity,
+        zIndex: total - index,
+        pointerEvents,
+      }}
+      className="absolute inset-x-0 mx-auto w-full max-w-5xl"
+    >
+      {cardContent}
+    </motion.div>
   );
 }
 
 // =====================================================
-// MAIN PROJECTS SECTION (Sticky Scroll)
+// MAIN PROJECTS SECTION (Sticky Scroll Stack)
 // =====================================================
 
 export default function Projects({ projects = [], user }) {
-  const containerRef = useRef(null);
+  const stackContainerRef = useRef(null);
+  const shouldReduceMotion = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
-    target: containerRef,
+    target: stackContainerRef,
     offset: ["start start", "end end"],
   });
 
@@ -245,19 +322,22 @@ export default function Projects({ projects = [], user }) {
     return null;
   }
 
+  const isMultiProject = projects.length > 1 && !shouldReduceMotion;
+
   return (
     <section
       id="projects"
-      ref={containerRef}
-      className="relative w-full bg-[#FAF7F2] text-[#1C1917] py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
+      className="relative w-full bg-[#FAF7F2] text-[#1C1917] pt-20 pb-24 px-4 sm:px-6 lg:px-8 overflow-x-clip"
     >
-      {/* ================= BACKGROUND GLOWS ================= */}
-      <div className="pointer-events-none absolute left-[-150px] top-[10%] h-[500px] w-[500px] rounded-full bg-[#EFE7D8]/70 blur-[140px]" />
-      <div className="pointer-events-none absolute right-[-150px] top-[40%] h-[500px] w-[500px] rounded-full bg-[#E8DFC8]/60 blur-[140px]" />
-      <div className="pointer-events-none absolute left-[30%] bottom-[5%] h-[400px] w-[400px] rounded-full bg-[#EFE7D8]/50 blur-[130px]" />
+      {/* ================= BACKGROUND GLOWS (Clipped safely without breaking sticky) ================= */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="pointer-events-none absolute left-[-150px] top-[10%] h-[500px] w-[500px] rounded-full bg-[#EFE7D8]/70 blur-[140px]" />
+        <div className="pointer-events-none absolute right-[-150px] top-[40%] h-[500px] w-[500px] rounded-full bg-[#E8DFC8]/60 blur-[140px]" />
+        <div className="pointer-events-none absolute left-[30%] bottom-[5%] h-[400px] w-[400px] rounded-full bg-[#EFE7D8]/50 blur-[130px]" />
+      </div>
 
       {/* ================= SECTION HEADER ================= */}
-      <div className="relative z-10 mx-auto max-w-5xl text-center mb-16 sm:mb-24">
+      <div className="relative z-10 mx-auto max-w-5xl text-center mb-10 sm:mb-14">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -275,22 +355,41 @@ export default function Projects({ projects = [], user }) {
       </div>
 
       {/* ================= STACKED SCROLLING CARDS ================= */}
-      <div className="relative z-10 mx-auto max-w-5xl">
-        {projects.map((project, index) => {
-          const targetScale = 1 - (projects.length - index) * 0.04;
-          return (
+      {isMultiProject ? (
+        <div
+          ref={stackContainerRef}
+          className="relative z-10 mx-auto max-w-5xl"
+          style={{
+            height: `${Math.max(projects.length * 85, 120)}vh`,
+          }}
+        >
+          <div className="sticky top-20 sm:top-24 w-full h-[calc(100vh-6rem)] sm:h-[calc(100vh-7rem)] min-h-[500px] flex items-center justify-center pointer-events-none">
+            {projects.map((project, index) => (
+              <ProjectCard
+                key={project._id || index}
+                project={project}
+                index={index}
+                total={projects.length}
+                progress={scrollYProgress}
+                shouldReduceMotion={false}
+              />
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="relative z-10 mx-auto max-w-5xl space-y-8 sm:space-y-12">
+          {projects.map((project, index) => (
             <ProjectCard
               key={project._id || index}
               project={project}
               index={index}
               total={projects.length}
-              range={[index * (1 / projects.length), 1]}
-              targetScale={targetScale}
               progress={scrollYProgress}
+              shouldReduceMotion={true}
             />
-          );
-        })}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* ================= GITHUB REPOSITORIES CTA ================= */}
       <div className="relative z-10 mx-auto max-w-3xl text-center mt-12 sm:mt-20">
