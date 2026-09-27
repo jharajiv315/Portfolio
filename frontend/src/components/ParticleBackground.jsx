@@ -9,7 +9,8 @@ export default function ParticlesBackground() {
     const ctx = canvas.getContext("2d");
 
     let particles = [];
-    const particleCount = 50;
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    const particleCount = isMobile ? 22 : 50;
     const colors = [
       "rgba(184, 74, 28, 0.22)",
       "rgba(120, 100, 85, 0.18)",
@@ -29,8 +30,10 @@ export default function ParticlesBackground() {
       draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.shadowBlur = 6;
-        ctx.shadowColor = this.color;
+        if (!isMobile) {
+          ctx.shadowBlur = 6;
+          ctx.shadowColor = this.color;
+        }
         ctx.fillStyle = this.color;
         ctx.fill();
       }
@@ -50,7 +53,8 @@ export default function ParticlesBackground() {
 
     function createParticles() {
       particles = [];
-      for (let i = 0; i < particleCount; i++) {
+      const currentCount = window.innerWidth < 768 ? 22 : 50;
+      for (let i = 0; i < currentCount; i++) {
         particles.push(new Particle());
       }
     }
@@ -63,13 +67,26 @@ export default function ParticlesBackground() {
     }
 
     handleResize();
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize, { passive: true });
+
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion) {
+      particles.forEach((p) => p.draw());
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }
 
     let animationId;
 
     function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach((p) => p.update());
+      if (!document.hidden) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((p) => p.update());
+      }
       animationId = requestAnimationFrame(animate);
     }
 
