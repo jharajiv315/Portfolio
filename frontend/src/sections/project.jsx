@@ -5,36 +5,33 @@ import { FaGithub } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 // =====================================================
-// INDIVIDUAL PROJECT CARD (Sticky Scroll Stack)
+// INDIVIDUAL PROJECT CARD (Physical Deck Member)
 // =====================================================
 
 function ProjectCard({ project, index, total, progress, shouldReduceMotion }) {
   const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
-  const stepY = isMobile ? 16 : 26;
-  const exitY = isMobile ? -700 : -850;
 
   // Generate deterministic continuous motion ranges with clean dwell plateaus
   const { inputRange, yRange, scaleRange, opacityRange } = useMemo(() => {
     if (total <= 1) {
       return {
         inputRange: [0, 1],
-        yRange: [0, 0],
+        yRange: ["0%", "0%"],
         scaleRange: [1, 1],
         opacityRange: [1, 1],
       };
     }
 
-    const T = total - 1;
-    const step = 1 / T;
+    const numTransitions = total - 1;
+    const seg = 1 / numTransitions;
 
     const points = [0];
-    for (let k = 0; k < T; k++) {
-      const dwellEnd = k * step + step * 0.45;
-      const transMid = k * step + step * 0.82;
-      const transEnd = (k + 1) * step;
-      points.push(Number(dwellEnd.toFixed(4)));
-      points.push(Number(transMid.toFixed(4)));
-      points.push(Number(transEnd.toFixed(4)));
+    for (let i = 0; i < numTransitions; i++) {
+      const start = i * seg;
+      const dwell = start + seg * 0.40;
+      const exitEnd = (i + 1) * seg;
+      points.push(Number(dwell.toFixed(4)));
+      points.push(Number(exitEnd.toFixed(4)));
     }
 
     const inputRange = Array.from(new Set(points)).sort((a, b) => a - b);
@@ -43,58 +40,83 @@ function ProjectCard({ project, index, total, progress, shouldReduceMotion }) {
     const opacityRange = [];
 
     for (const p of inputRange) {
-      if (p >= (index + 1) * step) {
-        // Card has completely exited upward
-        yRange.push(exitY);
-        scaleRange.push(0.95);
-        opacityRange.push(0);
-      } else if (p >= index * step + step * 0.45) {
-        // Card is currently translating upward off the stack
-        const start = index * step + step * 0.45;
-        const end = (index + 1) * step;
-        const t = (p - start) / (end - start);
-        yRange.push(Math.round(exitY * t));
-        scaleRange.push(Number((1.0 - 0.05 * t).toFixed(3)));
-        // CRITICAL: Card stays 100% solid white (opacity 1.0) while clearing the card below it!
-        // It only fades out at the very end when it has physically cleared the stack.
-        if (t < 0.75) {
-          opacityRange.push(1.0);
-        } else {
-          const fadeT = (t - 0.75) / 0.25;
-          opacityRange.push(Number(Math.max(0, 1.0 - fadeT).toFixed(3)));
-        }
-      } else if (p >= index * step) {
-        // Card is active in the foreground and dwelling
-        yRange.push(0);
-        scaleRange.push(1.0);
-        opacityRange.push(1.0);
-      } else {
-        // Card is waiting in the stack behind (p < index * step)
-        // Only start fading in when the card immediately in front starts exiting!
-        const enterStart = (index - 1) * step + step * 0.45;
-        const enterEnd = index * step;
+      if (index === total - 1) {
+        // The FINAL card never exits upward!
+        const enterStart = (index - 1) * seg + seg * 0.40;
+        const enterEnd = index * seg;
         if (p <= enterStart) {
-          // Deep in stack: INVISIBLE to prevent ANY text collision or bleed-through!
-          yRange.push(stepY);
-          scaleRange.push(0.96);
-          opacityRange.push(0);
-        } else {
-          // Rising into active focus as previous card exits
+          yRange.push("0%");
+          scaleRange.push(0.97);
+          opacityRange.push(1);
+        } else if (p < enterEnd) {
           const t = (p - enterStart) / (enterEnd - enterStart);
-          yRange.push(Math.round(stepY * (1 - t)));
-          scaleRange.push(Number((0.96 + 0.04 * t).toFixed(3)));
-          opacityRange.push(Number((0.3 + 0.7 * t).toFixed(3)));
+          yRange.push("0%");
+          scaleRange.push(Number((0.97 + 0.03 * t).toFixed(3)));
+          opacityRange.push(1);
+        } else {
+          yRange.push("0%");
+          scaleRange.push(1.0);
+          opacityRange.push(1);
+        }
+      } else {
+        // Intermediate or first card
+        const myDwellEnd = index * seg + seg * 0.40;
+        const myExitEnd = (index + 1) * seg;
+
+        if (p >= myExitEnd) {
+          // Already fully exited off the top
+          yRange.push("-110%");
+          scaleRange.push(1.0);
+          opacityRange.push(0);
+        } else if (p >= myDwellEnd) {
+          // Currently sliding UP and off the top of the deck!
+          const t = (p - myDwellEnd) / (myExitEnd - myDwellEnd);
+          yRange.push("-" + Math.round(110 * t) + "%");
+          scaleRange.push(1.0);
+          opacityRange.push(t < 0.90 ? 1 : Number(Math.max(0, 1 - (t - 0.90) / 0.10).toFixed(2)));
+        } else if (p >= index * seg) {
+          // Active and in place
+          yRange.push("0%");
+          scaleRange.push(1.0);
+          opacityRange.push(1);
+        } else {
+          // Waiting in the deck underneath
+          if (index > 0) {
+            const enterStart = (index - 1) * seg + seg * 0.40;
+            const enterEnd = index * seg;
+            if (p <= enterStart) {
+              yRange.push("0%");
+              scaleRange.push(0.97);
+              opacityRange.push(1);
+            } else {
+              const t = (p - enterStart) / (enterEnd - enterStart);
+              yRange.push("0%");
+              scaleRange.push(Number((0.97 + 0.03 * t).toFixed(3)));
+              opacityRange.push(1);
+            }
+          } else {
+            yRange.push("0%");
+            scaleRange.push(1.0);
+            opacityRange.push(1);
+          }
         }
       }
     }
 
     return { inputRange, yRange, scaleRange, opacityRange };
-  }, [index, total, stepY, exitY]);
+  }, [index, total]);
 
   const y = useTransform(progress, inputRange, yRange);
   const scale = useTransform(progress, inputRange, scaleRange);
   const opacity = useTransform(progress, inputRange, opacityRange);
-  const pointerEvents = useTransform(opacity, (o) => (o > 0.85 ? "auto" : "none"));
+
+  const numTransitions = total > 1 ? total - 1 : 1;
+  const seg = 1 / numTransitions;
+  const pointerEvents = useTransform(progress, (p) => {
+    if (total <= 1) return "auto";
+    const currentCard = Math.min(Math.floor(p / seg), total - 1);
+    return currentCard === index ? "auto" : "none";
+  });
 
   const rawTechList = project?.technologies
     ? (Array.isArray(project.technologies)
@@ -125,8 +147,11 @@ function ProjectCard({ project, index, total, progress, shouldReduceMotion }) {
   const isExternalLive = liveUrl.startsWith("http");
 
   const cardContent = (
-    <div className="w-full rounded-2xl sm:rounded-3xl bg-white border border-[#E8E1D5] p-4 sm:p-7 md:p-9 shadow-[0_12px_40px_rgba(28,25,23,0.08)] relative overflow-hidden transition-shadow duration-300 hover:shadow-[0_20px_45px_rgba(184,74,28,0.14)] hover:border-[#B84A1C]/40">
-      {/* Glow ambient inside card */}
+    <div
+      className="w-full rounded-2xl sm:rounded-3xl border border-[#E8E1D5] p-5 sm:p-7 md:p-9 shadow-[0_12px_40px_rgba(28,25,23,0.08)] relative overflow-hidden transition-shadow duration-300 hover:shadow-[0_20px_45px_rgba(184,74,28,0.14)] hover:border-[#B84A1C]/40"
+      style={{ backgroundColor: "#FFFFFF" }}
+    >
+      {/* Subtle warm ambient accents inside card */}
       <div className="absolute -top-32 -right-32 w-80 h-80 rounded-full bg-gradient-to-br from-[#EFE7D8]/60 via-[#F5EFEB]/30 to-transparent blur-3xl pointer-events-none" />
       <div className="absolute -bottom-24 -left-24 w-64 h-64 rounded-full bg-[#E8DFC8]/40 blur-3xl pointer-events-none" />
 
@@ -319,9 +344,7 @@ function ProjectCard({ project, index, total, progress, shouldReduceMotion }) {
         zIndex: (total - index) * 10,
         pointerEvents,
       }}
-      className={`absolute inset-x-0 mx-auto w-full max-w-5xl ${
-        index === 0 ? "z-30" : index === 1 ? "z-20" : "z-10"
-      }`}
+      className="absolute inset-x-0 top-0 sm:top-auto mx-auto w-full max-w-5xl"
     >
       {cardContent}
     </motion.div>
@@ -329,7 +352,7 @@ function ProjectCard({ project, index, total, progress, shouldReduceMotion }) {
 }
 
 // =====================================================
-// MAIN PROJECTS SECTION (Sticky Scroll Stack)
+// MAIN PROJECTS SECTION (Single Coordinated Project Deck)
 // =====================================================
 
 export default function Projects({ projects = [], user }) {
@@ -346,20 +369,24 @@ export default function Projects({ projects = [], user }) {
   }
 
   const isMultiProject = projects.length > 1 && !shouldReduceMotion;
+  // Precise, controlled scroll runway: 100vh for sticky viewport + 75vh per transition
+  const trackHeight = isMultiProject
+    ? `${100 + (projects.length - 1) * 75}vh`
+    : "auto";
 
   return (
     <section
       id="projects"
-      className="relative w-full bg-[#FAF7F2] text-[#1C1917] pt-20 pb-24 px-4 sm:px-6 lg:px-8"
+      className="relative w-full bg-[#FAF7F2] text-[#1C1917] pt-20 pb-20 px-4 sm:px-6 lg:px-8"
     >
-      {/* ================= BACKGROUND GLOWS (Clipped safely without breaking sticky) ================= */}
+      {/* Background ambient accents (safely isolated without overflowing) */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="pointer-events-none absolute left-[-150px] top-[10%] h-[500px] w-[500px] rounded-full bg-[#EFE7D8]/70 blur-[140px]" />
         <div className="pointer-events-none absolute right-[-150px] top-[40%] h-[500px] w-[500px] rounded-full bg-[#E8DFC8]/60 blur-[140px]" />
         <div className="pointer-events-none absolute left-[30%] bottom-[5%] h-[400px] w-[400px] rounded-full bg-[#EFE7D8]/50 blur-[130px]" />
       </div>
 
-      {/* ================= SECTION HEADER ================= */}
+      {/* Section Header */}
       <div className="relative z-10 mx-auto max-w-5xl text-center mb-10 sm:mb-14">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -377,26 +404,26 @@ export default function Projects({ projects = [], user }) {
         </motion.div>
       </div>
 
-      {/* ================= STACKED SCROLLING CARDS ================= */}
+      {/* Project Deck */}
       {isMultiProject ? (
         <div
           ref={stackContainerRef}
           className="relative z-10 mx-auto max-w-5xl"
-          style={{
-            height: `${Math.max(projects.length * 85, 120)}vh`,
-          }}
+          style={{ height: trackHeight }}
         >
           <div className="sticky top-16 sm:top-24 w-full h-[calc(100vh-4.5rem)] sm:h-[calc(100vh-7rem)] min-h-[460px] flex items-center justify-center pointer-events-none">
-            {projects.map((project, index) => (
-              <ProjectCard
-                key={project._id || index}
-                project={project}
-                index={index}
-                total={projects.length}
-                progress={scrollYProgress}
-                shouldReduceMotion={false}
-              />
-            ))}
+            <div className="relative w-full max-w-5xl flex items-center justify-center">
+              {projects.map((project, index) => (
+                <ProjectCard
+                  key={project._id || index}
+                  project={project}
+                  index={index}
+                  total={projects.length}
+                  progress={scrollYProgress}
+                  shouldReduceMotion={false}
+                />
+              ))}
+            </div>
           </div>
         </div>
       ) : (
@@ -414,8 +441,8 @@ export default function Projects({ projects = [], user }) {
         </div>
       )}
 
-      {/* ================= GITHUB REPOSITORIES CTA ================= */}
-      <div className="relative z-10 mx-auto max-w-3xl text-center mt-12 sm:mt-20">
+      {/* GitHub Repositories CTA */}
+      <div className="relative z-10 mx-auto max-w-3xl text-center mt-12 sm:mt-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
