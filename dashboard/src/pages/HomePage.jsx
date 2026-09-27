@@ -341,28 +341,20 @@ const HomePage = () => {
         switch (active) {
           case "Dashboard":
             return <Dashboard />;
-            break;
           case "Add Project":
             return <AddProject />;
-            break;
           case "Add Skill":
             return <AddSkill />;
-            break;
           case "Add Uses":
             return <AddSoftwareApplications />;
-            break;
           case "Add Timeline":
             return <AddTimeline />;
-            break;
           case "Messages":
             return <Messages />;
-            break;
           case "Account":
             return <Account />;
-            break;
           default:
             return <Dashboard />;
-            break;
         }
       })()}
     </div>
