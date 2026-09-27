@@ -27,7 +27,7 @@ export default function Navbar({ user }) {
         }
       }
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -43,7 +43,7 @@ export default function Navbar({ user }) {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 w-full flex items-center justify-between px-6 sm:px-10 lg:px-14 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 w-full flex items-center justify-between px-4 min-[380px]:px-6 sm:px-10 lg:px-14 z-50 transition-all duration-300 ${
           scrolled
             ? "bg-[#FAF7F2]/85 backdrop-blur-md border-b border-[#E8E1D5]/80 shadow-sm py-3"
             : "bg-transparent py-5"
@@ -86,7 +86,7 @@ export default function Navbar({ user }) {
         {/* MOBILE MENU TOGGLE BUTTON */}
         <button
           onClick={() => setMenuOpen(true)}
-          className="md:hidden text-[#1C1917] hover:text-[#B84A1C] transition-colors cursor-pointer p-1.5 rounded-lg bg-white/70 border border-[#E8E1D5]"
+          className="md:hidden text-[#1C1917] hover:text-[#B84A1C] transition-colors cursor-pointer p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl bg-white/80 border border-[#E8E1D5] shadow-xs active:scale-95"
           aria-label="Open Menu"
         >
           <Menu size={22} />
