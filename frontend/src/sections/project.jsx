@@ -41,7 +41,7 @@ function ProjectCard({ project, index, total, range, targetScale, progress }) {
   return (
     <div
       ref={containerRef}
-      className="sticky top-24 flex items-center justify-center w-full mb-12 sm:mb-20"
+      className="sticky top-20 sm:top-24 flex items-center justify-center w-full mb-10 sm:mb-20"
       style={{
         zIndex: index + 1,
       }}
@@ -50,7 +50,7 @@ function ProjectCard({ project, index, total, range, targetScale, progress }) {
         style={{
           scale,
         }}
-        className="w-full max-w-5xl mx-auto rounded-3xl bg-white/95 border border-[#E8E1D5] p-6 sm:p-8 md:p-10 shadow-[0_8px_30px_rgba(28,25,23,0.06)] backdrop-blur-xl relative overflow-hidden transition-all duration-500 hover:shadow-[0_16px_40px_rgba(184,74,28,0.12)] hover:border-[#B84A1C]/40"
+        className="w-full max-w-5xl mx-auto rounded-2xl sm:rounded-3xl bg-white/95 border border-[#E8E1D5] p-4 xs:p-6 sm:p-8 md:p-10 shadow-[0_8px_30px_rgba(28,25,23,0.06)] backdrop-blur-xl relative overflow-hidden transition-all duration-500 hover:shadow-[0_16px_40px_rgba(184,74,28,0.12)] hover:border-[#B84A1C]/40"
       >
         {/* Glow ambient inside card */}
         <div className="absolute -top-32 -right-32 w-80 h-80 rounded-full bg-gradient-to-br from-[#EFE7D8]/60 via-[#F5EFEB]/30 to-transparent blur-3xl pointer-events-none" />
@@ -104,7 +104,7 @@ function ProjectCard({ project, index, total, range, targetScale, progress }) {
                   href={liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-medium text-sm text-white bg-[#B84A1C] hover:bg-[#A03D14] transition-all shadow-md hover:shadow-[0_8px_20px_rgba(184,74,28,0.25)] hover:scale-102 active:scale-98"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-medium text-xs sm:text-sm text-white bg-[#B84A1C] hover:bg-[#A03D14] transition-all shadow-md hover:shadow-[0_8px_20px_rgba(184,74,28,0.25)] hover:scale-102 active:scale-98"
                 >
                   <Globe size={15} />
                   Live Demo
@@ -113,7 +113,7 @@ function ProjectCard({ project, index, total, range, targetScale, progress }) {
               ) : (
                 <Link
                   to={liveUrl}
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-medium text-sm text-white bg-[#B84A1C] hover:bg-[#A03D14] transition-all shadow-md hover:shadow-[0_8px_20px_rgba(184,74,28,0.25)] hover:scale-102 active:scale-98"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-medium text-xs sm:text-sm text-white bg-[#B84A1C] hover:bg-[#A03D14] transition-all shadow-md hover:shadow-[0_8px_20px_rgba(184,74,28,0.25)] hover:scale-102 active:scale-98"
                 >
                   <Globe size={15} />
                   View Details
@@ -127,7 +127,7 @@ function ProjectCard({ project, index, total, range, targetScale, progress }) {
                   href={project.gitRepoLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-medium text-sm text-[#1C1917] bg-white/80 border border-[#E8E1D5] hover:border-[#1C1917]/30 hover:bg-white transition-all shadow-xs hover:shadow-sm hover:scale-102 active:scale-98"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-medium text-xs sm:text-sm text-[#1C1917] bg-white/80 border border-[#E8E1D5] hover:border-[#1C1917]/30 hover:bg-white transition-all shadow-xs hover:shadow-sm hover:scale-102 active:scale-98"
                 >
                   <FaGithub size={15} />
                   Source Code
@@ -146,13 +146,13 @@ function ProjectCard({ project, index, total, range, targetScale, progress }) {
                 className="group block relative rounded-2xl overflow-hidden border border-[#E8E1D5] bg-[#FAF7F2] shadow-lg transition-all duration-500 hover:border-[#B84A1C]/50 hover:shadow-xl"
               >
                 {/* Browser Window Mockup Top Bar */}
-                <div className="flex items-center justify-between px-4 py-2.5 bg-[#ECE5D8] border-b border-[#E0D5C3]">
+                <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 bg-[#ECE5D8] border-b border-[#E0D5C3]">
                   <div className="flex items-center gap-1.5">
                     <div className="w-2.5 h-2.5 rounded-full bg-[#E06C75]" />
                     <div className="w-2.5 h-2.5 rounded-full bg-[#E5C07B]" />
                     <div className="w-2.5 h-2.5 rounded-full bg-[#98C379]" />
                   </div>
-                  <div className="text-[11px] font-mono text-[#57534E] bg-white/90 px-3 py-0.5 rounded-md border border-[#DDD3C2] flex items-center gap-1.5 truncate max-w-[200px] sm:max-w-[280px]">
+                  <div className="text-[10px] sm:text-[11px] font-mono text-[#57534E] bg-white/90 px-2.5 sm:px-3 py-0.5 rounded-md border border-[#DDD3C2] flex items-center gap-1.5 truncate max-w-[130px] xs:max-w-[180px] sm:max-w-[280px]">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#B84A1C] animate-pulse" />
                     {liveUrl.replace("https://", "").replace("http://", "")}
                   </div>
