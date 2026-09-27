@@ -1,6 +1,6 @@
-import { useRef, useMemo } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import { ExternalLink, ArrowUpRight, Globe } from "lucide-react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { ExternalLink, ArrowUpRight, Globe, ChevronLeft, ChevronRight } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -8,107 +8,16 @@ import { Link } from "react-router-dom";
 // INDIVIDUAL PROJECT CARD (Opaque Physical Deck Member)
 // =====================================================
 
-function ProjectCard({ project, index, total, progress, shouldReduceMotion }) {
+function ProjectCard({
+  project,
+  index,
+  total,
+  activeIndex,
+  onNext,
+  onPrev,
+  shouldReduceMotion,
+}) {
   const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
-
-  // Generate deterministic continuous motion ranges with clean dwell plateaus
-  // Rule: NO OPACITY CROSSFADE. Every card remains fully opaque (#FFFFFF).
-  // The active card moves upward; the card underneath is physically revealed.
-  const { inputRange, yRange, scaleRange } = useMemo(() => {
-    if (total <= 1) {
-      return {
-        inputRange: [0, 1],
-        yRange: ["0%", "0%"],
-        scaleRange: [1, 1],
-      };
-    }
-
-    // Divide total scroll progress evenly across all projects
-    const seg = 1 / total;
-    const points = [0];
-
-    for (let i = 0; i < total; i++) {
-      const dwellEnd = i * seg + seg * 0.55;
-      const transitionEnd = (i + 1) * seg;
-      points.push(Number(dwellEnd.toFixed(4)));
-      if (i < total - 1) {
-        points.push(Number(transitionEnd.toFixed(4)));
-      }
-    }
-    points.push(1.0);
-
-    const inputRange = Array.from(new Set(points)).sort((a, b) => a - b);
-    const yRange = [];
-    const scaleRange = [];
-
-    for (const p of inputRange) {
-      if (index === total - 1) {
-        // FINAL CARD: Dwells and never exits upward
-        const enterStart = (index - 1) * seg + seg * 0.55;
-        const enterEnd = index * seg;
-        if (p <= enterStart) {
-          yRange.push("0%");
-          scaleRange.push(0.97);
-        } else if (p < enterEnd) {
-          const t = (p - enterStart) / (enterEnd - enterStart);
-          yRange.push("0%");
-          scaleRange.push(Number((0.97 + 0.03 * t).toFixed(3)));
-        } else {
-          yRange.push("0%");
-          scaleRange.push(1.0);
-        }
-      } else {
-        // Intermediate or first card
-        const myDwellEnd = index * seg + seg * 0.55;
-        const myExitEnd = (index + 1) * seg;
-
-        if (p >= myExitEnd) {
-          // Exited completely above the deck
-          yRange.push("-120%");
-          scaleRange.push(1.0);
-        } else if (p >= myDwellEnd) {
-          // Translating upward off the top of the deck
-          const t = (p - myDwellEnd) / (myExitEnd - myDwellEnd);
-          yRange.push("-" + Math.round(120 * t) + "%");
-          scaleRange.push(1.0);
-        } else if (p >= index * seg) {
-          // Active in focus
-          yRange.push("0%");
-          scaleRange.push(1.0);
-        } else {
-          // Waiting in the deck underneath
-          if (index > 0) {
-            const enterStart = (index - 1) * seg + seg * 0.55;
-            const enterEnd = index * seg;
-            if (p <= enterStart) {
-              yRange.push("0%");
-              scaleRange.push(0.97);
-            } else {
-              const t = (p - enterStart) / (enterEnd - enterStart);
-              yRange.push("0%");
-              scaleRange.push(Number((0.97 + 0.03 * t).toFixed(3)));
-            }
-          } else {
-            yRange.push("0%");
-            scaleRange.push(1.0);
-          }
-        }
-      }
-    }
-
-    return { inputRange, yRange, scaleRange };
-  }, [index, total]);
-
-  const y = useTransform(progress, inputRange, yRange);
-  const scale = useTransform(progress, inputRange, scaleRange);
-  const visibility = useTransform(y, (latestY) => (latestY === "-120%" ? "hidden" : "visible"));
-
-  const seg = 1 / (total > 1 ? total : 1);
-  const pointerEvents = useTransform(progress, (p) => {
-    if (total <= 1) return "auto";
-    const currentCard = Math.min(Math.floor(p / seg), total - 1);
-    return currentCard === index ? "auto" : "none";
-  });
 
   const rawTechList = project?.technologies
     ? (Array.isArray(project.technologies)
@@ -138,6 +47,13 @@ function ProjectCard({ project, index, total, progress, shouldReduceMotion }) {
 
   const isExternalLive = liveUrl.startsWith("http");
 
+  // Physical deck positioning:
+  // - Previous cards (index < activeIndex): have slid UP and away (-115%)
+  // - Active card (index === activeIndex): resting in full focus (0%, scale 1)
+  // - Next cards (index > activeIndex): resting underneath (0%, scale 0.97), completely occluded
+  const isActive = index === activeIndex;
+  const isPast = index < activeIndex;
+
   const cardContent = (
     <div
       className="w-full rounded-2xl sm:rounded-3xl border border-[#E8E1D5] p-4 sm:p-7 md:p-9 shadow-[0_12px_40px_rgba(28,25,23,0.08)] relative overflow-hidden transition-shadow duration-300 hover:shadow-[0_20px_45px_rgba(184,74,28,0.14)] hover:border-[#B84A1C]/40"
@@ -150,15 +66,50 @@ function ProjectCard({ project, index, total, progress, shouldReduceMotion }) {
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-8 items-center">
         {/* LEFT COLUMN: Project Details */}
         <div className="lg:col-span-5 flex flex-col justify-between h-full space-y-3.5 sm:space-y-5">
-          {/* Header / Number & Category */}
+          {/* Header / Number & Category with Interactive Navigation */}
           <div>
             <div className="flex items-center justify-between gap-3 mb-1.5 sm:mb-2">
               <span className="text-[#B84A1C] font-sans text-xs font-semibold uppercase tracking-wider">
                 {project.stack || "Full-Stack Project"}
               </span>
-              <span className="text-[#78716C] font-mono text-xs font-medium">
-                {displayNum} / {totalNum}
-              </span>
+
+              {/* Counter + Prev/Next Controls */}
+              <div className="flex items-center gap-2">
+                <span className="text-[#78716C] font-mono text-xs font-medium">
+                  {displayNum} / {totalNum}
+                </span>
+
+                {total > 1 && (
+                  <div className="flex items-center gap-1 ml-1.5">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onPrev();
+                      }}
+                      disabled={activeIndex === 0}
+                      className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border border-[#E8E1D5] bg-[#FAF7F2] text-[#57534E] hover:text-[#B84A1C] hover:border-[#B84A1C] flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer active:scale-95"
+                      aria-label="Previous Project"
+                      title="Previous project"
+                    >
+                      <ChevronLeft size={14} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onNext();
+                      }}
+                      disabled={activeIndex === total - 1}
+                      className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border border-[#E8E1D5] bg-[#FAF7F2] text-[#57534E] hover:text-[#B84A1C] hover:border-[#B84A1C] flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer active:scale-95"
+                      aria-label="Next Project"
+                      title="Next project"
+                    >
+                      <ChevronRight size={14} />
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
             <h3 className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-[#1C1917] hover:text-[#B84A1C] transition-colors leading-tight">
@@ -318,26 +269,41 @@ function ProjectCard({ project, index, total, progress, shouldReduceMotion }) {
     </div>
   );
 
-  // If reduced motion is requested, render without transform overlays
-  if (shouldReduceMotion) {
+  // If reduced motion is requested or single project
+  if (shouldReduceMotion || total <= 1) {
     return (
-      <div className="w-full max-w-5xl mx-auto mb-10 sm:mb-16">
+      <div className="w-full max-w-5xl mx-auto">
         {cardContent}
       </div>
     );
   }
 
+  // Animation values:
+  // - Previous cards: slide up to -115% and hide
+  // - Active card: y = 0, scale = 1, visible
+  // - Next cards: y = 0, scale = 0.97, occluded
+  const targetY = isPast ? "-115%" : "0%";
+  const targetScale = isActive ? 1.0 : isPast ? 1.0 : 0.97;
+  const targetZIndex = isActive ? 30 : isPast ? 10 : (total - index) * 5;
+
   return (
     <motion.div
-      style={{
-        y,
-        scale,
+      initial={false}
+      animate={{
+        y: targetY,
+        scale: targetScale,
         opacity: 1, // STRICT OCCLUSION: No opacity crossfade
-        visibility,
-        zIndex: (total - index) * 10,
-        pointerEvents,
+        visibility: isPast ? "hidden" : "visible",
       }}
-      className="absolute inset-x-0 mx-auto w-full max-w-5xl"
+      transition={{
+        duration: 0.5,
+        ease: [0.16, 1, 0.3, 1], // Smooth physical card dealing curve
+      }}
+      style={{
+        zIndex: targetZIndex,
+        pointerEvents: isActive ? "auto" : "none",
+      }}
+      className="absolute inset-0 w-full max-w-5xl mx-auto"
     >
       {cardContent}
     </motion.div>
@@ -349,24 +315,77 @@ function ProjectCard({ project, index, total, progress, shouldReduceMotion }) {
 // =====================================================
 
 export default function Projects({ projects = [], user }) {
-  const stackContainerRef = useRef(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const touchStartRef = useRef({ x: 0, y: 0, time: 0 });
+  const deckRef = useRef(null);
   const shouldReduceMotion = useReducedMotion();
 
-  const { scrollYProgress } = useScroll({
-    target: stackContainerRef,
-    offset: ["start start", "end end"],
-  });
+  const total = projects?.length || 0;
 
-  if (!projects || projects.length === 0) {
+  const nextProject = useCallback(() => {
+    setActiveIndex((prev) => Math.min(prev + 1, total - 1));
+  }, [total]);
+
+  const prevProject = useCallback(() => {
+    setActiveIndex((prev) => Math.max(prev - 1, 0));
+  }, []);
+
+  const goToProject = useCallback((index) => {
+    setActiveIndex(index);
+  }, []);
+
+  // Keyboard navigation when section is in view
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (total <= 1) return;
+      if (e.key === "ArrowRight") {
+        nextProject();
+      } else if (e.key === "ArrowLeft") {
+        prevProject();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [nextProject, prevProject, total]);
+
+  // Touch Swipe Handlers for mobile & touch screens
+  const handleTouchStart = (e) => {
+    const touch = e.touches[0];
+    touchStartRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+      time: Date.now(),
+    };
+  };
+
+  const handleTouchEnd = (e) => {
+    if (total <= 1) return;
+    const touch = e.changedTouches[0];
+    const dx = touch.clientX - touchStartRef.current.x;
+    const dy = touch.clientY - touchStartRef.current.y;
+    const dt = Date.now() - touchStartRef.current.time;
+
+    // Minimum distance and reasonable speed
+    const absX = Math.abs(dx);
+    const absY = Math.abs(dy);
+
+    if (dt < 600) {
+      // Horizontal swipe
+      if (absX > 45 && absX > absY * 1.2) {
+        if (dx < 0) nextProject(); // Swipe Left -> Next
+        else prevProject();         // Swipe Right -> Prev
+      }
+      // Vertical swipe
+      else if (absY > 45 && absY > absX * 1.2) {
+        if (dy < 0) nextProject(); // Swipe Up -> Next
+        else prevProject();         // Swipe Down -> Prev
+      }
+    }
+  };
+
+  if (!projects || total === 0) {
     return null;
   }
-
-  const isMultiProject = projects.length > 1 && !shouldReduceMotion;
-  // Precise, controlled scroll runway: exactly 80vh per card
-  // When the final card completes its dwell at the end of the runway, the deck unpins immediately
-  const trackHeight = isMultiProject
-    ? `${projects.length * 80}vh`
-    : "auto";
 
   return (
     <section
@@ -381,7 +400,7 @@ export default function Projects({ projects = [], user }) {
       </div>
 
       {/* Section Header */}
-      <div className="relative z-10 mx-auto max-w-5xl text-center mb-10 sm:mb-14">
+      <div className="relative z-10 mx-auto max-w-5xl text-center mb-8 sm:mb-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -398,45 +417,82 @@ export default function Projects({ projects = [], user }) {
         </motion.div>
       </div>
 
-      {/* Project Deck */}
-      {isMultiProject ? (
-        <div
-          ref={stackContainerRef}
-          className="relative z-10 mx-auto max-w-5xl"
-          style={{ height: trackHeight }}
-        >
-          <div className="sticky top-16 sm:top-24 w-full h-[calc(100vh-4.5rem)] sm:h-[calc(100vh-7rem)] min-h-[440px] flex items-center justify-center pointer-events-none">
-            <div className="relative w-full max-w-5xl flex items-center justify-center">
+      {/* Single Coordinated Project Deck */}
+      <div
+        ref={deckRef}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        className="relative z-10 mx-auto max-w-5xl"
+      >
+        {total > 1 ? (
+          <div>
+            {/* The deck viewport has natural height matching the active card */}
+            <div className="relative w-full min-h-[550px] sm:min-h-[460px] lg:min-h-[450px]">
               {projects.map((project, index) => (
                 <ProjectCard
                   key={project._id || index}
                   project={project}
                   index={index}
-                  total={projects.length}
-                  progress={scrollYProgress}
-                  shouldReduceMotion={false}
+                  total={total}
+                  activeIndex={activeIndex}
+                  onNext={nextProject}
+                  onPrev={prevProject}
+                  shouldReduceMotion={shouldReduceMotion}
                 />
               ))}
             </div>
-          </div>
-        </div>
-      ) : (
-        <div className="relative z-10 mx-auto max-w-5xl space-y-8 sm:space-y-12">
-          {projects.map((project, index) => (
-            <ProjectCard
-              key={project._id || index}
-              project={project}
-              index={index}
-              total={projects.length}
-              progress={scrollYProgress}
-              shouldReduceMotion={true}
-            />
-          ))}
-        </div>
-      )}
 
-      {/* GitHub Repositories CTA (Follows immediately with clean, standard margin) */}
-      <div className="relative z-10 mx-auto max-w-3xl text-center mt-8 sm:mt-12">
+            {/* Deck Navigation Indicator & Pill Controls */}
+            <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-3 px-2 sm:px-4">
+              {/* Swipe / Keyboard Hint */}
+              <div className="text-xs text-[#78716C] font-sans flex items-center gap-1.5 order-2 sm:order-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#B84A1C]" />
+                <span>Swipe or use arrows to navigate physical deck</span>
+              </div>
+
+              {/* Step Pill Selectors */}
+              <div className="flex items-center gap-2 order-1 sm:order-2">
+                {projects.map((p, i) => {
+                  const isCurrent = i === activeIndex;
+                  return (
+                    <button
+                      key={p._id || i}
+                      type="button"
+                      onClick={() => goToProject(i)}
+                      className={`px-3 py-1 rounded-full text-xs font-mono transition-all cursor-pointer ${
+                        isCurrent
+                          ? "bg-[#B84A1C] text-white font-bold shadow-sm"
+                          : "bg-white text-[#78716C] border border-[#E8E1D5] hover:text-[#1C1917] hover:border-[#B84A1C]/50"
+                      }`}
+                      aria-label={`Go to project ${i + 1}`}
+                    >
+                      {i + 1 < 10 ? `0${i + 1}` : i + 1}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="relative w-full">
+            {projects.map((project, index) => (
+              <ProjectCard
+                key={project._id || index}
+                project={project}
+                index={index}
+                total={1}
+                activeIndex={0}
+                onNext={() => {}}
+                onPrev={() => {}}
+                shouldReduceMotion={true}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* GitHub Repositories CTA (Follows immediately with clean, standard margin - NO BLANK SPACE) */}
+      <div className="relative z-10 mx-auto max-w-3xl text-center mt-10 sm:mt-14">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
