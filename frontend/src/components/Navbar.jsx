@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import OverlayMenu from "./overlaymenue";
 import Logo from "../assets/Logo.png";
-import { Menu, ArrowRight } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
 
 export default function Navbar({ user }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -44,8 +44,8 @@ export default function Navbar({ user }) {
     <>
       <nav
         className={`fixed top-0 left-0 w-full flex items-center justify-between px-4 min-[380px]:px-6 sm:px-10 lg:px-14 z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-[#FAF7F2]/85 backdrop-blur-md border-b border-[#E8E1D5]/80 shadow-sm py-3"
+          menuOpen || scrolled
+            ? "bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#E8E1D5]/80 shadow-sm py-3"
             : "bg-transparent py-5"
         }`}
       >
@@ -85,11 +85,12 @@ export default function Navbar({ user }) {
 
         {/* MOBILE MENU TOGGLE BUTTON */}
         <button
-          onClick={() => setMenuOpen(true)}
+          onClick={() => setMenuOpen((prev) => !prev)}
           className="md:hidden text-[#1C1917] hover:text-[#B84A1C] transition-colors cursor-pointer p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl bg-white/80 border border-[#E8E1D5] shadow-xs active:scale-95"
-          aria-label="Open Menu"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
         >
-          <Menu size={22} />
+          {menuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
 
         {/* RIGHT - Reach Out (Terracotta pill button from reference mockup) */}
