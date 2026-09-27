@@ -4,15 +4,37 @@ import { Timeline } from "../models/timelineSchema.js";
 
 export const postTimeline = catchAsyncErrors(async (req, res, next) => {
   const { title, description, from, to } = req.body;
+  if (!title || !description || !from) {
+    return next(new ErrorHandler("Please provide title, description, and starting year/point", 400));
+  }
   const newTimeline = await Timeline.create({
     title,
     description,
-    timeline: { from, to },
+    timeline: { from, to: to || "" },
   });
   res.status(200).json({
     success: true,
-    message: "Timeline Added!",
+    message: "Timeline Added Successfully!",
     newTimeline,
+  });
+});
+
+export const updateTimeline = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
+  const { title, description, from, to } = req.body;
+  let timeline = await Timeline.findById(id);
+  if (!timeline) {
+    return next(new ErrorHandler("Timeline not found", 404));
+  }
+  const updatedTimeline = await Timeline.findByIdAndUpdate(id, {
+    title,
+    description,
+    timeline: { from, to: to || "" },
+  });
+  res.status(200).json({
+    success: true,
+    message: "Timeline Updated Successfully!",
+    updatedTimeline,
   });
 });
 
@@ -25,7 +47,7 @@ export const deleteTimeline = catchAsyncErrors(async (req, res, next) => {
   await timeline.deleteOne();
   res.status(200).json({
     success: true,
-    message: "Timeline Deleted!",
+    message: "Timeline Deleted Successfully!",
   });
 });
 

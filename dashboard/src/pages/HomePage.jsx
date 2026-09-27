@@ -348,6 +348,7 @@ const HomePage = () => {
           case "Add Uses":
             return <AddSoftwareApplications />;
           case "Add Timeline":
+          case "Timeline":
             return <AddTimeline />;
           case "Messages":
             return <Messages />;

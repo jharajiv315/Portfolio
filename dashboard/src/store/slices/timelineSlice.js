@@ -40,6 +40,21 @@ const timelineSlice = createSlice({
       state.loading = false;
       state.message = null;
     },
+    updateTimelineRequest(state) {
+      state.loading = true;
+      state.error = null;
+      state.message = null;
+    },
+    updateTimelineSuccess(state, action) {
+      state.error = null;
+      state.loading = false;
+      state.message = action.payload;
+    },
+    updateTimelineFailed(state, action) {
+      state.error = action.payload;
+      state.loading = false;
+      state.message = null;
+    },
     deleteTimelineRequest(state) {
       state.loading = true;
       state.error = null;
@@ -105,6 +120,30 @@ export const addNewTimeline = (timelineData) => async (dispatch) => {
     dispatch(
       timelineSlice.actions.addNewTimelineFailed(
         error.response?.data?.message || "Failed to add timeline"
+      )
+    );
+  }
+};
+
+export const updateTimeline = (id, timelineData) => async (dispatch) => {
+  dispatch(timelineSlice.actions.updateTimelineRequest());
+  try {
+    const response = await axios.put(
+      `${API_URL}/api/v1/timeline/update/${id}`,
+      timelineData,
+      {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    dispatch(
+      timelineSlice.actions.updateTimelineSuccess(response.data.message)
+    );
+    dispatch(timelineSlice.actions.clearAllErrors());
+  } catch (error) {
+    dispatch(
+      timelineSlice.actions.updateTimelineFailed(
+        error.response?.data?.message || "Failed to update timeline"
       )
     );
   }

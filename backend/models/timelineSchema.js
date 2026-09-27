@@ -77,6 +77,35 @@ export const Timeline = {
         const result = await pool.query(query, [id]);
         return formatTimelineRow(result.rows[0]);
     },
+
+    async findByIdAndUpdate(id, { title, description, timeline }) {
+        const existing = await this.findById(id);
+        if (!existing) return null;
+
+        const newTitle = title !== undefined ? title : existing.title;
+        const newDesc = description !== undefined ? description : existing.description;
+        
+        let newTimelineObj = existing.timeline || { from: "", to: "" };
+        if (timeline) {
+            const parsed = typeof timeline === "string" ? JSON.parse(timeline) : timeline;
+            newTimelineObj = {
+                from: parsed.from !== undefined ? parsed.from : newTimelineObj.from,
+                to: parsed.to !== undefined ? parsed.to : newTimelineObj.to,
+            };
+        }
+        const timelineJson = JSON.stringify(newTimelineObj);
+
+        const query = `
+            UPDATE timelines
+            SET title = $1,
+                description = $2,
+                timeline = $3
+            WHERE id = $4
+            RETURNING ${TIMELINE_FIELDS};
+        `;
+        const result = await pool.query(query, [newTitle, newDesc, timelineJson, id]);
+        return formatTimelineRow(result.rows[0]);
+    },
 };
 
 export default Timeline;
