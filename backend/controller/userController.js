@@ -111,7 +111,7 @@ export const login = catchAsyncErrors(async (req, res, next) => {
 
   const user = await User.findOne({ email }).select("+password");
   if (!user) {
-    return next(new ErrorHandler("Invalid Email Or Password!", 404));
+    return next(new ErrorHandler("Invalid Email Or Password", 401));
   }
 
   const isPasswordMatched = await user.comparePassword(password);
@@ -326,10 +326,16 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
       message: `Email sent to ${user.email} successfully`,
     });
   } catch (error) {
+    console.error("Nodemailer error during password recovery:", error);
     user.resetPasswordToken = null;
     user.resetPasswordExpire = null;
     await user.save();
-    return next(new ErrorHandler(error.message, 500));
+    return next(
+      new ErrorHandler(
+        "Failed to send password recovery email. Please try again later.",
+        500
+      )
+    );
   }
 });
 
