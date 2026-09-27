@@ -1,12 +1,21 @@
 import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
 import { pool, initDb } from './database/dbConnection.js';
 import User from './models/userSchema.js';
+
+dotenv.config({ path: './config/config.env' });
 
 async function seedAdmin() {
   await initDb();
 
-  const email = 'jharajiv315@gmail.com';
-  const plainPassword = 'Rajiv45';
+  const email = process.env.ADMIN_EMAIL || 'jharajiv315@gmail.com';
+  const plainPassword = process.env.ADMIN_PASSWORD;
+
+  if (!plainPassword) {
+    console.error('Error: ADMIN_PASSWORD environment variable is required to execute seedAdmin.');
+    process.exit(1);
+  }
+
   const hashedPassword = await bcrypt.hash(plainPassword, 10);
 
   const existingUser = await User.findOne({ email });
