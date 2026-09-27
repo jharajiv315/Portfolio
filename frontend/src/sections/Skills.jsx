@@ -123,6 +123,7 @@ const repeatListToFill = (list, minLength = 16) => {
 };
 
 export default function Skills({ skills = [], softwareApplications = [] }) {
+  const sectionRef = useRef(null);
   const skillsTrackRef = useRef(null);
   const appsTrackRef = useRef(null);
 
@@ -139,13 +140,21 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
   useEffect(() => {
     const skillsTrack = skillsTrackRef.current;
     const appsTrack = appsTrackRef.current;
+    const sectionEl = sectionRef.current;
     if (!skillsTrack && !appsTrack) return;
+
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion) return;
 
     let xSkills = 0;
     let xApps = 0;
     let direction = 1; // 1: Scroll Down, -1: Scroll Up
     let lastScrollY = window.scrollY;
     let animationFrameId;
+    let isVisible = true;
     let lastTime = performance.now();
     const speed = 55; // Pixels per second
 
@@ -161,38 +170,57 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
 
+    // Viewport-aware rendering: pause animation when skills section is off-screen
+    let observer;
+    if (typeof IntersectionObserver !== "undefined" && sectionEl) {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          isVisible = entry.isIntersecting;
+          if (isVisible) {
+            lastTime = performance.now();
+          }
+        },
+        { rootMargin: "100px" }
+      );
+      observer.observe(sectionEl);
+    }
+
     const animate = (currentTime) => {
-      const deltaTime = (currentTime - lastTime) / 1000;
-      lastTime = currentTime;
+      if (isVisible) {
+        const deltaTime = Math.min((currentTime - lastTime) / 1000, 0.1);
+        lastTime = currentTime;
 
-      // Track 1: Skills (moving Right-to-Left)
-      if (skillsTrack) {
-        const halfWidthSkills = skillsTrack.scrollWidth / 2;
-        if (halfWidthSkills > 0) {
-          if (direction === 1) {
-            xSkills -= speed * deltaTime;
-            if (xSkills <= -halfWidthSkills) xSkills += halfWidthSkills;
-          } else {
-            xSkills += speed * deltaTime;
-            if (xSkills >= 0) xSkills -= halfWidthSkills;
+        // Track 1: Skills (moving Right-to-Left)
+        if (skillsTrack) {
+          const halfWidthSkills = skillsTrack.scrollWidth / 2;
+          if (halfWidthSkills > 0) {
+            if (direction === 1) {
+              xSkills -= speed * deltaTime;
+              if (xSkills <= -halfWidthSkills) xSkills += halfWidthSkills;
+            } else {
+              xSkills += speed * deltaTime;
+              if (xSkills >= 0) xSkills -= halfWidthSkills;
+            }
+            skillsTrack.style.transform = `translate3d(${xSkills}px, 0, 0)`;
           }
-          skillsTrack.style.transform = `translate3d(${xSkills}px, 0, 0)`;
         }
-      }
 
-      // Track 2: Apps (moving Left-to-Right for elegant contrasting motion)
-      if (appsTrack) {
-        const halfWidthApps = appsTrack.scrollWidth / 2;
-        if (halfWidthApps > 0) {
-          if (direction === 1) {
-            xApps += speed * deltaTime;
-            if (xApps >= 0) xApps -= halfWidthApps;
-          } else {
-            xApps -= speed * deltaTime;
-            if (xApps <= -halfWidthApps) xApps += halfWidthApps;
+        // Track 2: Apps (moving Left-to-Right for elegant contrasting motion)
+        if (appsTrack) {
+          const halfWidthApps = appsTrack.scrollWidth / 2;
+          if (halfWidthApps > 0) {
+            if (direction === 1) {
+              xApps += speed * deltaTime;
+              if (xApps >= 0) xApps -= halfWidthApps;
+            } else {
+              xApps -= speed * deltaTime;
+              if (xApps <= -halfWidthApps) xApps += halfWidthApps;
+            }
+            appsTrack.style.transform = `translate3d(${xApps}px, 0, 0)`;
           }
-          appsTrack.style.transform = `translate3d(${xApps}px, 0, 0)`;
         }
+      } else {
+        lastTime = currentTime;
       }
 
       animationFrameId = requestAnimationFrame(animate);
@@ -202,12 +230,13 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      if (observer) observer.disconnect();
       cancelAnimationFrame(animationFrameId);
     };
   }, [displaySkills.length, displayApps.length]);
 
   return (
-    <section id="skills" className="skills-section">
+    <section id="skills" ref={sectionRef} className="skills-section">
       {/* ================= BACKGROUND GLOWS ================= */}
       <div className="skill-glow skill-glow-left" />
       <div className="skill-glow skill-glow-center" />
@@ -507,7 +536,7 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
           }
           .skills-fade-left,
           .skills-fade-right {
-            width: 60px;
+            width: 40px;
           }
         }
 
