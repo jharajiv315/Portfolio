@@ -1,13 +1,7 @@
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { FiX } from "react-icons/fi";
 
 export default function OverlayMenu({ isOpen, onClose }) {
-  const isMobile =
-    typeof window !== "undefined" && window.innerWidth < 1024;
-
-  const origin = isMobile ? "95% 5%" : "95% 5%";
-
   const menuItems = [
     "Home",
     "About",
@@ -41,55 +35,42 @@ export default function OverlayMenu({ isOpen, onClose }) {
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          initial={{
-            clipPath: `circle(0% at ${origin})`,
-          }}
-          animate={{
-            clipPath: `circle(150% at ${origin})`,
-          }}
-          exit={{
-            clipPath: `circle(0% at ${origin})`,
-          }}
-          transition={{
-            duration: 0.7,
-            ease: [0.4, 0, 0.2, 1],
-          }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
           style={{
             backgroundColor: "rgba(250, 247, 242, 0.98)",
           }}
-          className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-xl pt-[max(1.5rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))] px-6"
+          className="fixed inset-0 z-40 flex flex-col items-center justify-center backdrop-blur-xl px-6 pt-24 pb-10"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) onClose();
+          }}
         >
-          {/* Close Button */}
-          <button
-            onClick={onClose}
-            className="absolute top-5 right-5 sm:top-6 sm:right-6 text-[#1C1917] hover:text-[#B84A1C] text-3xl transition-colors p-3 min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer rounded-full hover:bg-black/5"
-            aria-label="Close menu"
+          {/* Menu Items Container */}
+          <motion.div
+            initial={{ opacity: 0, y: -14 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+            className="flex flex-col items-center w-full max-w-sm"
           >
-            <FiX />
-          </button>
-
-          {/* Menu Items & Action */}
-          <div className="flex flex-col items-center">
-            <ul className="space-y-3 sm:space-y-4 text-center mb-8">
+            <ul className="space-y-2 sm:space-y-3 text-center mb-8 w-full">
               {menuItems.map((item, index) => (
                 <motion.li
                   key={item}
-                  initial={{
-                    opacity: 0,
-                    y: 20,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                  }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{
-                    delay: index * 0.07,
+                    delay: 0.03 * index,
+                    duration: 0.18,
+                    ease: "easeOut",
                   }}
                 >
                   <a
                     href={`#${item.toLowerCase()}`}
                     onClick={onClose}
-                    className="inline-block py-2 px-6 min-h-[44px] text-2xl sm:text-3xl text-[#1C1917] font-serif font-bold hover:text-[#B84A1C] transition-colors duration-200 tracking-tight"
+                    className="inline-block py-2.5 px-6 min-h-[44px] text-2xl sm:text-3xl text-[#1C1917] font-serif font-bold hover:text-[#B84A1C] transition-colors duration-150 tracking-tight active:scale-95"
                   >
                     {item}
                   </a>
@@ -98,9 +79,9 @@ export default function OverlayMenu({ isOpen, onClose }) {
             </ul>
 
             <motion.div
-              initial={{ opacity: 0, y: 15 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: menuItems.length * 0.07 }}
+              transition={{ delay: 0.03 * menuItems.length, duration: 0.2 }}
             >
               <a
                 href="#contact"
@@ -110,7 +91,7 @@ export default function OverlayMenu({ isOpen, onClose }) {
                 Reach Out
               </a>
             </motion.div>
-          </div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
