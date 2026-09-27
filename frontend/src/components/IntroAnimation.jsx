@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 export default function IntroAnimation({ onFinish, onComplete }) {
-  const handleDone = onFinish || onComplete || (() => {});
+  const handleDone = useCallback(() => {
+    if (onFinish) onFinish();
+    else if (onComplete) onComplete();
+  }, [onFinish, onComplete]);
 
   const greetings = [
     "Hello",
