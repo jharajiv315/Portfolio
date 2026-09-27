@@ -11,13 +11,13 @@ export const errorMiddleware = (err, req, res, next) => {
 
     // PostgreSQL unique constraint violation
     if (err.code === "23505") {
-        const message = err.detail || "Duplicate field value entered";
+        const message = "A record with this value already exists";
         err = new ErrorHandler(message, 400);
     }
 
     // PostgreSQL not null violation
     if (err.code === "23502") {
-        const message = `Missing required field: ${err.column || ""}`;
+        const message = "Missing required input field";
         err = new ErrorHandler(message, 400);
     }
 
@@ -35,12 +35,17 @@ export const errorMiddleware = (err, req, res, next) => {
 
     if (err.name === "JsonWebTokenError") {
         const message = "Invalid Token. Please try again";
-        err = new ErrorHandler(message, 400);
+        err = new ErrorHandler(message, 401);
     }
 
     if (err.name === "TokenExpiredError") {
-        const message = "Invalid Token. Please try to login again";
-        err = new ErrorHandler(message, 400);
+        const message = "Invalid or expired Token. Please login again";
+        err = new ErrorHandler(message, 401);
+    }
+
+    // Log internal server errors for server-side observability without exposing stack to clients
+    if (err.statusCode >= 500) {
+        console.error(`[Server Error] ${new Date().toISOString()}:`, err);
     }
 
     const errorMessage = err.errors
