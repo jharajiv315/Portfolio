@@ -72,7 +72,7 @@ export default function Footer({ user }) {
         </motion.p>
 
         {/* Copyright */}
-        <p className="text-xs font-sans text-[#A8A29E]">
+        <p className="text-xs font-sans text-[#57534E]">
           © {currentYear} {fullName}. All rights reserved.
         </p>
       </div>
