@@ -289,7 +289,7 @@ export default function Experience({ timelines = [] }) {
 
         {/* ================= MOBILE / TABLET VERTICAL TIMELINE ================= */}
         <div className="block lg:hidden relative py-4">
-          <div className="absolute top-0 bottom-0 left-4 sm:left-6 w-[3px] bg-[#E8E1D5] rounded-full overflow-hidden">
+          <div className="absolute top-0 bottom-0 left-3.5 sm:left-6 w-[3px] bg-[#E8E1D5] rounded-full overflow-hidden">
             <motion.div
               style={{
                 scaleY: scaleLine,
@@ -299,7 +299,7 @@ export default function Experience({ timelines = [] }) {
             />
           </div>
 
-          <div className="space-y-8 pl-12 sm:pl-16">
+          <div className="space-y-6 sm:space-y-8 pl-8 sm:pl-16">
             {experiences.map((exp, index) => (
               <motion.div
                 key={`mobile-${exp.id}`}
@@ -307,10 +307,10 @@ export default function Experience({ timelines = [] }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-30px" }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="relative bg-white/95 border border-[#E8E1D5] p-5 rounded-2xl shadow-xs backdrop-blur-xl transition-all duration-300 hover:border-[#B84A1C]/50"
+                className="relative bg-white/95 border border-[#E8E1D5] p-4 sm:p-5 rounded-2xl shadow-xs backdrop-blur-xl transition-all duration-300 hover:border-[#B84A1C]/50"
               >
-                <div className="absolute -left-[39px] sm:-left-[47px] top-6 flex items-center justify-center">
-                  <div className="w-4 h-4 rounded-full bg-white border-2 border-[#B84A1C] shadow-sm" />
+                <div className="absolute -left-[27px] sm:-left-[47px] top-6 flex items-center justify-center">
+                  <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-white border-2 border-[#B84A1C] shadow-sm" />
                 </div>
 
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
