@@ -19,8 +19,10 @@ function CosmicParticles() {
     const ctx = canvas.getContext("2d");
 
     let animationFrameId;
+    let isVisible = true;
     let particles = [];
-    const count = 50;
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    const count = isMobile ? 18 : 50;
 
     const resize = () => {
       if (canvas.parentElement) {
@@ -30,7 +32,7 @@ function CosmicParticles() {
     };
 
     resize();
-    window.addEventListener("resize", resize);
+    window.addEventListener("resize", resize, { passive: true });
 
     class Star {
       constructor() {
@@ -60,8 +62,10 @@ function CosmicParticles() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(184, 74, 28, ${Math.max(0.1, this.alpha * 0.7)})`;
-        ctx.shadowBlur = 4;
-        ctx.shadowColor = "rgba(184, 74, 28, 0.4)";
+        if (!isMobile) {
+          ctx.shadowBlur = 4;
+          ctx.shadowColor = "rgba(184, 74, 28, 0.4)";
+        }
         ctx.fill();
       }
     }
@@ -79,12 +83,25 @@ function CosmicParticles() {
       return () => window.removeEventListener("resize", resize);
     }
 
+    let observer;
+    if (typeof IntersectionObserver !== "undefined" && canvas.parentElement) {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          isVisible = entry.isIntersecting;
+        },
+        { rootMargin: "100px" }
+      );
+      observer.observe(canvas.parentElement);
+    }
+
     const loop = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach((p) => {
-        p.update();
-        p.draw();
-      });
+      if (isVisible) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((p) => {
+          p.update();
+          p.draw();
+        });
+      }
       animationFrameId = requestAnimationFrame(loop);
     };
 
@@ -92,6 +109,7 @@ function CosmicParticles() {
 
     return () => {
       window.removeEventListener("resize", resize);
+      if (observer) observer.disconnect();
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
@@ -268,7 +286,7 @@ export default function Contact({ user }) {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Your Name"
-                    className="w-full h-[40px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-xs sm:text-[13px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out"
+                    className="w-full h-[44px] sm:h-[40px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-base sm:text-[13px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out"
                   />
                 </div>
 
@@ -285,7 +303,7 @@ export default function Contact({ user }) {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Your Email"
-                    className="w-full h-[40px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-xs sm:text-[13px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out"
+                    className="w-full h-[44px] sm:h-[40px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-base sm:text-[13px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out"
                   />
                 </div>
 
@@ -299,7 +317,7 @@ export default function Contact({ user }) {
                     name="service"
                     value={formData.service}
                     onChange={handleChange}
-                    className="w-full h-[40px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] font-sans text-xs sm:text-[13px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out cursor-pointer"
+                    className="w-full h-[44px] sm:h-[40px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] font-sans text-base sm:text-[13px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out cursor-pointer"
                   >
                     <option value="Web Development" className="bg-[#FAF7F2] text-[#1C1917]">
                       Web Development
@@ -334,7 +352,7 @@ export default function Contact({ user }) {
                     value={formData.idea}
                     onChange={handleChange}
                     placeholder="Explain your idea or inquiry..."
-                    className="w-full h-[90px] px-3.5 py-2.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-xs sm:text-[13px] leading-relaxed hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out resize-none"
+                    className="w-full min-h-[96px] sm:h-[90px] px-3.5 py-2.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-base sm:text-[13px] leading-relaxed hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out resize-none"
                   />
                 </div>
 
