@@ -21,6 +21,16 @@ export default function IntroAnimation({ onFinish, onComplete }) {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
+    // If user prefers reduced motion, skip intro animation immediately
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      setVisible(false);
+      handleDone();
+      return;
+    }
+
     if (index < greetings.length - 1) {
       const interval = setInterval(() => {
         setIndex((prev) => prev + 1);
@@ -34,7 +44,7 @@ export default function IntroAnimation({ onFinish, onComplete }) {
     }, 900);
 
     return () => clearTimeout(timer);
-  }, [index, greetings.length]);
+  }, [index, greetings.length, handleDone]);
 
   return (
     <AnimatePresence onExitComplete={handleDone}>
