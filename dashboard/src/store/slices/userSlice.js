@@ -60,6 +60,12 @@ const userSlice = createSlice({
       state.user = {};
       state.error = action.payload;
     },
+    loadUserNotLoggedIn(state) {
+      state.loading = false;
+      state.isAuthenticated = false;
+      state.user = {};
+      state.error = null;
+    },
     updatePasswordRequest(state) {
       state.loading = true;
       state.isUpdated = false;
@@ -126,15 +132,27 @@ export const login = (email, password) => async (dispatch) => {
 };
 
 export const getUser = () => async (dispatch) => {
+  const token = localStorage.getItem("adminToken");
+  if (!token) {
+    dispatch(userSlice.actions.loadUserNotLoggedIn());
+    return;
+  }
   dispatch(userSlice.actions.loadUserRequest());
   try {
-    const { data } = await axios.get(`${API_URL}/api/v1/user/me`, {
-      withCredentials: true,
-    });
+    const { data } = await axios.get(`${API_URL}/api/v1/user/me`);
     dispatch(userSlice.actions.loadUserSuccess(data.user));
     dispatch(userSlice.actions.clearAllErrors());
   } catch (error) {
-    dispatch(userSlice.actions.loadUserFailed(error.response?.data?.message || "User not found"));
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      localStorage.removeItem("adminToken");
+      dispatch(userSlice.actions.loadUserNotLoggedIn());
+    } else {
+      dispatch(
+        userSlice.actions.loadUserFailed(
+          error.response?.data?.message || "Session verification failed"
+        )
+      );
+    }
   }
 };
 

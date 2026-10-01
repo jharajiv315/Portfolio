@@ -42,14 +42,18 @@ const HomePage = () => {
   };
   const navigateTo = useNavigate();
   useEffect(() => {
-    if (error) {
+    if (
+      error &&
+      !error.toLowerCase().includes("authenticated") &&
+      !error.toLowerCase().includes("session")
+    ) {
       toast.error(error);
       dispatch(clearAllUserErrors());
     }
     if (!isAuthenticated) {
       navigateTo("/login");
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, error, dispatch, navigateTo]);
   return (
     <div className="flex min-h-screen w-full flex-col bg-background text-foreground">
       <aside className="fixed inset-y-0 left-0 hidden w-14 flex-col border-r border-border bg-card sm:flex z-50 shadow-xs">

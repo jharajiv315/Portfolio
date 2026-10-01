@@ -22,17 +22,28 @@ import ViewProject from "./pages/ViewProject";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { Navigate } from "react-router-dom";
 
+import { useSelector } from "react-redux";
+
 function App() {
   const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(getUser());
     dispatch(getAllSkills());
     dispatch(getAllSoftwareApplications());
     dispatch(getAllTimeline());
-    dispatch(getAllMessages());
     dispatch(getAllProjects());
-  }, []);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(getAllMessages());
+      dispatch(getAllTimeline());
+      dispatch(getAllSkills());
+      dispatch(getAllProjects());
+    }
+  }, [dispatch, isAuthenticated]);
   return (
     <Router>
       <Routes>

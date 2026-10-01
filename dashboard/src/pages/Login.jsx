@@ -17,37 +17,53 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigateTo = useNavigate();
 
-  const handleLogin = () => {
-    dispatch(login(email, password));
+  const handleLogin = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    if (!email.trim() || !password.trim()) {
+      toast.error("Please enter your email and password.");
+      return;
+    }
+    dispatch(login(email.trim(), password.trim()));
   };
 
   useEffect(() => {
-    if (error) {
+    // Only display genuine login error messages (ignore session verification noise)
+    if (
+      error &&
+      !error.toLowerCase().includes("authenticated") &&
+      !error.toLowerCase().includes("session")
+    ) {
       toast.error(error);
       dispatch(clearAllUserErrors());
     }
     if (isAuthenticated) {
       navigateTo("/");
     }
-  }, [dispatch, isAuthenticated, error, loading]);
+  }, [dispatch, isAuthenticated, error, loading, navigateTo]);
 
   return (
     <div className="w-full lg:grid lg:min-h-[100vh] lg:grid-cols-2 xl:min-h-[100vh]">
-      <div className=" min-h-[100vh] flex items-center justify-center py-12">
-        <div className="mx-auto grid w-[350px] gap-6">
+      <div className="min-h-[100vh] flex items-center justify-center py-12 px-4">
+        <div className="mx-auto grid w-full max-w-[360px] gap-6">
           <div className="grid gap-2 text-center">
+            <span className="text-[11px] uppercase tracking-wider text-primary font-semibold block mb-1">
+              Admin Portal
+            </span>
             <h1 className="text-3xl font-serif font-bold text-foreground">Admin Login</h1>
-            <p className="text-balance text-muted-foreground text-sm">
+            <p className="text-balance text-muted-foreground text-xs sm:text-sm">
               Enter your credentials to access your administrative portfolio dashboard
             </p>
           </div>
-          <div className="grid gap-4">
+
+          <form onSubmit={handleLogin} autoComplete="off" className="grid gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="admin-email">Email</Label>
               <Input
-                id="email"
+                id="admin-email"
                 type="email"
-                placeholder="jharajiv315@gmail.com"
+                name="email"
+                autoComplete="off"
+                placeholder="admin@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -56,7 +72,7 @@ const Login = () => {
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
-                <Label>Password</Label>
+                <Label htmlFor="admin-password">Password</Label>
                 <Link
                   to="/password/forgot"
                   className="ml-auto inline-block text-xs text-primary hover:underline"
@@ -65,12 +81,14 @@ const Login = () => {
                 </Link>
               </div>
               <Input
+                id="admin-password"
                 type="password"
+                name="password"
+                autoComplete="new-password"
+                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleLogin(email, password);
-                }}
+                required
                 className="rounded-xl"
               />
             </div>
@@ -78,17 +96,17 @@ const Login = () => {
               <SpecialLoadingButton content={"Logging In"} />
             ) : (
               <Button
-                onClick={() => handleLogin(email, password)}
-                className="w-full rounded-full shadow-sm"
+                type="submit"
+                className="w-full rounded-full shadow-sm mt-2"
               >
                 Sign In
               </Button>
             )}
-          </div>
+          </form>
         </div>
       </div>
-      <div className="flex justify-center items-center bg-muted">
-        <img src="/login.png" alt="login" />
+      <div className="hidden lg:flex justify-center items-center bg-muted/40 p-8 border-l border-border">
+        <img src="/login.png" alt="login" className="max-w-[400px] w-full object-contain" />
       </div>
     </div>
   );

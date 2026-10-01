@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Send, CheckCircle2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Send, CheckCircle2, Sparkles, ArrowRight } from "lucide-react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import astraImg from "../assets/Astra.png";
@@ -109,8 +109,8 @@ function CosmicParticles() {
 
     return () => {
       window.removeEventListener("resize", resize);
-      if (observer) observer.disconnect();
       cancelAnimationFrame(animationFrameId);
+      if (observer) observer.disconnect();
     };
   }, []);
 
@@ -135,6 +135,7 @@ export default function Contact({ user }) {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [lastSubmittedEmail, setLastSubmittedEmail] = useState("");
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -162,7 +163,6 @@ export default function Contact({ user }) {
 
     try {
       const subject = `[${formData.service}] Inquiry from ${trimmedName}`;
-
       const messageContent = `Client Email: ${trimmedEmail}\nService Requested: ${formData.service}\n\nProject Idea / Inquiry:\n${trimmedIdea}`;
 
       const res = await axios.post(
@@ -179,9 +179,9 @@ export default function Contact({ user }) {
         }
       );
 
+      setLastSubmittedEmail(trimmedEmail);
       setSubmitted(true);
-      setStatus("Message sent successfully! I'll get back to you promptly. ✅");
-      toast.success(res.data?.message || "Message sent successfully!");
+      toast.success(res.data?.message || "Inquiry received successfully!");
       setFormData({
         name: "",
         email: "",
@@ -193,13 +193,10 @@ export default function Contact({ user }) {
       const errorMsg =
         err.response?.data?.message || "Something went wrong. Please try again.";
       setSubmitted(false);
-      setStatus(`Error: ${errorMsg} ❌`);
+      setStatus(`Error: ${errorMsg}`);
       toast.error(errorMsg);
     } finally {
       setLoading(false);
-      setTimeout(() => {
-        setStatus("");
-      }, 7000);
     }
   };
 
@@ -260,141 +257,191 @@ export default function Contact({ user }) {
             transition={{ duration: 0.7, ease: "easeOut" }}
           >
             <div
-              className="rounded-3xl p-5 sm:p-7 relative overflow-hidden bg-white/95 border border-[#E8E1D5] shadow-[0_20px_45px_-10px_rgba(28,25,23,0.08)]"
+              className="rounded-3xl p-6 sm:p-8 relative overflow-hidden bg-white/95 border border-[#E8E1D5] shadow-[0_20px_45px_-10px_rgba(28,25,23,0.08)]"
             >
-              {/* Form Header */}
-              <div className="mb-4">
-                <h2 className="font-serif font-bold text-[24px] sm:text-[28px] lg:text-[32px] leading-[1.1] text-[#1C1917] tracking-tight">
-                  Let's Work <span className="text-[#B84A1C] italic font-serif">Together</span>
-                </h2>
-                <p className="mt-1.5 font-sans font-normal text-xs sm:text-[13.5px] leading-[1.5] text-[#57534E]">
-                  Have a project in mind or want to collaborate? Fill out the form below and I'll get back to you promptly.
-                </p>
-              </div>
-
-              {/* Contact Form */}
-              <form onSubmit={handleSubmit} className="space-y-3.5">
-                {/* 1. Your Name */}
-                <div>
-                  <label htmlFor="contact-name" className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
-                    Your Name <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
-                  </label>
-                  <input
-                    id="contact-name"
-                    type="text"
-                    name="name"
-                    required
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="Your Name"
-                    className="w-full h-[44px] sm:h-[40px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-base sm:text-[13px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out"
-                  />
-                </div>
-
-                {/* 2. Your Email */}
-                <div>
-                  <label htmlFor="contact-email" className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
-                    Your Email <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
-                  </label>
-                  <input
-                    id="contact-email"
-                    type="email"
-                    name="email"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="Your Email"
-                    className="w-full h-[44px] sm:h-[40px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-base sm:text-[13px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out"
-                  />
-                </div>
-
-                {/* 3. Service Needed */}
-                <div>
-                  <label htmlFor="contact-service" className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
-                    Service Needed <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
-                  </label>
-                  <select
-                    id="contact-service"
-                    name="service"
-                    value={formData.service}
-                    onChange={handleChange}
-                    className="w-full h-[44px] sm:h-[40px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] font-sans text-base sm:text-[13px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out cursor-pointer"
-                  >
-                    <option value="Web Development" className="bg-[#FAF7F2] text-[#1C1917]">
-                      Web Development
-                    </option>
-                    <option value="Full Stack Application" className="bg-[#FAF7F2] text-[#1C1917]">
-                      Full Stack Application
-                    </option>
-                    <option value="Frontend & UI/UX Design" className="bg-[#FAF7F2] text-[#1C1917]">
-                      Frontend & UI/UX Design
-                    </option>
-                    <option value="AI & API Integration" className="bg-[#FAF7F2] text-[#1C1917]">
-                      AI & API Integration
-                    </option>
-                    <option value="Others" className="bg-[#FAF7F2] text-[#1C1917]">
-                      Others
-                    </option>
-                    <option value="Something in mind?" className="bg-[#FAF7F2] text-[#1C1917]">
-                      Something in mind?
-                    </option>
-                  </select>
-                </div>
-
-                {/* 4. Explain Your Idea */}
-                <div>
-                  <label htmlFor="contact-idea" className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
-                    Explain Your Idea <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
-                  </label>
-                  <textarea
-                    id="contact-idea"
-                    name="idea"
-                    required
-                    value={formData.idea}
-                    onChange={handleChange}
-                    placeholder="Explain your idea or inquiry..."
-                    className="w-full min-h-[96px] sm:h-[90px] px-3.5 py-2.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-base sm:text-[13px] leading-relaxed hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out resize-none"
-                  />
-                </div>
-
-                {/* Status Message */}
-                {status && (
+              <AnimatePresence mode="wait">
+                {submitted ? (
+                  /* ================= CLEAN & PROFESSIONAL SUCCESS PROMPT ================= */
                   <motion.div
-                    initial={{ opacity: 0, y: -4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className={`text-xs sm:text-[13px] font-sans font-medium flex items-center gap-2 py-2 px-3 rounded-xl ${
-                      submitted
-                        ? "text-emerald-800 bg-emerald-50 border border-emerald-200"
-                        : "text-rose-800 bg-rose-50 border border-rose-200"
-                    }`}
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    className="py-6 sm:py-8 px-2 sm:px-4 text-center flex flex-col items-center justify-center space-y-4"
                   >
-                    {submitted ? (
-                      <CheckCircle2 size={15} className="text-emerald-600 flex-shrink-0" />
-                    ) : (
-                      <span className="text-rose-600 text-sm flex-shrink-0">⚠️</span>
+                    <div className="w-16 h-16 rounded-full bg-[#FAF7F2] border-2 border-[#E8E1D5] flex items-center justify-center shadow-xs">
+                      <CheckCircle2 className="w-9 h-9 text-[#B84A1C]" />
+                    </div>
+
+                    <div>
+                      <span className="text-[11px] font-mono uppercase tracking-wider text-[#B84A1C] font-semibold block mb-1">
+                        Dispatch Confirmed
+                      </span>
+                      <h3 className="font-serif font-bold text-2xl sm:text-3xl text-[#1C1917] tracking-tight">
+                        Message Received!
+                      </h3>
+                      <p className="mt-2 text-xs sm:text-sm text-[#57534E] leading-relaxed max-w-sm mx-auto">
+                        Thank you for reaching out. Your inquiry has been routed directly to Rajiv's communication desk and recorded in the priority queue. You will receive a direct email response shortly.
+                      </p>
+                    </div>
+
+                    {lastSubmittedEmail && (
+                      <div className="w-full max-w-xs p-3 rounded-2xl bg-[#FAF7F2] border border-[#E8E1D5] text-[11.5px] font-mono text-[#78716C] flex items-center justify-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-[#B84A1C] animate-pulse" />
+                        <span>Confirmation sent for: <strong className="text-[#1C1917]">{lastSubmittedEmail}</strong></span>
+                      </div>
                     )}
-                    <span>{status}</span>
+
+                    <div className="pt-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSubmitted(false);
+                          setStatus("");
+                        }}
+                        className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-semibold text-white bg-[#B84A1C] hover:bg-[#A03D14] transition-all shadow-md hover:shadow-lg hover:scale-102 active:scale-98 cursor-pointer"
+                      >
+                        <span>Send Another Inquiry</span>
+                        <ArrowRight size={14} />
+                      </button>
+                    </div>
+                  </motion.div>
+                ) : (
+                  /* ================= CONTACT INPUT FORM ================= */
+                  <motion.div
+                    key="form"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    {/* Form Header */}
+                    <div className="mb-4">
+                      <h2 className="font-serif font-bold text-[24px] sm:text-[28px] lg:text-[32px] leading-[1.1] text-[#1C1917] tracking-tight">
+                        Let's Work <span className="text-[#B84A1C] italic font-serif">Together</span>
+                      </h2>
+                      <p className="mt-1.5 font-sans font-normal text-xs sm:text-[13.5px] leading-[1.5] text-[#57534E]">
+                        Have a project in mind or want to collaborate? Fill out the form below and I'll get back to you promptly.
+                      </p>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-3.5">
+                      {/* 1. Your Name */}
+                      <div>
+                        <label htmlFor="contact-name" className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
+                          Your Name <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
+                        </label>
+                        <input
+                          id="contact-name"
+                          type="text"
+                          name="name"
+                          required
+                          value={formData.name}
+                          onChange={handleChange}
+                          placeholder="Your Name"
+                          className="w-full h-[44px] sm:h-[40px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-base sm:text-[13px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out"
+                        />
+                      </div>
+
+                      {/* 2. Your Email */}
+                      <div>
+                        <label htmlFor="contact-email" className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
+                          Your Email <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
+                        </label>
+                        <input
+                          id="contact-email"
+                          type="email"
+                          name="email"
+                          required
+                          value={formData.email}
+                          onChange={handleChange}
+                          placeholder="your.email@example.com"
+                          className="w-full h-[44px] sm:h-[40px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-base sm:text-[13px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out"
+                        />
+                      </div>
+
+                      {/* 3. Service Needed */}
+                      <div>
+                        <label htmlFor="contact-service" className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
+                          Service Needed <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
+                        </label>
+                        <select
+                          id="contact-service"
+                          name="service"
+                          value={formData.service}
+                          onChange={handleChange}
+                          className="w-full h-[44px] sm:h-[40px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] font-sans text-base sm:text-[13px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out cursor-pointer"
+                        >
+                          <option value="Web Development" className="bg-[#FAF7F2] text-[#1C1917]">
+                            Web Development
+                          </option>
+                          <option value="Full Stack Application" className="bg-[#FAF7F2] text-[#1C1917]">
+                            Full Stack Application
+                          </option>
+                          <option value="Frontend & UI/UX Design" className="bg-[#FAF7F2] text-[#1C1917]">
+                            Frontend & UI/UX Design
+                          </option>
+                          <option value="AI & API Integration" className="bg-[#FAF7F2] text-[#1C1917]">
+                            AI & API Integration
+                          </option>
+                          <option value="Others" className="bg-[#FAF7F2] text-[#1C1917]">
+                            Others
+                          </option>
+                          <option value="Something in mind?" className="bg-[#FAF7F2] text-[#1C1917]">
+                            Something in mind?
+                          </option>
+                        </select>
+                      </div>
+
+                      {/* 4. Explain Your Idea */}
+                      <div>
+                        <label htmlFor="contact-idea" className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
+                          Explain Your Idea <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
+                        </label>
+                        <textarea
+                          id="contact-idea"
+                          name="idea"
+                          required
+                          value={formData.idea}
+                          onChange={handleChange}
+                          placeholder="Tell me about your project, goals, or inquiry..."
+                          className="w-full min-h-[96px] sm:h-[90px] px-3.5 py-2.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-base sm:text-[13px] leading-relaxed hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out resize-none"
+                        />
+                      </div>
+
+                      {/* Error Status Message (if submission fails) */}
+                      {status && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -4 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="text-xs sm:text-[13px] font-sans font-medium flex items-center gap-2 py-2 px-3 rounded-xl text-rose-800 bg-rose-50 border border-rose-200"
+                        >
+                          <span className="text-rose-600 text-sm flex-shrink-0">⚠️</span>
+                          <span>{status}</span>
+                        </motion.div>
+                      )}
+
+                      {/* 5. Submit Button */}
+                      <div className="pt-1">
+                        <button
+                          type="submit"
+                          disabled={loading}
+                          className="w-full h-[42px] rounded-full font-medium text-xs sm:text-[13.5px] text-white bg-[#B84A1C] hover:bg-[#A03D14] shadow-md hover:shadow-[0_8px_20px_rgba(184,74,28,0.25)] transition-all duration-150 ease-out hover:-translate-y-[1px] active:translate-y-0 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                        >
+                          {loading ? (
+                            <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          ) : (
+                            <>
+                              <span>Send Message</span>
+                              <Send size={14} />
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </form>
                   </motion.div>
                 )}
-
-                {/* 5. Submit Button */}
-                <div className="pt-1">
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full h-[42px] rounded-full font-medium text-xs sm:text-[13.5px] text-white bg-[#B84A1C] hover:bg-[#A03D14] shadow-md hover:shadow-[0_8px_20px_rgba(184,74,28,0.25)] transition-all duration-150 ease-out hover:-translate-y-[1px] active:translate-y-0 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0"
-                  >
-                    {loading ? (
-                      <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    ) : (
-                      <>
-                        <span>Send Message</span>
-                        <Send size={14} />
-                      </>
-                    )}
-                  </button>
-                </div>
-              </form>
+              </AnimatePresence>
             </div>
           </motion.div>
         </div>

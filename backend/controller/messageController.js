@@ -57,7 +57,8 @@ export const sendMessage = catchAsyncErrors(async (req, res, next) => {
   // 2. Dispatch Email Notification to Admin
   try {
     const adminUser = await User.findOne();
-    const adminEmail = adminUser?.email || process.env.ADMIN_EMAIL || process.env.SMTP_MAIL;
+    // Destination email explicitly set to jharajiv315@gmail.com
+    const adminEmail = process.env.ADMIN_EMAIL || "jharajiv315@gmail.com";
 
     if (adminEmail && process.env.SMTP_MAIL && process.env.SMTP_PASSWORD) {
       const dashboardUrl = process.env.DASHBOARD_URL || "https://portfolio-beta-ochre-90.vercel.app";
