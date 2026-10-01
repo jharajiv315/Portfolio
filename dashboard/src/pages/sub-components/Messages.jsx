@@ -30,6 +30,7 @@ import {
   X,
   CornerDownRight,
   Trash2,
+  ExternalLink,
 } from "lucide-react";
 
 // Helper to extract email from text if missing on parent object
@@ -243,15 +244,30 @@ const Messages = () => {
 
                         {/* Card Actions */}
                         <CardFooter className="flex items-center justify-between p-0 pt-4 mt-3 border-t border-border/40">
-                          <Button
-                            variant="default"
-                            size="sm"
-                            className="rounded-full text-xs flex items-center gap-1.5 shadow-xs"
-                            onClick={() => handleOpenReply(element)}
-                          >
-                            <Reply className="h-3.5 w-3.5" />
-                            {isReplied ? "Reply Again" : "Reply via Email"}
-                          </Button>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="default"
+                              size="sm"
+                              className="rounded-full text-xs flex items-center gap-1.5 shadow-xs"
+                              onClick={() => handleOpenReply(element)}
+                            >
+                              <Reply className="h-3.5 w-3.5" />
+                              {isReplied ? "Reply Again" : "Reply via Email"}
+                            </Button>
+
+                            {senderEmail && (
+                              <a
+                                href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(senderEmail)}&su=${encodeURIComponent(`Re: ${element.subject || "Portfolio Inquiry"}`)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium border border-border bg-background hover:bg-muted text-muted-foreground hover:text-foreground transition-all shadow-xs cursor-pointer"
+                                title="Open in Gmail"
+                              >
+                                <ExternalLink className="h-3 w-3 text-primary" />
+                                <span>Gmail</span>
+                              </a>
+                            )}
+                          </div>
 
                           {loading && messageId === element._id ? (
                             <SpecialLoadingButton content={"Deleting"} width={"w-20"} />
@@ -364,27 +380,39 @@ const Messages = () => {
               </div>
 
               {/* Modal Actions */}
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-border">
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="rounded-full text-xs"
-                  onClick={handleCloseReply}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-border">
+                <a
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(selectedMessage.resolvedEmail)}&su=${encodeURIComponent(replySubject)}&body=${encodeURIComponent(replyBody || "Hi " + (selectedMessage.senderName || "") + ",\n\n")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium border border-border bg-background hover:bg-muted text-foreground transition-all shadow-xs cursor-pointer"
                 >
-                  Cancel
-                </Button>
+                  <ExternalLink className="h-3.5 w-3.5 text-primary" />
+                  <span>Open & Send in Gmail</span>
+                </a>
 
-                {loading ? (
-                  <SpecialLoadingButton content={"Sending Email..."} width={"w-32"} />
-                ) : (
+                <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
                   <Button
-                    type="submit"
-                    className="rounded-full text-xs flex items-center gap-2 shadow-sm"
+                    type="button"
+                    variant="outline"
+                    className="rounded-full text-xs"
+                    onClick={handleCloseReply}
                   >
-                    <Send className="h-3.5 w-3.5" />
-                    Send Reply
+                    Cancel
                   </Button>
-                )}
+
+                  {loading ? (
+                    <SpecialLoadingButton content={"Saving..."} width={"w-28"} />
+                  ) : (
+                    <Button
+                      type="submit"
+                      className="rounded-full text-xs flex items-center gap-2 shadow-sm"
+                    >
+                      <Send className="h-3.5 w-3.5" />
+                      Save & Send
+                    </Button>
+                  )}
+                </div>
               </div>
             </form>
           </div>
