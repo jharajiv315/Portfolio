@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import usePortfolioData from "../hooks/usePortfolioData";
 import IntroAnimation from "../components/IntroAnimation";
 import CustomCursor from "../components/CustomCursor";
@@ -13,7 +13,43 @@ import Contact from "../sections/Contact";
 import Footer from "../sections/Footer";
 
 export default function Home() {
-  const [introFinished, setIntroFinished] = useState(false);
+  // Check if intro has already played in this browser session
+  const [introFinished, setIntroFinished] = useState(() => {
+    if (typeof window !== "undefined") {
+      try {
+        return sessionStorage.getItem("portfolio_intro_shown") === "true";
+      } catch {
+        return false;
+      }
+    }
+    return false;
+  });
+
+  const alreadyShownRef = useRef(introFinished);
+
+  const handleIntroComplete = () => {
+    setIntroFinished(true);
+    try {
+      sessionStorage.setItem("portfolio_intro_shown", "true");
+    } catch (e) {
+      console.warn("Could not access sessionStorage:", e);
+    }
+  };
+
+  // Restore hash location smoothly on back-navigation or anchor visits
+  useEffect(() => {
+    if (introFinished && typeof window !== "undefined" && window.location.hash) {
+      const targetId = window.location.hash.replace("#", "");
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        const timer = setTimeout(() => {
+          targetElement.scrollIntoView({ behavior: "smooth" });
+        }, 120);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [introFinished]);
+
   const {
     user,
     skills,
@@ -27,18 +63,20 @@ export default function Home() {
 
   return (
     <div className="relative bg-[#FAF7F2] text-[#1C1917] min-h-screen selection:bg-[#B84A1C]/20 selection:text-[#B84A1C]">
-      {/* Multilingual Intro Animation */}
+      {/* Multilingual Intro Animation - Only executes once per browser session */}
       {!introFinished && (
         <IntroAnimation
-          onFinish={() => setIntroFinished(true)}
-          onComplete={() => setIntroFinished(true)}
+          onFinish={handleIntroComplete}
+          onComplete={handleIntroComplete}
         />
       )}
 
-      {/* Main Website - Reveals when intro completes */}
+      {/* Main Website - Renders immediately when intro was previously seen, or fades in on first visit */}
       <div
         className={
-          introFinished
+          alreadyShownRef.current
+            ? "opacity-100"
+            : introFinished
             ? "opacity-100 transition-opacity duration-700"
             : "opacity-0 pointer-events-none"
         }

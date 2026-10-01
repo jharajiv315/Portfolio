@@ -67,7 +67,8 @@ export default function IntroAnimation({ onFinish, onComplete }) {
           <AnimatePresence mode="wait">
             <motion.h1
               key={index}
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-[#1C1917] flex items-center gap-2"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-[#1C1917] flex items-center gap-2 cursor-pointer select-none"
+              onClick={() => setVisible(false)}
               initial={{
                 opacity: 0,
                 y: 20,
@@ -89,6 +90,14 @@ export default function IntroAnimation({ onFinish, onComplete }) {
               <span className="inline-block w-2.5 h-2.5 rounded-full bg-[#B84A1C]"></span>
             </motion.h1>
           </AnimatePresence>
+
+          {/* Quick Skip Button */}
+          <button
+            onClick={() => setVisible(false)}
+            className="absolute bottom-8 right-8 text-xs font-mono uppercase tracking-wider text-[#78716C] hover:text-[#1C1917] transition-colors px-3 py-1.5 rounded-full border border-[#E8E1D5] bg-white/70 backdrop-blur-xs cursor-pointer active:scale-95"
+          >
+            Skip Intro →
+          </button>
         </motion.div>
       )}
     </AnimatePresence>

@@ -31,12 +31,13 @@ function ProjectCard({
   const displayNum = index + 1 < 10 ? `0${index + 1}` : `${index + 1}`;
   const totalNum = total < 10 ? `0${total}` : `${total}`;
 
+  const projectId = project._id || project.id;
   const liveUrl =
     project.projectLink &&
     project.projectLink.trim() !== "" &&
     !project.projectLink.includes("[ADD")
       ? project.projectLink
-      : `/project/${project._id}`;
+      : `/project/${projectId}`;
 
   const hasGitRepo =
     project.gitRepoLink &&

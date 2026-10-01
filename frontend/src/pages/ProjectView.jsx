@@ -14,6 +14,10 @@ export const ProjectView = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, [id]);
+
+  useEffect(() => {
     const getProject = async () => {
       try {
         setLoading(true);
@@ -31,6 +35,15 @@ export const ProjectView = () => {
     };
     getProject();
   }, [id]);
+
+  const handleReturn = () => {
+    // If previous history entry exists in current window, navigate back to preserve scroll position
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate("/#projects");
+    }
+  };
 
   const hasGitRepo =
     project?.gitRepoLink &&
@@ -55,7 +68,7 @@ export const ProjectView = () => {
         {/* Navigation Bar / Return */}
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-[#E8E1D5]">
           <button
-            onClick={() => navigate("/")}
+            onClick={handleReturn}
             className="inline-flex items-center gap-2 text-sm font-medium text-[#57534E] hover:text-[#1C1917] transition-colors group cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
