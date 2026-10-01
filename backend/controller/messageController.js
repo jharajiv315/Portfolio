@@ -294,7 +294,7 @@ export const replyMessage = catchAsyncErrors(async (req, res, next) => {
 
   return res.status(200).json({
     success: true,
-    message: `Reply saved in dashboard. Direct SMTP is awaiting your Google App Password on Render. Click "Open Email" to send directly.`,
+    message: `Reply saved in dashboard! Click "Open in Gmail" to dispatch directly to ${recipientEmail}.`,
     data: updatedMessage,
     emailDelivered: false,
     deliveryWarning,
