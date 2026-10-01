@@ -57,17 +57,17 @@ export const forgotPassword = (email) => async (dispatch) => {
     const response = await axios.post(
       `${API_URL}/api/v1/user/password/forgot`,
       { email },
-      { withCredentials: true, headers: { "Content-Type": "application/json" } }
+      { headers: { "Content-Type": "application/json" } }
     );
     dispatch(
       forgotResetPassSlice.actions.forgotPasswordSuccess(response.data)
     );
   } catch (error) {
-    dispatch(
-      forgotResetPassSlice.actions.forgotPasswordFailed(
-        error.response?.data?.message || "Failed to process password recovery request"
-      )
-    );
+    const errorMsg =
+      error.response?.data?.message ||
+      (error.message?.includes("Network") ? "Network connection error. Please try again." : error.message) ||
+      "Failed to process password recovery request";
+    dispatch(forgotResetPassSlice.actions.forgotPasswordFailed(errorMsg));
   }
 };
 
@@ -79,7 +79,6 @@ export const resetPassword =
         `${API_URL}/api/v1/user/password/reset/${token}`,
         { password, confirmPassword },
         {
-          withCredentials: true,
           headers: { "Content-Type": "application/json" },
         }
       );
@@ -87,11 +86,11 @@ export const resetPassword =
         forgotResetPassSlice.actions.resetPasswordSuccess(response.data)
       );
     } catch (error) {
-      dispatch(
-        forgotResetPassSlice.actions.resetPasswordFailed(
-          error.response?.data?.message || "Failed to reset password"
-        )
-      );
+      const errorMsg =
+        error.response?.data?.message ||
+        (error.message?.includes("Network") ? "Network connection error. Please try again." : error.message) ||
+        "Failed to reset password";
+      dispatch(forgotResetPassSlice.actions.resetPasswordFailed(errorMsg));
     }
   };
 

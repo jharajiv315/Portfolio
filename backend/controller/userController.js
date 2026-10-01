@@ -311,9 +311,12 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
   const resetToken = user.getResetPasswordToken();
   await user.save();
 
-  const dashboardBase =
+  const rawDashboardBase =
     process.env.DASHBOARD_URL ||
     "https://portfolio-dashboard-seven-delta.vercel.app";
+  const dashboardBase = rawDashboardBase.includes("vercel.app")
+    ? rawDashboardBase.replace(/^http:\/\//i, "https://")
+    : rawDashboardBase;
   const resetPasswordUrl = `${dashboardBase}/password/reset/${resetToken}`;
 
   const message = `Your Reset Password Link is:\n\n${resetPasswordUrl}\n\nThis link is valid for 15 minutes. If you did not request this, please ignore it.`;

@@ -49,7 +49,16 @@ app.use(
       return callback(null, false);
     },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "Cookie",
+      "token",
+      "Token",
+      "x-token",
+      "Accept",
+      "Origin",
+    ],
     credentials: true,
   })
 );
