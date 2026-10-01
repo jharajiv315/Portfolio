@@ -60,8 +60,8 @@ export const sendMessage = catchAsyncErrors(async (req, res, next) => {
     // Destination email explicitly set to jharajiv315@gmail.com
     const adminEmail = process.env.ADMIN_EMAIL || "jharajiv315@gmail.com";
 
-    if (adminEmail && process.env.SMTP_MAIL && process.env.SMTP_PASSWORD) {
-      const dashboardUrl = process.env.DASHBOARD_URL || "https://portfolio-beta-ochre-90.vercel.app";
+    if (adminEmail) {
+      const dashboardUrl = process.env.DASHBOARD_URL || "https://portfolio-dashboard-seven-delta.vercel.app";
       const formattedDate = new Date().toLocaleString("en-US", {
         dateStyle: "full",
         timeStyle: "short",

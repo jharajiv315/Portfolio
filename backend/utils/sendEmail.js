@@ -1,14 +1,21 @@
 import nodemailer from "nodemailer";
 
 export const sendEmail = async (options) => {
-  const host = process.env.SMTP_HOST || "smtp.gmail.com";
+  const host = (process.env.SMTP_HOST || "smtp.gmail.com").trim();
   const port = Number(process.env.SMTP_PORT) || 465;
-  const service = process.env.SMTP_SERVICE || "gmail";
+  const service = (process.env.SMTP_SERVICE || "gmail").trim();
   const secure = port === 465;
 
-  if (!process.env.SMTP_MAIL || !process.env.SMTP_PASSWORD) {
+  const rawMail = process.env.SMTP_MAIL || "jharajiv315@gmail.com";
+  const rawPass = process.env.SMTP_PASSWORD || "jdnhekgupctwermq";
+
+  // Sanitize: strip any accidental spaces or wrapping quotes from the App Password
+  const smtpMail = rawMail.trim().replace(/["']/g, "");
+  const smtpPass = rawPass.replace(/[\s"']/g, "");
+
+  if (!smtpMail || !smtpPass) {
     const error = new Error(
-      "Gmail SMTP credentials (SMTP_MAIL or SMTP_PASSWORD) are not configured in server environment variables."
+      "Gmail SMTP credentials (SMTP_MAIL or SMTP_PASSWORD) are missing."
     );
     error.code = "SMTP_NOT_CONFIGURED";
     throw error;
@@ -19,18 +26,18 @@ export const sendEmail = async (options) => {
     host,
     port,
     secure,
-    connectionTimeout: 8000,
-    greetingTimeout: 8000,
-    socketTimeout: 10000,
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 15000,
     auth: {
-      user: process.env.SMTP_MAIL,
-      pass: process.env.SMTP_PASSWORD,
+      user: smtpMail,
+      pass: smtpPass,
     },
   });
 
   const fromAddress =
     options.from ||
-    `${process.env.SMTP_FROM_NAME || "Rajiv Jha — Portfolio"} <${process.env.SMTP_MAIL}>`;
+    `${process.env.SMTP_FROM_NAME || "Rajiv Jha — Portfolio"} <${smtpMail}>`;
 
   const mailOptions = {
     from: fromAddress,

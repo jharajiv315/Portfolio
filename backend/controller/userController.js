@@ -357,11 +357,10 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
     </html>
   `;
 
-  // Attempt to deliver via SMTP if credentials are configured
+  // Attempt to deliver via SMTP
   let emailSent = false;
-  if (process.env.SMTP_MAIL && process.env.SMTP_PASSWORD) {
-    try {
-      await sendEmail({
+  try {
+    await sendEmail({
         email: user.email,
         subject: `Personal Portfolio Dashboard Password Recovery`,
         message,
