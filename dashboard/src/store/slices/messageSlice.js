@@ -33,12 +33,18 @@ const messageSlice = createSlice({
     replyMessageSuccess(state, action) {
       state.error = null;
       state.loading = false;
-      state.message = action.payload;
+      state.message =
+        typeof action.payload === "string"
+          ? action.payload
+          : action.payload?.message;
+      state.lastReplyResult =
+        typeof action.payload === "object" ? action.payload : null;
     },
     replyMessageFailed(state, action) {
       state.error = action.payload;
       state.loading = false;
       state.message = null;
+      state.lastReplyResult = null;
     },
     deleteMessageRequest(state) {
       state.loading = true;
@@ -59,6 +65,7 @@ const messageSlice = createSlice({
       state.error = null;
       state.message = null;
       state.loading = false;
+      state.lastReplyResult = null;
     },
     clearAllErrors(state) {
       state.error = null;
@@ -97,14 +104,16 @@ export const replyMessage = (id, replyData) => async (dispatch) => {
         headers: { "Content-Type": "application/json" },
       }
     );
-    dispatch(messageSlice.actions.replyMessageSuccess(response.data.message));
+    dispatch(messageSlice.actions.replyMessageSuccess(response.data));
     dispatch(messageSlice.actions.clearAllErrors());
   } catch (error) {
-    dispatch(
-      messageSlice.actions.replyMessageFailed(
-        error.response?.data?.message || "Failed to send email reply"
-      )
-    );
+    const errorMsg =
+      error.response?.data?.message ||
+      (error.message?.includes("ECONNREFUSED")
+        ? "SMTP server connection failed. Please ensure SMTP_PASSWORD is set on Render."
+        : error.message) ||
+      "Failed to send email reply";
+    dispatch(messageSlice.actions.replyMessageFailed(errorMsg));
   }
 };
 

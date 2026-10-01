@@ -51,7 +51,7 @@ const Messages = () => {
     navigateTo("/");
   };
 
-  const { messages, loading, error, message } = useSelector(
+  const { messages, loading, error, message, lastReplyResult } = useSelector(
     (state) => state.messages
   );
 
@@ -112,13 +112,18 @@ const Messages = () => {
       dispatch(clearAllMessageErrors());
     }
     if (message) {
-      toast.success(message);
+      if (lastReplyResult && lastReplyResult.emailDelivered === false && lastReplyResult.mailtoUrl) {
+        toast.info(message, { autoClose: 9000 });
+        window.open(lastReplyResult.mailtoUrl, "_blank");
+      } else {
+        toast.success(message);
+      }
       setIsReplyOpen(false);
       setSelectedMessage(null);
       dispatch(resetMessagesSlice());
       dispatch(getAllMessages());
     }
-  }, [dispatch, error, message]);
+  }, [dispatch, error, message, lastReplyResult]);
 
   return (
     <>

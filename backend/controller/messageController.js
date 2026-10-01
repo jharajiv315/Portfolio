@@ -252,26 +252,53 @@ export const replyMessage = catchAsyncErrors(async (req, res, next) => {
     </html>
   `;
 
-  // 1. Dispatch Email to Sender
-  await sendEmail({
-    email: recipientEmail,
-    replyTo: adminEmail,
-    from: `${adminName} <${process.env.SMTP_MAIL}>`,
-    subject: emailSubject,
-    message: `${cleanReply}\n\n---\nOriginal message from ${message.senderName}:\nSubject: ${message.subject}\n\n${message.message}`,
-    html: htmlContent,
-  });
+  // 1. Dispatch Email to Sender if SMTP is available
+  let emailDelivered = false;
+  let deliveryWarning = null;
 
-  // 2. Mark as replied in database with audit record
+  try {
+    await sendEmail({
+      email: recipientEmail,
+      replyTo: adminEmail,
+      from: `${adminName} <${process.env.SMTP_MAIL || adminEmail}>`,
+      subject: emailSubject,
+      message: `${cleanReply}\n\n---\nOriginal message from ${message.senderName}:\nSubject: ${message.subject}\n\n${message.message}`,
+      html: htmlContent,
+    });
+    emailDelivered = true;
+  } catch (emailErr) {
+    console.warn("Nodemailer reply dispatch failed:", emailErr?.message || emailErr);
+    deliveryWarning =
+      emailErr?.code === "SMTP_NOT_CONFIGURED"
+        ? "Gmail SMTP credentials (SMTP_PASSWORD) are not yet set in Render environment variables."
+        : (emailErr?.message || "Email server connection issue");
+  }
+
+  // 2. Mark as replied in database with audit record so the response is NEVER lost
   const updatedMessage = await Message.findByIdAndUpdateReply(id, {
     replyMessage: cleanReply,
     repliedAt: new Date(),
   });
 
-  res.status(200).json({
+  // 3. Construct direct mailto URI for instant 1-click mail client fallback
+  const mailtoUrl = `mailto:${encodeURIComponent(recipientEmail)}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(cleanReply)}`;
+
+  if (emailDelivered) {
+    return res.status(200).json({
+      success: true,
+      message: `Reply email delivered successfully to ${recipientEmail}`,
+      data: updatedMessage,
+      emailDelivered: true,
+    });
+  }
+
+  return res.status(200).json({
     success: true,
-    message: `Reply sent successfully to ${recipientEmail}`,
+    message: `Reply saved in dashboard. Direct SMTP is awaiting your Google App Password on Render. Click "Open Email" to send directly.`,
     data: updatedMessage,
+    emailDelivered: false,
+    deliveryWarning,
+    mailtoUrl,
   });
 });
 
