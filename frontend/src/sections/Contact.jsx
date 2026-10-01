@@ -169,6 +169,7 @@ export default function Contact({ user }) {
         `${API_URL}/api/v1/message/send`,
         {
           senderName: trimmedName,
+          email: trimmedEmail,
           subject,
           message: messageContent,
         },

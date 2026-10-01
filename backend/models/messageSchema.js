@@ -4,8 +4,12 @@ const MESSAGE_FIELDS = `
     id,
     id AS "_id",
     sender_name AS "senderName",
+    email,
     subject,
     message,
+    replied,
+    reply_message AS "replyMessage",
+    replied_at AS "repliedAt",
     created_at AS "createdAt"
 `;
 
@@ -30,20 +34,24 @@ const formatMessageRow = (row) => {
         id: row.id,
         _id: row.id,
         senderName: row.senderName ?? row.sender_name,
+        email: row.email || "",
         subject: row.subject,
         message: row.message,
+        replied: Boolean(row.replied),
+        replyMessage: row.replyMessage ?? row.reply_message ?? null,
+        repliedAt: row.repliedAt ?? row.replied_at ?? null,
         createdAt: row.createdAt ?? row.created_at,
     });
 };
 
 export const Message = {
-    async create({ senderName, subject, message }) {
+    async create({ senderName, email = "", subject, message }) {
         const query = `
-            INSERT INTO messages (sender_name, subject, message)
-            VALUES ($1, $2, $3)
+            INSERT INTO messages (sender_name, email, subject, message)
+            VALUES ($1, $2, $3, $4)
             RETURNING ${MESSAGE_FIELDS};
         `;
-        const result = await pool.query(query, [senderName, subject, message]);
+        const result = await pool.query(query, [senderName, email, subject, message]);
         return formatMessageRow(result.rows[0]);
     },
 
@@ -64,6 +72,19 @@ export const Message = {
             WHERE id = $1;
         `;
         const result = await pool.query(query, [id]);
+        return formatMessageRow(result.rows[0]);
+    },
+
+    async findByIdAndUpdateReply(id, { replyMessage, repliedAt = new Date() }) {
+        const query = `
+            UPDATE messages
+            SET replied = TRUE,
+                reply_message = $1,
+                replied_at = $2
+            WHERE id = $3
+            RETURNING ${MESSAGE_FIELDS};
+        `;
+        const result = await pool.query(query, [replyMessage, repliedAt, id]);
         return formatMessageRow(result.rows[0]);
     },
 

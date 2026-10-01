@@ -104,6 +104,14 @@ export const initDb = async () => {
     await pool.query(createSkillsTable);
     await pool.query(createSoftwareApplicationsTable);
     await pool.query(createProjectsTable);
+
+    // Schema migrations for messages table to support direct email replies & status tracking
+    await pool.query(`
+        ALTER TABLE messages ADD COLUMN IF NOT EXISTS email VARCHAR(255);
+        ALTER TABLE messages ADD COLUMN IF NOT EXISTS replied BOOLEAN DEFAULT FALSE;
+        ALTER TABLE messages ADD COLUMN IF NOT EXISTS reply_message TEXT;
+        ALTER TABLE messages ADD COLUMN IF NOT EXISTS replied_at TIMESTAMP WITH TIME ZONE;
+    `);
 };
 
 export const dbConnection = async () => {

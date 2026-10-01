@@ -25,6 +25,21 @@ const messageSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
+    replyMessageRequest(state) {
+      state.loading = true;
+      state.error = null;
+      state.message = null;
+    },
+    replyMessageSuccess(state, action) {
+      state.error = null;
+      state.loading = false;
+      state.message = action.payload;
+    },
+    replyMessageFailed(state, action) {
+      state.error = action.payload;
+      state.loading = false;
+      state.message = null;
+    },
     deleteMessageRequest(state) {
       state.loading = true;
       state.error = null;
@@ -66,6 +81,28 @@ export const getAllMessages = () => async (dispatch) => {
     dispatch(
       messageSlice.actions.getAllMessagesFailed(
         error.response?.data?.message || "Failed to fetch messages"
+      )
+    );
+  }
+};
+
+export const replyMessage = (id, replyData) => async (dispatch) => {
+  dispatch(messageSlice.actions.replyMessageRequest());
+  try {
+    const response = await axios.post(
+      `${API_URL}/api/v1/message/reply/${id}`,
+      replyData,
+      {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    dispatch(messageSlice.actions.replyMessageSuccess(response.data.message));
+    dispatch(messageSlice.actions.clearAllErrors());
+  } catch (error) {
+    dispatch(
+      messageSlice.actions.replyMessageFailed(
+        error.response?.data?.message || "Failed to send email reply"
       )
     );
   }

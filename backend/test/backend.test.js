@@ -138,4 +138,54 @@ describe("Backend Critical Engineering Tests", () => {
       assert.equal(isAllowed("https://attacker-portfolio-beta-ochre-90.vercel.app"), false);
     });
   });
+
+  describe("Contact Form & Direct Reply Email Architecture", () => {
+    const extractEmail = (email, messageText) => {
+      if (email && typeof email === "string" && email.includes("@")) {
+        return email.trim();
+      }
+      if (!messageText) return "";
+      const clientMatch = messageText.match(/Client Email:\s*([^\s\n\r]+)/i);
+      if (clientMatch && clientMatch[1]?.includes("@")) {
+        return clientMatch[1].trim();
+      }
+      const generalMatch = messageText.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/);
+      if (generalMatch && generalMatch[0]) {
+        return generalMatch[0].trim();
+      }
+      return "";
+    };
+
+    test("Extracts explicit email address when provided", () => {
+      const email = "client@example.com";
+      const message = "Hello, I want to build an AI project.";
+      assert.equal(extractEmail(email, message), "client@example.com");
+    });
+
+    test("Extracts email embedded in formatted contact message string", () => {
+      const message = "Client Email: founder@techstartup.io\nService Requested: Web Development\n\nProject Idea:\nNeed a modern portal";
+      assert.equal(extractEmail(null, message), "founder@techstartup.io");
+    });
+
+    test("Extracts arbitrary email found in plain text message", () => {
+      const message = "Reach me at contact.partner@domain.org for collaboration.";
+      assert.equal(extractEmail("", message), "contact.partner@domain.org");
+    });
+
+    test("Validates reply payload structure before email dispatch", () => {
+      const validateReply = (replyMessage, recipientEmail) => {
+        if (!replyMessage || replyMessage.trim().length < 2) {
+          return { valid: false, error: "Please enter your reply message content." };
+        }
+        if (!recipientEmail || !recipientEmail.includes("@")) {
+          return { valid: false, error: "Cannot send email: invalid sender email address." };
+        }
+        return { valid: true };
+      };
+
+      assert.equal(validateReply("", "test@example.com").valid, false);
+      assert.equal(validateReply("Thank you for reaching out!", "").valid, false);
+      assert.equal(validateReply("Thank you for reaching out!", "test@example.com").valid, true);
+    });
+  });
 });

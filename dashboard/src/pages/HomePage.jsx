@@ -30,6 +30,7 @@ import { clearAllUserErrors, logout } from "@/store/slices/userSlice";
 import { toast } from "react-toastify";
 import Messages from "./sub-components/Messages";
 import AddTimeline from "./sub-components/AddTimeline";
+import ManageTimeline from "./ManageTimeline";
 
 const HomePage = () => {
   const [active, setActive] = useState("");
@@ -349,7 +350,8 @@ const HomePage = () => {
             return <AddSoftwareApplications />;
           case "Add Timeline":
           case "Timeline":
-            return <AddTimeline />;
+          case "Manage Timeline":
+            return <ManageTimeline onBack={() => setActive("Dashboard")} />;
           case "Messages":
             return <Messages />;
           case "Account":

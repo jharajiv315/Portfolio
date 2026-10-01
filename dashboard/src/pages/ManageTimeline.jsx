@@ -25,12 +25,16 @@ import {
   updateTimeline,
 } from "@/store/slices/timelineSlice";
 
-const ManageTimeline = () => {
+const ManageTimeline = ({ onBack } = {}) => {
   const navigateTo = useNavigate();
   const dispatch = useDispatch();
 
   const handleReturnToDashboard = () => {
-    navigateTo("/");
+    if (onBack) {
+      onBack();
+    } else {
+      navigateTo("/");
+    }
   };
 
   const { loading, timeline, error, message } = useSelector(
