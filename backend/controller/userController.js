@@ -370,7 +370,6 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
     } catch (mailError) {
       console.error("Nodemailer error during password recovery:", mailError?.message || mailError);
     }
-  }
 
   if (emailSent) {
     return res.status(200).json({
