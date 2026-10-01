@@ -8,22 +8,26 @@ const forgotResetPassSlice = createSlice({
     loading: false,
     error: null,
     message: null,
+    resetPasswordUrl: null,
   },
   reducers: {
     forgotPasswordRequest(state) {
       state.loading = true;
       state.error = null;
       state.message = null;
+      state.resetPasswordUrl = null;
     },
     forgotPasswordSuccess(state, action) {
       state.loading = false;
       state.error = null;
-      state.message = action.payload;
+      state.message = typeof action.payload === "string" ? action.payload : action.payload.message;
+      state.resetPasswordUrl = action.payload?.resetPasswordUrl || null;
     },
     forgotPasswordFailed(state, action) {
       state.loading = false;
       state.error = action.payload;
       state.message = null;
+      state.resetPasswordUrl = null;
     },
     resetPasswordRequest(state) {
       state.loading = true;
@@ -33,7 +37,8 @@ const forgotResetPassSlice = createSlice({
     resetPasswordSuccess(state, action) {
       state.loading = false;
       state.error = null;
-      state.message = action.payload;
+      state.message = typeof action.payload === "string" ? action.payload : action.payload.message;
+      state.resetPasswordUrl = null;
     },
     resetPasswordFailed(state, action) {
       state.loading = false;
@@ -55,12 +60,12 @@ export const forgotPassword = (email) => async (dispatch) => {
       { withCredentials: true, headers: { "Content-Type": "application/json" } }
     );
     dispatch(
-      forgotResetPassSlice.actions.forgotPasswordSuccess(response.data.message)
+      forgotResetPassSlice.actions.forgotPasswordSuccess(response.data)
     );
   } catch (error) {
     dispatch(
       forgotResetPassSlice.actions.forgotPasswordFailed(
-        error.response?.data?.message || "Failed to send reset email"
+        error.response?.data?.message || "Failed to process password recovery request"
       )
     );
   }
@@ -79,7 +84,7 @@ export const resetPassword =
         }
       );
       dispatch(
-        forgotResetPassSlice.actions.resetPasswordSuccess(response.data.message)
+        forgotResetPassSlice.actions.resetPasswordSuccess(response.data)
       );
     } catch (error) {
       dispatch(
