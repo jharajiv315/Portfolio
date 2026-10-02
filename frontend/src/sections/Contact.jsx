@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, CheckCircle2, Sparkles, ArrowRight } from "lucide-react";
+import { Send, CheckCircle2, Sparkles, ArrowRight, Mail } from "lucide-react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import astraImg from "../assets/Astra.png";
@@ -264,32 +264,31 @@ export default function Contact({ user }) {
                   /* ================= CLEAN & PROFESSIONAL SUCCESS PROMPT ================= */
                   <motion.div
                     key="success"
-                    initial={{ opacity: 0, scale: 0.95 }}
+                    initial={{ opacity: 0, scale: 0.96 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                    className="py-6 sm:py-8 px-2 sm:px-4 text-center flex flex-col items-center justify-center space-y-4"
+                    exit={{ opacity: 0, scale: 0.96 }}
+                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                    className="py-8 px-4 text-center flex flex-col items-center justify-center space-y-4 font-poppins"
                   >
-                    <div className="w-16 h-16 rounded-full bg-[#FAF7F2] border-2 border-[#E8E1D5] flex items-center justify-center shadow-xs">
-                      <CheckCircle2 className="w-9 h-9 text-[#B84A1C]" />
+                    <div className="w-14 h-14 rounded-full bg-[#FAF7F2] border border-[#E8E1D5] flex items-center justify-center text-[#B84A1C] shadow-sm mb-0.5">
+                      <CheckCircle2 className="w-7 h-7 stroke-[2]" />
                     </div>
 
                     <div>
-                      <span className="text-[11px] font-mono uppercase tracking-wider text-[#B84A1C] font-semibold block mb-1">
-                        Dispatch Confirmed
-                      </span>
-                      <h3 className="font-serif font-bold text-2xl sm:text-3xl text-[#1C1917] tracking-tight">
-                        Message Received!
+                      <h3 className="font-poppins font-semibold text-2xl text-[#1C1917] tracking-tight">
+                        Thank You for Reaching Out!
                       </h3>
-                      <p className="mt-2 text-xs sm:text-sm text-[#57534E] leading-relaxed max-w-sm mx-auto">
-                        Thank you for reaching out. Your inquiry has been routed directly to Rajiv's communication desk and recorded in the priority queue. You will receive a direct email response shortly.
+                      <p className="mt-2 text-sm text-[#57534E] leading-relaxed max-w-sm mx-auto font-poppins">
+                        Your message has been sent successfully. I have received your note and will review the details. You can expect a response in your inbox shortly.
                       </p>
                     </div>
 
                     {lastSubmittedEmail && (
-                      <div className="w-full max-w-xs p-3 rounded-2xl bg-[#FAF7F2] border border-[#E8E1D5] text-[11.5px] font-mono text-[#78716C] flex items-center justify-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#B84A1C] animate-pulse" />
-                        <span>Confirmation sent for: <strong className="text-[#1C1917]">{lastSubmittedEmail}</strong></span>
+                      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FAF7F2] border border-[#E8E1D5] text-xs font-poppins text-[#78716C]">
+                        <Mail className="w-3.5 h-3.5 text-[#B84A1C]" />
+                        <span>
+                          Sender: <strong className="text-[#1C1917] font-medium">{lastSubmittedEmail}</strong>
+                        </span>
                       </div>
                     )}
 
@@ -300,9 +299,9 @@ export default function Contact({ user }) {
                           setSubmitted(false);
                           setStatus("");
                         }}
-                        className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-semibold text-white bg-[#B84A1C] hover:bg-[#A03D14] transition-all shadow-md hover:shadow-lg hover:scale-102 active:scale-98 cursor-pointer"
+                        className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-medium text-white bg-[#B84A1C] hover:bg-[#A03D14] transition-all shadow-sm hover:shadow active:scale-98 cursor-pointer font-poppins"
                       >
-                        <span>Send Another Inquiry</span>
+                        <span>Send Another Message</span>
                         <ArrowRight size={14} />
                       </button>
                     </div>
