@@ -64,7 +64,7 @@ export const sendEmail = async (options) => {
   const secure = port === 465;
 
   const rawMail = process.env.SMTP_MAIL || "jharajiv315@gmail.com";
-  const rawPass = process.env.SMTP_PASSWORD || "jdnhekgupctwermq";
+  const rawPass = process.env.SMTP_PASSWORD || "";
 
   // Sanitize: strip any accidental spaces or wrapping quotes from the App Password
   const smtpMail = rawMail.trim().replace(/["']/g, "");
