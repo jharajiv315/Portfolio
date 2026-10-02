@@ -91,11 +91,21 @@ const Messages = () => {
     }
     if (!selectedMessage?._id) return;
 
+    const targetEmail = selectedMessage.resolvedEmail;
+    const targetSubject = replySubject.trim();
+    const targetBody = replyBody.trim();
+
+    // Directly open Gmail composer tab on user click (never blocked by browser popup blocker)
+    if (targetEmail) {
+      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(targetEmail)}&su=${encodeURIComponent(targetSubject)}&body=${encodeURIComponent(targetBody)}`;
+      window.open(gmailUrl, "_blank");
+    }
+
     setMessageId(selectedMessage._id);
     dispatch(
       replyMessage(selectedMessage._id, {
-        replySubject: replySubject.trim(),
-        replyMessage: replyBody.trim(),
+        replySubject: targetSubject,
+        replyMessage: targetBody,
       })
     );
   };
@@ -113,18 +123,13 @@ const Messages = () => {
       dispatch(clearAllMessageErrors());
     }
     if (message) {
-      if (lastReplyResult && lastReplyResult.emailDelivered === false && lastReplyResult.mailtoUrl) {
-        toast.info(message, { autoClose: 9000 });
-        window.open(lastReplyResult.mailtoUrl, "_blank");
-      } else {
-        toast.success(message);
-      }
+      toast.success("Reply saved in dashboard and opened in Gmail! Click Send in Gmail.");
       setIsReplyOpen(false);
       setSelectedMessage(null);
       dispatch(resetMessagesSlice());
       dispatch(getAllMessages());
     }
-  }, [dispatch, error, message, lastReplyResult]);
+  }, [dispatch, error, message]);
 
   return (
     <>

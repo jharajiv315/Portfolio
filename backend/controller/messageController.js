@@ -294,7 +294,7 @@ export const replyMessage = catchAsyncErrors(async (req, res, next) => {
 
   return res.status(200).json({
     success: true,
-    message: `Reply saved in dashboard! Click "Open in Gmail" to dispatch directly to ${recipientEmail}.`,
+    message: "Reply saved in dashboard successfully!",
     data: updatedMessage,
     emailDelivered: false,
     deliveryWarning,
