@@ -11,7 +11,7 @@ export const sendEmail = async (options) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: options.from || "Rajiv Jha <onboarding@resend.dev>",
+          from: process.env.RESEND_FROM || "Rajiv Jha <onboarding@resend.dev>",
           to: [options.email],
           subject: options.subject,
           text: options.message,
