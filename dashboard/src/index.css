@@ -84,3 +84,16 @@
     letter-spacing: -0.02em;
   }
 }
+/* Shared workspace rhythm; nested pages originally reserved an icon rail. */
+.admin-workspace > div, .admin-workspace > form { padding-left: 0; }
+.admin-workspace { min-width: 0; }
+.admin-workspace main { max-width: 1440px; margin-inline: auto; }
+body { line-height: 1.6; }
+h1, h2, h3 { text-wrap: balance; }
+button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 3px; }
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), textarea { min-height: 44px; font-size: 0.9375rem; }
+textarea { line-height: 1.7; }
+th { font-size: .75rem; font-weight: 600; }
+td { font-size: .875rem; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }

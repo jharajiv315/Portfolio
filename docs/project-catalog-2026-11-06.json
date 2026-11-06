@@ -1,0 +1,41 @@
+[
+  {
+    "id": 2,
+    "title": "KRIVIO AI",
+    "stack": "AI Commerce Platform",
+    "technologies": "React, TypeScript, Node.js, Express, Python, FastAPI, PostgreSQL, Supabase Auth, Gemini, Tailwind CSS",
+    "description": "An AI-assisted business mentor and commerce toolkit for rural Indian artisans, farmers, and self-help groups. KRIVIO combines multilingual voice guidance, an AI image studio, product catalog creation, marketplace-ready exports, wholesale PDF quotations, and shareable storefronts. Built with a React and TypeScript frontend, an Express gateway, Python/FastAPI services, PostgreSQL, and Gemini integrations.",
+    "projectLink": "https://krivio-ai.vercel.app/",
+    "gitRepoLink": "https://github.com/jharajiv315/KRIVIO-AI",
+    "projectBanner": {
+      "url": "https://raw.githubusercontent.com/jharajiv315/Portfolio/main/frontend/public/project-previews/krivio.jpg",
+      "public_id": null
+    }
+  },
+  {
+    "id": 3,
+    "title": "GitaPath",
+    "stack": "AI Guidance & Learning",
+    "technologies": "React, TypeScript, Node.js, Express, Gemini, Supabase, Tailwind CSS, Vite",
+    "description": "A source-grounded Bhagavad Gita guidance platform that connects everyday questions with relevant teachings and chapter-and-verse references. It includes structured AI conversations, a chapter browser, guided learning, reflection journaling, and voice input. The React and TypeScript interface connects to an Express API with Gemini integration and Supabase authentication.",
+    "projectLink": "https://gitapath-tau.vercel.app/",
+    "gitRepoLink": "https://github.com/jharajiv315/gitapath",
+    "projectBanner": {
+      "url": "https://raw.githubusercontent.com/jharajiv315/Portfolio/main/frontend/public/project-previews/gitapath.jpg",
+      "public_id": null
+    }
+  },
+  {
+    "id": 4,
+    "title": "TRUVA",
+    "stack": "AI Label Intelligence",
+    "technologies": "React, TypeScript, Python, FastAPI, Gemini, RapidOCR, Supabase Auth, Tailwind CSS, Capacitor",
+    "description": "A package-label scanning and review application with separate consumer and inspector workspaces. TRUVA extracts printed declarations, explains food-label evidence, compares compatible saved products, and presents inspection records for human review. Built with React and TypeScript, a Python/FastAPI inspection API, Gemini vision, RapidOCR, and Supabase Auth. Scan history is stored locally per account; automated findings support review rather than certify compliance.",
+    "projectLink": "https://truva-gules.vercel.app/",
+    "gitRepoLink": "https://github.com/jharajiv315/TRUVA",
+    "projectBanner": {
+      "url": "https://raw.githubusercontent.com/jharajiv315/TRUVA/main/docs/screenshots/consumer-workspace.png",
+      "public_id": null
+    }
+  }
+]

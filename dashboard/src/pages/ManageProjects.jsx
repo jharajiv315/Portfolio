@@ -22,13 +22,14 @@ import {
   TooltipTrigger,
 } from "@radix-ui/react-tooltip";
 import { Eye, Pen, Trash2 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const ManageProjects = () => {
   const navigateTo = useNavigate();
+  const [query, setQuery] = useState("");
   const handleReturnToDashboard = () => {
     navigateTo("/");
   };
@@ -38,7 +39,7 @@ const ManageProjects = () => {
 
   const dispatch = useDispatch();
   const handleProjectDelete = (id) => {
-    dispatch(deleteProject(id));
+    if (window.confirm("Delete this project from your portfolio? This cannot be undone.")) dispatch(deleteProject(id));
   };
 
   useEffect(() => {
@@ -53,129 +54,32 @@ const ManageProjects = () => {
     }
   }, [dispatch, error, loading, message]);
 
+  const filtered = (projects || []).filter(project => `${project.title} ${project.technologies}`.toLowerCase().includes(query.toLowerCase()));
   return (
-    <>
-      <div className="flex min-h-screen w-full flex-col bg-muted/40">
-        <Tabs defaultValue="week">
-          <TabsContent value="week">
-            <Card>
-              <CardHeader className="flex gap-4 sm:justify-between sm:flex-row sm:items-center">
-                <CardTitle>Manage Your Projects</CardTitle>
-                <Button className="w-fit" onClick={handleReturnToDashboard}>
-                  Return to Dashboard
-                </Button>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Banner</TableHead>
-                      <TableHead>Title</TableHead>
-                      <TableHead className="hidden md:table-cell">
-                        Stack
-                      </TableHead>
-                      <TableHead className="hidden md:table-cell">
-                        Deployed
-                      </TableHead>
-                      <TableHead className="md:table-cell">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {projects && projects.length > 0 ? (
-                      projects.map((element) => {
-                        return (
-                          <TableRow className="bg-accent" key={element._id}>
-                            <TableCell>
-                              <div className="font-medium">
-                                <img
-                                  src={
-                                    element.projectBanner &&
-                                    element.projectBanner.url
-                                  }
-                                  alt={element.title}
-                                  className="w-16 h-16"
-                                />
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              <div className="font-medium">{element.title}</div>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              {element.stack}
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              {element.deployed}
-                            </TableCell>
-                            <TableCell className="flex flex-row items-center gap-3 h-24">
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <Link to={`/view/project/${element._id}`}>
-                                      <button
-                                        className="border-green-600 border-2 rounded-full h-8 w-8 flex 
-                                      justify-center items-center text-green-600  hover:text-slate-950 
-                                      hover:bg-green-600"
-                                      >
-                                        <Eye className="h-5 w-5" />
-                                      </button>
-                                    </Link>
-                                  </TooltipTrigger>
-                                  <TooltipContent side="bottom">
-                                    View
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <Link to={`/update/project/${element._id}`}>
-                                      <button className="border-yellow-400 border-2 rounded-full h-8 w-8 flex justify-center items-center text-yellow-400  hover:text-slate-950 hover:bg-yellow-400">
-                                        <Pen className="h-5 w-5" />
-                                      </button>
-                                    </Link>
-                                  </TooltipTrigger>
-                                  <TooltipContent side="bottom">
-                                    Edit
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <button
-                                      className="border-red-600 border-2 rounded-full h-8 w-8 flex justify-center items-center text-red-600  hover:text-slate-50 hover:bg-red-600"
-                                      onClick={() =>
-                                        handleProjectDelete(element._id)
-                                      }
-                                    >
-                                      <Trash2 className="h-5 w-5" />
-                                    </button>
-                                  </TooltipTrigger>
-                                  <TooltipContent side="bottom">
-                                    Delete
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })
-                    ) : (
-                      <TableRow>
-                        <TableCell className="text-2xl">
-                          You have not added any project.
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+    <main className="mx-auto min-h-screen max-w-7xl px-5 py-8 sm:px-8">
+      <Button variant="ghost" onClick={handleReturnToDashboard} className="mb-6">← Back to overview</Button>
+      <div className="mb-8 flex flex-wrap items-end justify-between gap-5">
+        <div><p className="mb-2 text-xs font-semibold uppercase tracking-widest text-primary">Portfolio content</p><h1 className="text-3xl font-semibold tracking-tight">Projects</h1><p className="mt-2 text-sm text-muted-foreground">Review your work, update details, and keep every project current.</p></div>
+        <div><label htmlFor="project-search" className="sr-only">Search projects</label><input id="project-search" type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="Search projects…" className="w-full rounded-xl border bg-card px-4 py-3 sm:w-64" /></div>
       </div>
-    </>
+      <p className="mb-4 text-xs text-muted-foreground" aria-live="polite">{filtered.length} {filtered.length === 1 ? "project" : "projects"}</p>
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {filtered.map(project => <article key={project._id} className="flex overflow-hidden rounded-2xl border bg-card shadow-sm flex-col">
+          <img src={project.projectBanner?.url} alt={`${project.title} preview`} className="aspect-video w-full border-b bg-muted object-cover object-top" loading="lazy" />
+          <div className="flex flex-1 flex-col p-6">
+            <p className="mb-3 text-xs font-medium text-primary">{project.stack}</p>
+            <h2 className="text-xl font-semibold tracking-tight">{project.title}</h2>
+            <p className="mt-3 line-clamp-3 text-sm leading-6 text-muted-foreground">{project.description}</p>
+            <div className="my-5 flex flex-wrap gap-2">{String(project.technologies || "").split(",").slice(0,5).map(tech => <span key={tech} className="rounded-md bg-muted px-2 py-1 text-[11px] font-medium">{tech.trim()}</span>)}</div>
+            <div className="mt-auto flex items-center justify-between border-t pt-4">
+              <div className="flex gap-2"><Button asChild size="sm"><Link to={`/update/project/${project._id}`}>Edit project</Link></Button><Button asChild size="sm" variant="outline"><Link to={`/view/project/${project._id}`}>Details</Link></Button></div>
+              <Button variant="ghost" size="icon" disabled={loading} aria-label={`Delete ${project.title}`} onClick={() => handleProjectDelete(project._id)} className="text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></Button>
+            </div>
+          </div>
+        </article>)}
+      </div>
+      {!filtered.length && <div className="rounded-2xl border border-dashed p-12 text-center text-muted-foreground">{loading ? "Loading projects…" : query ? "No projects match your search." : "Your projects will appear here after you add them."}</div>}
+    </main>
   );
 };
-
 export default ManageProjects;

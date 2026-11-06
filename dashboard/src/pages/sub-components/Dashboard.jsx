@@ -135,8 +135,8 @@ const Dashboard = () => {
               </Card>
               <Card className="flex flex-col justify-center shadow-xs border-border bg-card">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-sans font-medium text-muted-foreground">Projects Completed</CardTitle>
-                  <CardTitle className="text-5xl font-serif font-bold text-primary">
+                  <CardTitle className="text-sm font-sans font-medium text-muted-foreground">Portfolio Projects</CardTitle>
+                  <CardTitle className="text-4xl font-sans font-semibold tabular-nums text-primary">
                     {projects ? projects.length : 0}
                   </CardTitle>
                 </CardHeader>
@@ -147,7 +147,7 @@ const Dashboard = () => {
               <Card className="flex flex-col justify-center shadow-xs border-border bg-card">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-sans font-medium text-muted-foreground">Skills Recorded</CardTitle>
-                  <CardTitle className="text-5xl font-serif font-bold text-primary">
+                  <CardTitle className="text-4xl font-sans font-semibold tabular-nums text-primary">
                     {skills ? skills.length : 0}
                   </CardTitle>
                 </CardHeader>
@@ -183,11 +183,9 @@ const Dashboard = () => {
                         {projects && projects.length > 0 ? (
                           projects.map((element) => {
                             return (
-                              <TableRow className="bg-accent" key={element._id}>
+                              <TableRow className="hover:bg-muted/40" key={element._id}>
                                 <TableCell>
-                                  <div className="font-medium">
-                                    {element.title}
-                                  </div>
+                                  <div className="flex items-center gap-3"><img src={element.projectBanner?.url} alt="" className="hidden h-12 w-20 rounded-md border object-cover sm:block" /><span className="font-semibold">{element.title}</span></div>
                                 </TableCell>
                                 <TableCell className="hidden md:table-cell">
                                   {element.stack}
@@ -240,7 +238,7 @@ const Dashboard = () => {
                       skills.map((element) => {
                         return (
                           <Card key={element._id}>
-                            <CardHeader>{element.title}</CardHeader>
+                            <CardHeader className="flex-row items-center justify-between py-4 text-sm font-medium">{element.title}<span className="text-muted-foreground tabular-nums">{element.proficiency}%</span></CardHeader>
                             <CardFooter>
                               <Progress value={element.proficiency} />
                             </CardFooter>
@@ -276,7 +274,7 @@ const Dashboard = () => {
                         softwareApplications.length > 0 ? (
                           softwareApplications.map((element) => {
                             return (
-                              <TableRow className="bg-accent" key={element._id}>
+                              <TableRow className="hover:bg-muted/40" key={element._id}>
                                 <TableCell className="font-medium">
                                   {element.name}
                                 </TableCell>
@@ -339,7 +337,7 @@ const Dashboard = () => {
                         {timeline && timeline.length > 0 ? (
                           timeline.map((element) => {
                             return (
-                              <TableRow className="bg-accent" key={element._id}>
+                              <TableRow className="hover:bg-muted/40" key={element._id}>
                                 <TableCell className="font-medium">
                                   {element.title}
                                 </TableCell>

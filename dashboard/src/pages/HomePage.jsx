@@ -33,7 +33,8 @@ import AddTimeline from "./sub-components/AddTimeline";
 import ManageTimeline from "./ManageTimeline";
 
 const HomePage = () => {
-  const [active, setActive] = useState("");
+  const [active, setActive] = useState("Dashboard");
+  const [menuOpen, setMenuOpen] = useState(false);
   const { isAuthenticated, error, user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const handleLogout = () => {
@@ -54,294 +55,52 @@ const HomePage = () => {
       navigateTo("/login");
     }
   }, [isAuthenticated, error, dispatch, navigateTo]);
+  const items = [
+    ["Dashboard", Home, "Overview"],
+    ["Add Project", FolderGit, "Add project"],
+    ["Add Skill", PencilRuler, "Add skill"],
+    ["Add Uses", LayoutGrid, "Add tool"],
+    ["Timeline", History, "Timeline"],
+    ["Messages", MessageSquareMore, "Messages"],
+    ["Account", User, "Account"],
+  ];
+  const navigation = (close = () => {}) => <nav aria-label="Main navigation" className="space-y-1">{items.map(([key, Icon, label]) => (
+    <button key={key} type="button" aria-current={active === key ? "page" : undefined}
+      onClick={() => { setActive(key); close(); }}
+      className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors ${active === key ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:bg-accent hover:text-foreground"}`}>
+      <Icon className="h-4 w-4" />{label}
+    </button>
+  ))}</nav>;
   return (
-    <div className="flex min-h-screen w-full flex-col bg-background text-foreground">
-      <aside className="fixed inset-y-0 left-0 hidden w-14 flex-col border-r border-border bg-card sm:flex z-50 shadow-xs">
-        <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
-          <Link
-            to="/"
-            onClick={() => setActive("Dashboard")}
-            className="group flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-base font-serif font-bold text-primary-foreground shadow-sm hover:scale-105 transition-all"
-          >
-            R
-          </Link>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  className={`flex h-9 w-9 items-center justify-center rounded-lg ${
-                    active === "Dashboard"
-                      ? "text-accent-foreground bg-accent"
-                      : "text-muted-foreground"
-                  }  transition-colors hover:text-foreground md:h-8 md:w-8`}
-                  onClick={() => setActive("Dashboard")}
-                >
-                  <Home className="h-5 w-5" />
-                  <span className="sr-only">Dashboard</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Dashboard</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  className={`flex h-9 w-9 items-center justify-center rounded-lg ${
-                    active === "Add Project"
-                      ? "text-accent-foreground bg-accent"
-                      : "text-muted-foreground"
-                  }  transition-colors hover:text-foreground md:h-8 md:w-8`}
-                  onClick={() => setActive("Add Project")}
-                >
-                  <FolderGit className="h-5 w-5" />
-                  <span className="sr-only">Add Project</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Add Project</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  className={`flex h-9 w-9 items-center justify-center rounded-lg ${
-                    active === "Add Skill"
-                      ? "text-accent-foreground bg-accent"
-                      : "text-muted-foreground"
-                  }  transition-colors hover:text-foreground md:h-8 md:w-8`}
-                  onClick={() => setActive("Add Skill")}
-                >
-                  <PencilRuler className="h-5 w-5" />
-                  <span className="sr-only">Add Skill</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Add Skill</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  className={`flex h-9 w-9 items-center justify-center rounded-lg ${
-                    active === "Add Uses"
-                      ? "text-accent-foreground bg-accent"
-                      : "text-muted-foreground"
-                  }  transition-colors hover:text-foreground md:h-8 md:w-8`}
-                  onClick={() => setActive("Add Uses")}
-                >
-                  <LayoutGrid className="h-5 w-5" />
-                  <span className="sr-only">Add Uses</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Add Uses</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  className={`flex h-9 w-9 items-center justify-center rounded-lg ${
-                    active === "Add Timeline"
-                      ? "text-accent-foreground bg-accent"
-                      : "text-muted-foreground"
-                  }  transition-colors hover:text-foreground md:h-8 md:w-8`}
-                  onClick={() => setActive("Add Timeline")}
-                >
-                  <History className="h-5 w-5" />
-                  <span className="sr-only">Add Timeline</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Add Timeline</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  className={`flex h-9 w-9 items-center justify-center rounded-lg ${
-                    active === "Messages"
-                      ? "text-accent-foreground bg-accent"
-                      : "text-muted-foreground"
-                  }  transition-colors hover:text-foreground md:h-8 md:w-8`}
-                  onClick={() => setActive("Messages")}
-                >
-                  <MessageSquareMore className="h-5 w-5" />
-                  <span className="sr-only">Messages</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Messages</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  className={`flex h-9 w-9 items-center justify-center rounded-lg ${
-                    active === "Account"
-                      ? "text-accent-foreground bg-accent"
-                      : "text-muted-foreground"
-                  }  transition-colors hover:text-foreground md:h-8 md:w-8`}
-                  onClick={() => setActive("Account")}
-                >
-                  <User className="h-5 w-5" />
-                  <span className="sr-only">Account</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Account</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </nav>
-        <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-                  onClick={handleLogout}
-                >
-                  <LogOut className="h-5 w-5" />
-                  <span className="sr-only">Logout</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Logout</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </nav>
-      </aside>
-      <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 max-[900px]:h-[100px]">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button size="icon" variant="outline" className="sm:hidden">
-              <PanelLeft className="h-5 w-5" />
-              <span className="sr-only">Toggle Menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="sm:max-w-xs">
-            <nav className="grid gap-6 text-lg font-medium">
-              <Link
-                to="/"
-                onClick={() => setActive("Dashboard")}
-                className="group flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-serif font-bold text-primary-foreground shadow-sm"
-              >
-                R
-              </Link>
-              <Link
-                href="#"
-                className={`flex items-center gap-4 px-2.5 ${
-                  active === "Dashboard"
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground "
-                }`}
-                onClick={() => setActive("Dashboard")}
-              >
-                <Home className="h-5 w-5" />
-                Dashboard
-              </Link>
-              <Link
-                className={`flex items-center gap-4 px-2.5 ${
-                  active === "Add Project"
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground "
-                }`}
-                onClick={() => setActive("Add Project")}
-              >
-                <FolderGit className="h-5 w-5" />
-                Add Project
-              </Link>
-              <Link
-                className={`flex items-center gap-4 px-2.5 ${
-                  active === "Add Skill"
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground "
-                }`}
-                onClick={() => setActive("Add Skill")}
-              >
-                <PencilRuler className="h-5 w-5" />
-                Add Skill
-              </Link>
-              <Link
-                className={`flex items-center gap-4 px-2.5 ${
-                  active === "Add Uses"
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground "
-                }`}
-                onClick={() => setActive("Add Uses")}
-              >
-                <LayoutGrid className="h-5 w-5" />
-                Add Uses
-              </Link>
-              <Link
-                className={`flex items-center gap-4 px-2.5 ${
-                  active === "Profile"
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground "
-                }`}
-                onClick={() => setActive("Account")}
-              >
-                <User className="h-5 w-5" />
-                Account
-              </Link>
-              <Link
-                className={`flex items-center gap-4 px-2.5 ${
-                  active === "Timeline"
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground "
-                }`}
-                onClick={() => setActive("Timeline")}
-              >
-                <History className="h-5 w-5" />
-                Timeline
-              </Link>
-              <Link
-                className={`flex items-center gap-4 px-2.5 ${
-                  active === "Messages"
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground "
-                }`}
-                onClick={() => setActive("Messages")}
-              >
-                <MessageSquareMore className="h-5 w-5" />
-                Messages
-              </Link>
-              <Link
-                className={
-                  "flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                }
-                onClick={handleLogout}
-              >
-                <LogOut className="h-5 w-5" />
-                Logout
-              </Link>
-            </nav>
-          </SheetContent>
-        </Sheet>
-
-        <div className="flex items-center gap-4 md:grow-0 sm:ml-16 sm:mt-5">
-          {user?.avatar?.url ? (
-            <img
-              src={user.avatar.url}
-              alt="avatar"
-              className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl border border-border object-cover object-top shadow-sm bg-card max-[900px]:hidden"
-            />
-          ) : (
-            <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl border border-border bg-card flex items-center justify-center font-serif font-bold text-2xl text-primary shadow-sm max-[900px]:hidden">
-              {user?.fullName?.charAt(0) || "R"}
-            </div>
-          )}
-          <div>
-            <span className="text-[11px] uppercase tracking-wider text-primary font-semibold block">
-              Admin Control Center
-            </span>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-foreground tracking-tight">
-              Welcome back, {user?.fullName || "Rajiv"}
-            </h1>
-          </div>
+    <div className="admin-shell min-h-screen bg-background text-foreground">
+      <a className="sr-only focus:not-sr-only" href="#workspace">Skip to workspace</a>
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-60 flex-col border-r bg-card px-4 py-7 sm:flex">
+        <Link to="/" onClick={() => setActive("Dashboard")} className="mb-9 flex items-center gap-3 px-3">
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-foreground text-lg font-bold text-background">R.</span>
+          <span className="text-sm font-semibold">Portfolio studio<span className="mt-1 block text-xs font-normal text-muted-foreground">Rajiv Jha</span></span>
+        </Link>
+        <p className="mb-3 px-4 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Workspace</p>
+        {navigation()}
+        <div className="mt-auto border-t pt-5">
+          <a href="https://portfolio-beta-ochre-90.vercel.app/" target="_blank" rel="noopener noreferrer" className="block px-4 py-3 text-sm font-medium">Open portfolio ↗</a>
+          <button type="button" onClick={handleLogout} className="flex w-full items-center gap-3 px-4 py-3 text-sm text-muted-foreground"><LogOut className="h-4 w-4" />Sign out</button>
         </div>
+      </aside>
+      <header className="flex items-center justify-between gap-4 border-b bg-card/80 px-5 py-6 sm:ml-60 sm:px-8">
+        <div className="flex items-center gap-3">
+          <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+            <SheetTrigger asChild><Button size="icon" variant="outline" className="sm:hidden" aria-label="Open navigation"><PanelLeft className="h-5 w-5" /></Button></SheetTrigger>
+            <SheetContent side="left" className="pt-12">
+              <h2 className="mb-6 text-lg font-semibold">Portfolio studio</h2>
+              {navigation(() => setMenuOpen(false))}
+              <Button variant="ghost" onClick={handleLogout} className="mt-6">Sign out</Button>
+            </SheetContent>
+          </Sheet>
+          <div><p className="mb-1 text-xs font-medium text-muted-foreground">Your portfolio, up to date.</p><h1 className="text-xl font-semibold tracking-tight sm:text-2xl">{items.find(([key]) => key === active)?.[2] || "Overview"}</h1></div>
+        </div>
+        <div className="flex items-center gap-3"><span className="hidden text-sm font-medium md:block">{user?.fullName || "Rajiv Jha"}</span><img src={user?.avatar?.url || "/me.jpg"} alt="Profile" className="h-10 w-10 rounded-full border object-cover" /></div>
       </header>
+      <div id="workspace" className="admin-workspace sm:ml-60">
       {(() => {
         switch (active) {
           case "Dashboard":
@@ -364,6 +123,7 @@ const HomePage = () => {
             return <Dashboard />;
         }
       })()}
+      </div>
     </div>
   );
 };
