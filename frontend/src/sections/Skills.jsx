@@ -1,7 +1,6 @@
 import {
   Code2,
   PanelsTopLeft,
-  Database,
   BrainCircuit,
   Wrench,
 } from "lucide-react";

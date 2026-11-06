@@ -25,7 +25,7 @@ export default function Navbar({ user }) {
       if (el) observe.observe(el);
     });
     return () => observe.disconnect();
-  }, []);
+  }, [user]);
   useEffect(() => {
     if (!open) return;
     const previous = document.body.style.overflow;

@@ -4,8 +4,6 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { ArrowLeft, Github, ExternalLink, Layers, Cpu } from "lucide-react";
-import CustomCursor from "../components/CustomCursor";
-import ParticleBackground from "../components/ParticleBackground";
 
 export const ProjectView = () => {
   const [project, setProject] = useState(null);
