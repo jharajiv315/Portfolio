@@ -9,15 +9,28 @@ import { ArrowLeft, Github, ExternalLink, Layers, Cpu } from "lucide-react";
 export const ProjectView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { projects, loading, refreshing, error, isPreview, previewToken } =
-    usePortfolioData();
+  const {
+    projects,
+    loading,
+    refreshing,
+    error,
+    isPreview,
+    previewToken,
+    settings,
+  } = usePortfolioData();
   const project = projects.find((p) => String(p.id || p._id) === id);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);
   const handleReturn = () => {
     // If previous history entry exists in current window, navigate back to preserve scroll position
-    navigate(previewToken ? `/#preview=${previewToken}` : "/#projects");
+    navigate(
+      previewToken
+        ? `/#preview=${previewToken}`
+        : settings.visibility.projects
+          ? "/#projects"
+          : "/#home",
+    );
   };
 
   const hasGitRepo =

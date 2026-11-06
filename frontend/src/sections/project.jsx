@@ -136,14 +136,16 @@ export default function Projects({
             Projects are being updated. Explore my GitHub in the meantime.
           </p>
         )}
-        <a
-          className="studio-text-link"
-          href={user?.githubURL || "https://github.com/jharajiv315"}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          More experiments on GitHub <ArrowUpRight size={17} />
-        </a>
+        {user?.githubURL && (
+          <a
+            className="studio-text-link"
+            href={user.githubURL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            More experiments on GitHub <ArrowUpRight size={17} />
+          </a>
+        )}
       </div>
     </section>
   );

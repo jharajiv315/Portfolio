@@ -31,28 +31,28 @@ export default function Footer({ user, copy = {} }) {
           transition={{ duration: 0.6, delay: 0.15 }}
           className="flex items-center gap-6 text-lg sm:text-xl text-[#57534E] mb-6"
         >
-          <a
-            href={
-              user?.linkedinURL ||
-              user?.linkedInURL ||
-              "https://www.linkedin.com/in/rajiv-jha-9b36ba3a2/"
-            }
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-[#0A66C2] transition-colors duration-200 hover:scale-110 transform"
-            aria-label="LinkedIn"
-          >
-            <FaLinkedin />
-          </a>
-          <a
-            href={user?.githubURL || "https://github.com/jharajiv315"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-[#1C1917] transition-colors duration-200 hover:scale-110 transform"
-            aria-label="GitHub"
-          >
-            <FaGithub />
-          </a>
+          {(user?.linkedinURL || user?.linkedInURL) && (
+            <a
+              href={user?.linkedinURL || user?.linkedInURL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#0A66C2] transition-colors duration-200 hover:scale-110 transform"
+              aria-label="LinkedIn"
+            >
+              <FaLinkedin />
+            </a>
+          )}
+          {user?.githubURL && (
+            <a
+              href={user.githubURL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#1C1917] transition-colors duration-200 hover:scale-110 transform"
+              aria-label="GitHub"
+            >
+              <FaGithub />
+            </a>
+          )}
         </motion.div>
 
         {/* Quote */}

@@ -9,7 +9,12 @@ import {
 import { SiLeetcode } from "react-icons/si";
 import developerMascot from "../assets/developer-mascot.png";
 
-export default function Hero({ user, projectCount = 0, copy = {} }) {
+export default function Hero({
+  user,
+  projectCount = 0,
+  copy = {},
+  sections = {},
+}) {
   const name = user?.fullName || "Rajiv Jha";
   const resume = user?.resume?.url;
   const linkedIn = user?.linkedinURL || user?.linkedInURL;
@@ -35,11 +40,27 @@ export default function Hero({ user, projectCount = 0, copy = {} }) {
         </p>
         <p className="hero-support">{copy.heroSupport}</p>
         <div className="studio-actions">
-          <a href="#projects" className="studio-button">
-            {copy.heroPrimaryLabel} <ArrowDown size={17} />
-          </a>
+          {sections.projects !== false && (
+            <a
+              href={
+                sections.projects !== false
+                  ? "#projects"
+                  : user?.githubURL || "https://github.com/jharajiv315"
+              }
+              className="studio-button"
+            >
+              {copy.heroPrimaryLabel} <ArrowDown size={17} />
+            </a>
+          )}
           <a
-            href={resume || "#contact"}
+            href={
+              resume ||
+              (sections.contact !== false
+                ? "#contact"
+                : user?.email
+                  ? `mailto:${user.email}`
+                  : user?.githubURL)
+            }
             target={resume ? "_blank" : undefined}
             rel={resume ? "noopener noreferrer" : undefined}
             className="studio-button studio-button-outline"
@@ -50,23 +71,31 @@ export default function Hero({ user, projectCount = 0, copy = {} }) {
         </div>
         <div className="hero-socials flex-wrap">
           <span>Find me online</span>
-          <a
-            href={user?.githubURL || "https://github.com/jharajiv315"}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Rajiv on GitHub"
-          >
-            <Github size={19} />
-          </a>
-          <a
-            href={user?.leetcodeURL || "https://leetcode.com/u/Rajiv_Jha/"}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Rajiv on LeetCode"
-            title="LeetCode"
-          >
-            <SiLeetcode size={19} />
-          </a>
+          {user?.githubURL && (
+            <>
+              <a
+                href={user.githubURL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Rajiv on GitHub"
+              >
+                <Github size={19} />
+              </a>
+            </>
+          )}
+          {user?.leetcodeURL && (
+            <>
+              <a
+                href={user.leetcodeURL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Rajiv on LeetCode"
+                title="LeetCode"
+              >
+                <SiLeetcode size={19} />
+              </a>
+            </>
+          )}
           {linkedIn && (
             <a
               href={linkedIn}
@@ -106,13 +135,15 @@ export default function Hero({ user, projectCount = 0, copy = {} }) {
       </div>
       <div className="hero-bottom">
         <span>{copy.heroFooter}</span>
-        <a href="#projects">
-          Selected work{" "}
-          {projectCount > 0 && (
-            <span>({String(projectCount).padStart(2, "0")})</span>
-          )}{" "}
-          <ArrowDown size={15} />
-        </a>
+        {sections.projects !== false && (
+          <a href="#projects">
+            Selected work{" "}
+            {projectCount > 0 && (
+              <span>({String(projectCount).padStart(2, "0")})</span>
+            )}{" "}
+            <ArrowDown size={15} />
+          </a>
+        )}
       </div>
     </section>
   );

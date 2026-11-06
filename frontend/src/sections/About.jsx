@@ -1,5 +1,5 @@
 import { ArrowUpRight, Code2, BrainCircuit, Layers3 } from "lucide-react";
-export default function About({ user, copy = {} }) {
+export default function About({ user, copy = {}, sections = {} }) {
   return (
     <section id="about" className="studio-section">
       <div className="studio-container about-layout">
@@ -10,9 +10,16 @@ export default function About({ user, copy = {} }) {
             <br />
             <em>{copy.aboutAccent}</em>
           </h2>
-          <a href="#contact" className="studio-text-link">
-            Let’s connect <ArrowUpRight size={17} />
-          </a>
+          {(sections.contact !== false || user?.email) && (
+            <a
+              href={
+                sections.contact !== false ? "#contact" : `mailto:${user.email}`
+              }
+              className="studio-text-link"
+            >
+              Let’s connect <ArrowUpRight size={17} />
+            </a>
+          )}
         </div>
         <div className="about-story">
           <p className="about-lead">

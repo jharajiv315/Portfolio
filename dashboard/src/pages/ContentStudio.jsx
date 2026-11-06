@@ -286,216 +286,225 @@ export default function ContentStudio({ onDirtyChange = () => {} }) {
           ),
         )}
       </nav>
-      {tab === "Profile" && (
-        <section className="grid gap-6 rounded-xl border bg-card p-6 md:grid-cols-2">
-          {PROFILE.map(([key, label]) => (
+      <fieldset disabled={Boolean(busy)} className="min-w-0">
+        {tab === "Profile" && (
+          <section className="grid gap-6 rounded-xl border bg-card p-6 md:grid-cols-2">
+            {PROFILE.map(([key, label]) => (
+              <Field
+                key={key}
+                label={label}
+                value={draft.user[key]}
+                multiline={key === "aboutMe"}
+                onChange={(v) =>
+                  update((d) => {
+                    d.user[key] = v;
+                  })
+                }
+                hint={
+                  key === "email"
+                    ? "Public contact address. This does not change your admin sign-in email."
+                    : undefined
+                }
+              />
+            ))}
             <Field
-              key={key}
-              label={label}
-              value={draft.user[key]}
-              multiline={key === "aboutMe"}
+              label="Avatar URL"
+              value={draft.user.avatar?.url}
+              type="url"
               onChange={(v) =>
                 update((d) => {
-                  d.user[key] = v;
+                  d.user.avatar = { url: v };
                 })
               }
-              hint={
-                key === "email"
-                  ? "Public contact address. This does not change your admin sign-in email."
-                  : undefined
+              hint="Upload files through Account → Edit profile, or paste an existing image URL."
+            />
+            <Field
+              label="Résumé URL"
+              value={draft.user.resume?.url}
+              type="url"
+              onChange={(v) =>
+                update((d) => {
+                  d.user.resume = { url: v };
+                })
               }
             />
-          ))}
-          <Field
-            label="Avatar URL"
-            value={draft.user.avatar?.url}
-            type="url"
-            onChange={(v) =>
-              update((d) => {
-                d.user.avatar = { url: v };
-              })
-            }
-            hint="Upload files through Account → Edit profile, or paste an existing image URL."
-          />
-          <Field
-            label="Résumé URL"
-            value={draft.user.resume?.url}
-            type="url"
-            onChange={(v) =>
-              update((d) => {
-                d.user.resume = { url: v };
-              })
-            }
-          />
-        </section>
-      )}
-      {tab === "Page text" && (
-        <div className="space-y-5">
-          {Object.entries(COPY_GROUPS).map(([group, keys]) => (
-            <details
-              key={group}
-              className="rounded-xl border bg-card p-6"
-              open={group === "Hero"}
-            >
-              <summary className="cursor-pointer font-semibold">
-                {group}
-              </summary>
-              <div className="mt-5 grid gap-5 md:grid-cols-2">
-                {keys.map((key) => (
-                  <Field
-                    key={key}
-                    label={labelOf(key)}
-                    value={draft.settings.copy[key]}
-                    multiline={/Intro|Support|P1|P2/.test(key)}
-                    onChange={(v) =>
-                      update((d) => {
-                        d.settings.copy[key] = v;
-                      })
-                    }
-                    hint={
-                      key === "heroNameTemplate"
-                        ? "Use {name} to insert your public name."
-                        : undefined
-                    }
-                  />
-                ))}
-              </div>
-            </details>
-          ))}
-        </div>
-      )}
-      {tab === "Visibility & order" && (
-        <div className="space-y-6">
-          <section className="rounded-xl border bg-card p-6">
-            <h3 className="mb-4 font-semibold">Visible sections</h3>
-            <div className="flex flex-wrap gap-6">
-              {Object.entries(draft.settings.visibility).map(([key, value]) => (
-                <label
-                  key={key}
-                  className="flex items-center gap-2 text-sm capitalize"
-                >
-                  <input
-                    type="checkbox"
-                    checked={value}
-                    onChange={(e) =>
-                      update((d) => {
-                        d.settings.visibility[key] = e.target.checked;
-                      })
-                    }
-                  />
-                  {key}
-                </label>
-              ))}
-            </div>
           </section>
-          <section className="rounded-xl border bg-card p-6">
-            <h3 className="mb-4 font-semibold">Project order & visibility</h3>
-            {draft.projects.map((p, i) => (
-              <div
-                key={p.id}
-                className="flex flex-wrap items-center justify-between gap-3 border-t py-4"
+        )}
+        {tab === "Page text" && (
+          <div className="space-y-5">
+            {Object.entries(COPY_GROUPS).map(([group, keys]) => (
+              <details
+                key={group}
+                className="rounded-xl border bg-card p-6"
+                open={group === "Hero"}
               >
-                <span className="font-medium">{p.title}</span>
-                <div className="flex items-center gap-3">
-                  <label className="flex items-center gap-2 text-xs">
-                    <input
-                      type="checkbox"
-                      checked={
-                        !draft.settings.hiddenProjectIds.includes(String(p.id))
-                      }
-                      onChange={(e) =>
+                <summary className="cursor-pointer font-semibold">
+                  {group}
+                </summary>
+                <div className="mt-5 grid gap-5 md:grid-cols-2">
+                  {keys.map((key) => (
+                    <Field
+                      key={key}
+                      label={labelOf(key)}
+                      value={draft.settings.copy[key]}
+                      multiline={/Intro|Support|P1|P2/.test(key)}
+                      onChange={(v) =>
                         update((d) => {
-                          d.settings.hiddenProjectIds = e.target.checked
-                            ? d.settings.hiddenProjectIds.filter(
-                                (id) => id !== String(p.id),
-                              )
-                            : [...d.settings.hiddenProjectIds, String(p.id)];
+                          d.settings.copy[key] = v;
+                        })
+                      }
+                      hint={
+                        key === "heroNameTemplate"
+                          ? "Use {name} to insert your public name."
+                          : undefined
+                      }
+                    />
+                  ))}
+                </div>
+              </details>
+            ))}
+          </div>
+        )}
+        {tab === "Visibility & order" && (
+          <div className="space-y-6">
+            <section className="rounded-xl border bg-card p-6">
+              <h3 className="mb-4 font-semibold">Visible sections</h3>
+              <div className="flex flex-wrap gap-6">
+                {Object.entries(draft.settings.visibility).map(
+                  ([key, value]) => (
+                    <label
+                      key={key}
+                      className="flex items-center gap-2 text-sm capitalize"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={value}
+                        onChange={(e) =>
+                          update((d) => {
+                            d.settings.visibility[key] = e.target.checked;
+                          })
+                        }
+                      />
+                      {key}
+                    </label>
+                  ),
+                )}
+              </div>
+            </section>
+            <section className="rounded-xl border bg-card p-6">
+              <h3 className="mb-4 font-semibold">Project order & visibility</h3>
+              {draft.projects.map((p, i) => (
+                <div
+                  key={p.id}
+                  className="flex flex-wrap items-center justify-between gap-3 border-t py-4"
+                >
+                  <span className="font-medium">{p.title}</span>
+                  <div className="flex items-center gap-3">
+                    <label className="flex items-center gap-2 text-xs">
+                      <input
+                        type="checkbox"
+                        checked={
+                          !draft.settings.hiddenProjectIds.includes(
+                            String(p.id),
+                          )
+                        }
+                        onChange={(e) =>
+                          update((d) => {
+                            d.settings.hiddenProjectIds = e.target.checked
+                              ? d.settings.hiddenProjectIds.filter(
+                                  (id) => id !== String(p.id),
+                                )
+                              : [...d.settings.hiddenProjectIds, String(p.id)];
+                          })
+                        }
+                      />
+                      Published visibility
+                    </label>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={i === 0}
+                      aria-label={`Move ${p.title} up`}
+                      onClick={() => move(p.id, -1)}
+                    >
+                      ↑
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={i === draft.projects.length - 1}
+                      aria-label={`Move ${p.title} down`}
+                      onClick={() => move(p.id, 1)}
+                    >
+                      ↓
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </section>
+          </div>
+        )}
+        {tab === "Project stories" && (
+          <div className="space-y-6">
+            {draft.projects.map((p) => (
+              <section key={p.id} className="rounded-xl border bg-card p-6">
+                <h3 className="mb-2 text-lg font-semibold">{p.title}</h3>
+                <p className="mb-5 text-xs text-muted-foreground">
+                  Edit the title, summary, technologies, thumbnail, and links in
+                  Manage projects. Add case-study content here. Keep claims tied
+                  to work you can demonstrate.
+                </p>
+                <div className="grid gap-5 md:grid-cols-2">
+                  {[
+                    ["problem", "The problem"],
+                    ["contribution", "Your contribution / project scope"],
+                    ["decisions", "Engineering decisions"],
+                    ["lessons", "Lessons & takeaways"],
+                  ].map(([key, label]) => (
+                    <Field
+                      key={key}
+                      label={label}
+                      value={p.caseStudy?.[key]}
+                      multiline
+                      onChange={(v) =>
+                        update((d) => {
+                          const project = d.projects.find((x) => x.id === p.id);
+                          project.caseStudy = {
+                            ...project.caseStudy,
+                            [key]: v,
+                          };
                         })
                       }
                     />
-                    Published visibility
-                  </label>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    disabled={i === 0}
-                    aria-label={`Move ${p.title} up`}
-                    onClick={() => move(p.id, -1)}
-                  >
-                    ↑
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    disabled={i === draft.projects.length - 1}
-                    aria-label={`Move ${p.title} down`}
-                    onClick={() => move(p.id, 1)}
-                  >
-                    ↓
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </section>
-        </div>
-      )}
-      {tab === "Project stories" && (
-        <div className="space-y-6">
-          {draft.projects.map((p) => (
-            <section key={p.id} className="rounded-xl border bg-card p-6">
-              <h3 className="mb-2 text-lg font-semibold">{p.title}</h3>
-              <p className="mb-5 text-xs text-muted-foreground">
-                Edit the title, summary, technologies, thumbnail, and links in
-                Manage projects. Add case-study content here. Keep claims tied
-                to work you can demonstrate.
-              </p>
-              <div className="grid gap-5 md:grid-cols-2">
-                {[
-                  ["problem", "The problem"],
-                  ["contribution", "Your contribution / project scope"],
-                  ["decisions", "Engineering decisions"],
-                  ["lessons", "Lessons & takeaways"],
-                ].map(([key, label]) => (
+                  ))}
                   <Field
-                    key={key}
-                    label={label}
-                    value={p.caseStudy?.[key]}
+                    label="Additional screenshots (one public URL per line)"
+                    value={(p.caseStudy?.screenshots || []).join("\n")}
                     multiline
                     onChange={(v) =>
                       update((d) => {
                         const project = d.projects.find((x) => x.id === p.id);
-                        project.caseStudy = { ...project.caseStudy, [key]: v };
+                        project.caseStudy = {
+                          ...project.caseStudy,
+                          screenshots: v.split("\n"),
+                        };
                       })
                     }
                   />
+                </div>
+                {p.caseStudy?.screenshots?.filter(Boolean).map((url) => (
+                  <img
+                    key={url}
+                    src={url}
+                    alt={`${p.title} additional screenshot`}
+                    className="mt-4 max-h-40 rounded-lg border object-contain"
+                  />
                 ))}
-                <Field
-                  label="Additional screenshots (one public URL per line)"
-                  value={(p.caseStudy?.screenshots || []).join("\n")}
-                  multiline
-                  onChange={(v) =>
-                    update((d) => {
-                      const project = d.projects.find((x) => x.id === p.id);
-                      project.caseStudy = {
-                        ...project.caseStudy,
-                        screenshots: v.split("\n"),
-                      };
-                    })
-                  }
-                />
-              </div>
-              {p.caseStudy?.screenshots?.filter(Boolean).map((url) => (
-                <img
-                  key={url}
-                  src={url}
-                  alt={`${p.title} additional screenshot`}
-                  className="mt-4 max-h-40 rounded-lg border object-contain"
-                />
-              ))}
-            </section>
-          ))}
-        </div>
-      )}
+              </section>
+            ))}
+          </div>
+        )}
+      </fieldset>
     </div>
   );
 }

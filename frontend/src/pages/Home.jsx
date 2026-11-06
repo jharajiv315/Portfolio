@@ -80,7 +80,12 @@ export default function Home() {
               <a href="/">Exit preview</a>
             </div>
           )}
-          <Hero user={user} projectCount={projects.length} copy={copy} />
+          <Hero
+            user={user}
+            projectCount={projects.length}
+            copy={copy}
+            sections={visible}
+          />
           {visible.projects && (
             <Projects
               projects={projects}
@@ -90,7 +95,9 @@ export default function Home() {
               previewToken={previewToken}
             />
           )}
-          {visible.about && <About user={user} copy={copy} />}
+          {visible.about && (
+            <About user={user} copy={copy} sections={visible} />
+          )}
           {visible.skills && (
             <Skills
               skills={skills}
