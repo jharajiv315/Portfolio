@@ -1,3 +1,4 @@
+import { documentModel } from "../storage/blobStore.js";
 import { pool } from "../database/dbConnection.js";
 
 const MESSAGE_FIELDS = `
@@ -22,6 +23,7 @@ export class MessageInstance {
     }
 
     async deleteOne() {
+        if (process.env.STORAGE_DRIVER === "blob") return Message.findByIdAndDelete(this.id || this._id);
         const query = `DELETE FROM messages WHERE id = $1 RETURNING ${MESSAGE_FIELDS};`;
         const result = await pool.query(query, [this.id || this._id]);
         return formatMessageRow(result.rows[0]);
@@ -44,7 +46,7 @@ const formatMessageRow = (row) => {
     });
 };
 
-export const Message = {
+const PostgresMessage = {
     async create({ senderName, email = "", subject, message }) {
         const query = `
             INSERT INTO messages (sender_name, email, subject, message)
@@ -99,4 +101,5 @@ export const Message = {
     },
 };
 
+export const Message = process.env.STORAGE_DRIVER === "blob" ? documentModel("messages", MessageInstance) : PostgresMessage;
 export default Message;

@@ -1,3 +1,4 @@
+import { documentModel } from "../storage/blobStore.js";
 import { pool } from "../database/dbConnection.js";
 
 const SKILL_FIELDS = `
@@ -18,6 +19,7 @@ export class SkillInstance {
     }
 
     async deleteOne() {
+        if (process.env.STORAGE_DRIVER === "blob") return Skill.findByIdAndDelete(this.id || this._id);
         const query = `DELETE FROM skills WHERE id = $1 RETURNING ${SKILL_FIELDS};`;
         const result = await pool.query(query, [this.id || this._id]);
         return formatSkillRow(result.rows[0]);
@@ -36,7 +38,7 @@ const formatSkillRow = (row) => {
     });
 };
 
-export const Skill = {
+const PostgresSkill = {
     async create({ title, proficiency, svg }) {
         const svgJson = typeof svg === "string" ? svg : JSON.stringify(svg || {});
         const query = `
@@ -112,4 +114,5 @@ export const Skill = {
     },
 };
 
+export const Skill = process.env.STORAGE_DRIVER === "blob" ? documentModel("skills", SkillInstance) : PostgresSkill;
 export default Skill;

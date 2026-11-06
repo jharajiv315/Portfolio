@@ -1,3 +1,4 @@
+import { documentModel } from "../storage/blobStore.js";
 import { pool } from "../database/dbConnection.js";
 
 const PROJECT_FIELDS = `
@@ -23,6 +24,7 @@ export class ProjectInstance {
     }
 
     async deleteOne() {
+        if (process.env.STORAGE_DRIVER === "blob") return Project.findByIdAndDelete(this.id || this._id);
         const query = `DELETE FROM projects WHERE id = $1 RETURNING ${PROJECT_FIELDS};`;
         const result = await pool.query(query, [this.id || this._id]);
         return formatProjectRow(result.rows[0]);
@@ -50,7 +52,7 @@ const formatProjectRow = (row) => {
     });
 };
 
-export const Project = {
+const PostgresProject = {
     async create({ title, description, gitRepoLink, projectLink, technologies, stack, deployed, projectBanner }) {
         const bannerJson = typeof projectBanner === "string" ? projectBanner : JSON.stringify(projectBanner || {});
         const query = `
@@ -167,4 +169,5 @@ export const Project = {
     },
 };
 
+export const Project = process.env.STORAGE_DRIVER === "blob" ? documentModel("projects", ProjectInstance) : PostgresProject;
 export default Project;

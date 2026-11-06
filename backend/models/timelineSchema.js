@@ -1,3 +1,4 @@
+import { documentModel } from "../storage/blobStore.js";
 import { pool } from "../database/dbConnection.js";
 
 const TIMELINE_FIELDS = `
@@ -18,6 +19,7 @@ export class TimelineInstance {
     }
 
     async deleteOne() {
+        if (process.env.STORAGE_DRIVER === "blob") return Timeline.findByIdAndDelete(this.id || this._id);
         const query = `DELETE FROM timelines WHERE id = $1 RETURNING ${TIMELINE_FIELDS};`;
         const result = await pool.query(query, [this.id || this._id]);
         return formatTimelineRow(result.rows[0]);
@@ -36,7 +38,7 @@ const formatTimelineRow = (row) => {
     });
 };
 
-export const Timeline = {
+const PostgresTimeline = {
     async create({ title, description, timeline }) {
         const timelineJson = typeof timeline === "string" ? timeline : JSON.stringify(timeline || { from: "", to: "" });
         const query = `
@@ -108,4 +110,5 @@ export const Timeline = {
     },
 };
 
+export const Timeline = process.env.STORAGE_DRIVER === "blob" ? documentModel("timelines", TimelineInstance) : PostgresTimeline;
 export default Timeline;

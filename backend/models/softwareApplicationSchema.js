@@ -1,3 +1,4 @@
+import { documentModel } from "../storage/blobStore.js";
 import { pool } from "../database/dbConnection.js";
 
 const SOFTWARE_APPLICATION_FIELDS = `
@@ -17,6 +18,7 @@ export class SoftwareApplicationInstance {
     }
 
     async deleteOne() {
+        if (process.env.STORAGE_DRIVER === "blob") return SoftwareApplication.findByIdAndDelete(this.id || this._id);
         const query = `DELETE FROM software_applications WHERE id = $1 RETURNING ${SOFTWARE_APPLICATION_FIELDS};`;
         const result = await pool.query(query, [this.id || this._id]);
         return formatSoftwareApplicationRow(result.rows[0]);
@@ -34,7 +36,7 @@ const formatSoftwareApplicationRow = (row) => {
     });
 };
 
-export const SoftwareApplication = {
+const PostgresSoftwareApplication = {
     async create({ name, svg }) {
         const svgJson = typeof svg === "string" ? svg : JSON.stringify(svg || {});
         const query = `
@@ -77,4 +79,5 @@ export const SoftwareApplication = {
     },
 };
 
+export const SoftwareApplication = process.env.STORAGE_DRIVER === "blob" ? documentModel("softwareApplications", SoftwareApplicationInstance) : PostgresSoftwareApplication;
 export default SoftwareApplication;

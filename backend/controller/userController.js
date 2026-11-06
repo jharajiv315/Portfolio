@@ -378,13 +378,10 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
     });
   }
 
-  // Graceful recovery fallback: If SMTP is not yet configured on the server, return reset link directly
-  res.status(200).json({
-    success: true,
-    message: `Password reset token generated successfully.`,
-    resetPasswordUrl,
-    directToken: resetToken,
-  });
+  user.resetPasswordToken = null;
+  user.resetPasswordExpire = null;
+  await user.save();
+  return next(new ErrorHandler("Password recovery email could not be delivered. Please try again later.", 503));
 });
 
 // RESET PASSWORD

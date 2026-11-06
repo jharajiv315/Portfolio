@@ -1,3 +1,4 @@
+import { documentModel } from "../storage/blobStore.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
@@ -72,6 +73,7 @@ export class UserInstance {
     }
 
     async deleteOne() {
+        if (process.env.STORAGE_DRIVER === "blob") return User.findByIdAndDelete(this.id);
         const query = `DELETE FROM users WHERE id = $1 RETURNING ${USER_FIELDS};`;
         const result = await pool.query(query, [this.id || this._id]);
         return formatUserRow(result.rows[0]);
@@ -81,6 +83,11 @@ export class UserInstance {
     async save() {
         if (this.password && !this.password.startsWith("$2")) {
             this.password = await bcrypt.hash(this.password, 10);
+        }
+
+        if (process.env.STORAGE_DRIVER === "blob") {
+            Object.assign(this, await User.findByIdAndUpdate(this.id, { ...this }));
+            return this;
         }
 
         const query = `
@@ -186,7 +193,7 @@ function makeQueryPromise(executor) {
     return promise;
 }
 
-export const User = {
+const PostgresUser = {
     // Create new user (automatically hashes password)
     async create(userData) {
         const {
@@ -408,4 +415,26 @@ export const User = {
     },
 };
 
+const BlobUser = documentModel("users", UserInstance);
+const blobFindById = BlobUser.findById.bind(BlobUser);
+const blobUpdate = BlobUser.findByIdAndUpdate.bind(BlobUser);
+BlobUser.findById = id => makeQueryPromise(() => blobFindById(id));
+BlobUser.findOne = (filter = {}) => makeQueryPromise(async () => {
+  const rows = await BlobUser.find();
+  return rows.find(row => Object.entries(filter).every(([key, value]) => {
+    if (key === 'email') return row.email.toLowerCase() === String(value).toLowerCase().trim();
+    if (key === 'resetPasswordExpire') return row[key] && new Date(row[key]).getTime() > value.$gt;
+    return String(row[key]) === String(value);
+  })) || null;
+});
+BlobUser.findByIdAndUpdate = async (id, updates) => {
+  const data = { ...updates };
+  if (data.password && !data.password.startsWith('$2')) {
+    if (data.password.length < 8) throw new Error('Password must contain at least 8 characters');
+    data.password = await bcrypt.hash(data.password, 10);
+  }
+  return blobUpdate(id, data);
+};
+BlobUser.create = async () => { throw new Error('Administrator provisioning is restricted to the import script'); };
+export const User = process.env.STORAGE_DRIVER === 'blob' ? BlobUser : PostgresUser;
 export default User;

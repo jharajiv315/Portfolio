@@ -91,7 +91,7 @@ app.use("/api/v1/skill", skillRouter);
 app.use("/api/v1/softwareapplication", softwareApplicationRouter);
 app.use("/api/v1/project", projectRouter);
 
-dbConnection();
+if (process.env.STORAGE_DRIVER !== "blob") dbConnection();
 app.use(errorMiddleware);
 
 export default app;
