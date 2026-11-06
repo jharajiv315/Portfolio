@@ -1504,3 +1504,231 @@
     transform: none;
   }
 }
+
+/* Toolkit refinement: same content, palette, and grouping. */
+#skills .skill-group-grid {
+  gap: 16px;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+  align-items: stretch;
+}
+#skills .skill-group {
+  position: relative;
+  overflow: hidden;
+  padding: 28px 24px 30px;
+  border: 1px solid #e3dbcf;
+  border-radius: 16px;
+  background: linear-gradient(160deg, #fffefa, #fcf9f4);
+  box-shadow:
+    0 3px 12px -8px #62472b1c,
+    inset 0 1px 0 #fff;
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+#skills .skill-group:last-child {
+  border: 1px solid #e3dbcf;
+}
+#skills .skill-group::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 25px;
+  right: 25px;
+  height: 2px;
+  background: linear-gradient(90deg, #b84a1c, #d9b896);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+#skills .skill-group > svg {
+  width: 44px;
+  height: 44px;
+  padding: 11px;
+  border-radius: 12px;
+  border: 1px solid #eadfce;
+  background: #f5eee4;
+  color: #b84a1c;
+  margin-bottom: 22px;
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.25s ease;
+}
+#skills .skill-group h3 {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.5;
+  margin: 0 0 21px;
+  color: #29251f;
+}
+#skills .skill-group > div {
+  gap: 8px;
+  align-content: start;
+}
+#skills .skill-group span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 1px solid #e9e1d6;
+  border-radius: 7px;
+  background: #faf6ef;
+  color: #5b5145;
+  font-size: 11px;
+  line-height: 1.5;
+  box-shadow: inset 0 1px 0 #fff;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+#skills .daily-tools {
+  margin-top: 30px;
+  padding: 21px 0 0;
+  gap: 28px;
+  border-top: 1px solid #e5dccf;
+  align-items: center;
+}
+#skills .daily-tools > p {
+  font-size: 11px;
+  color: #786b5a;
+  letter-spacing: 0.01em;
+}
+#skills .daily-tools > div {
+  gap: 10px;
+}
+#skills .daily-tools span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 8px 11px;
+  border: 1px solid #e9e1d6;
+  border-radius: 8px;
+  background: rgba(255, 253, 248, 0.75);
+  font-size: 10px;
+  line-height: 1.4;
+  color: #685d50;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+#skills .daily-tools img {
+  width: 17px;
+  height: 17px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+@media (hover: hover) and (pointer: fine) {
+  #skills .skill-group:hover {
+    transform: translateY(-3px);
+    border-color: #d5bda4;
+    box-shadow: 0 15px 30px -20px #78502d4d;
+  }
+  #skills .skill-group:hover::after {
+    transform: scaleX(1);
+  }
+  #skills .skill-group:hover > svg {
+    transform: translateY(-2px);
+    background: #f0e4d4;
+  }
+  #skills .skill-group span:hover {
+    border-color: #dbc4ac;
+    background: #f5ece0;
+    color: #86411f;
+  }
+  #skills .daily-tools span:hover {
+    background: #fffdf9;
+    border-color: #d9c7b1;
+  }
+}
+@media (max-width: 1100px) {
+  #skills .skill-group-grid {
+    gap: 12px;
+  }
+  #skills .skill-group {
+    padding: 25px 19px;
+  }
+  #skills .skill-group h3 {
+    font-size: 13px;
+  }
+  #skills .skill-group span {
+    padding-inline: 8px;
+    font-size: 10px;
+  }
+}
+@media (max-width: 800px) {
+  #skills .skill-group-grid {
+    gap: 16px;
+  }
+  #skills .skill-group {
+    padding: 25px;
+  }
+  #skills .skill-group h3 {
+    font-size: 14px;
+  }
+  #skills .skill-group span {
+    font-size: 11px;
+  }
+  #skills .daily-tools {
+    align-items: start;
+    gap: 16px;
+  }
+}
+@media (max-width: 480px) {
+  #skills .skill-group-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  #skills .skill-group {
+    padding: 22px;
+  }
+  #skills .skill-group > svg {
+    float: left;
+    width: 38px;
+    height: 38px;
+    padding: 9px;
+    margin: 0 13px 20px 0;
+    border-radius: 10px;
+  }
+  #skills .skill-group h3 {
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+  #skills .skill-group > div {
+    clear: both;
+    gap: 8px;
+  }
+  #skills .skill-group span {
+    font-size: 12px;
+    padding: 7px 11px;
+  }
+  #skills .daily-tools span {
+    font-size: 11px;
+    min-height: 38px;
+  }
+  #skills .daily-tools > div {
+    gap: 8px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #skills .skill-group,
+  #skills .skill-group::after,
+  #skills .skill-group > svg,
+  #skills .skill-group span,
+  #skills .daily-tools span {
+    transition: none !important;
+    transform: none !important;
+  }
+  #skills .skill-group::after {
+    display: none;
+  }
+}
