@@ -6,6 +6,7 @@ import {
   Mail,
   FileText,
 } from "lucide-react";
+import { SiLeetcode } from "react-icons/si";
 import developerMascot from "../assets/developer-mascot.png";
 
 export default function Hero({ user, projectCount = 0 }) {
@@ -57,6 +58,15 @@ export default function Hero({ user, projectCount = 0 }) {
             aria-label="Rajiv on GitHub"
           >
             <Github size={19} />
+          </a>
+          <a
+            href="https://leetcode.com/u/Rajiv_Jha/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Rajiv on LeetCode"
+            title="LeetCode"
+          >
+            <SiLeetcode size={19} />
           </a>
           {linkedIn && (
             <a
