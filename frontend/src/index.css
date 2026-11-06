@@ -446,10 +446,11 @@
   border-color: var(--accent);
 }
 .hero-visual {
-  padding: 20px 20px 0;
-  background: #eee8de;
-  border: 1px solid #e1d8ca;
-  border-radius: 160px 160px 12px 12px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  isolation: isolate;
   position: relative;
   max-width: 430px;
   width: 100%;
@@ -459,16 +460,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 15px 18px;
-  font-size: 9px;
+  padding: 0 2px 16px;
+  font-size: 10px;
   letter-spacing: 0.09em;
   color: #72685b;
 }
 .portrait-frame {
   aspect-ratio: 4/4.3;
   overflow: hidden;
-  border-radius: 130px 130px 8px 8px;
+  border-radius: 22px;
   background: #e4ded2;
+  position: relative;
+  box-shadow: 0 24px 50px -22px rgba(73, 53, 32, 0.3), 0 4px 12px rgba(73, 53, 32, 0.06);
 }
 .portrait-frame img {
   width: 100%;
@@ -480,7 +483,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 3px;
+  padding: 23px 2px 0;
   gap: 10px;
 }
 .portrait-caption strong {
@@ -983,7 +986,7 @@
     padding-inline: 0;
   }
   .hero-visual {
-    padding: 12px 12px 0;
+    padding: 0;
   }
   .portrait-caption strong {
     font-size: 10px;
@@ -1064,15 +1067,16 @@
   }
   .hero-visual {
     justify-self: center;
-    max-width: 330px;
-    padding: 17px 17px 0;
+    max-width: 350px;
+    padding: 0;
   }
   .portrait-label {
-    font-size: 8px;
-    padding-inline: 8px;
+    font-size: 9px;
+    padding-inline: 2px;
   }
   .portrait-frame {
-    aspect-ratio: 4/3.6;
+    aspect-ratio: 4/3.8;
+    border-radius: 18px;
   }
   .portrait-caption strong {
     font-size: 12px;
