@@ -49,7 +49,7 @@ export default function Hero({ user, projectCount = 0 }) {
             {resume ? "View résumé" : "Get in touch"}
           </a>
         </div>
-        <div className="hero-socials">
+        <div className="hero-socials flex-wrap">
           <span>Find me online</span>
           <a
             href={user?.githubURL || "https://github.com/jharajiv315"}
