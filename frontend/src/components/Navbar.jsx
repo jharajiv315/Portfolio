@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 const links = [
   ["home", "Home"],
   ["projects", "Work"],
@@ -11,6 +12,14 @@ const links = [
 export default function Navbar({ user }) {
   const [open, setOpen] = useState(false),
     [active, setActive] = useState("home");
+  const reducedMotion = useReducedMotion();
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const update = () => setScrolled(window.scrollY > 24);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
   const toggle = useRef(null),
     panel = useRef(null);
   useEffect(() => {
@@ -57,7 +66,9 @@ export default function Navbar({ user }) {
   }, [open]);
   const close = () => setOpen(false);
   return (
-    <header className="studio-nav">
+    <header
+      className={`studio-nav refined-nav${scrolled ? " is-scrolled" : ""}${open ? " is-menu-open" : ""}`}
+    >
       <nav className="studio-nav-inner" aria-label="Main navigation">
         <a className="studio-brand" href="#home" onClick={close}>
           <span>R.</span>
@@ -70,7 +81,19 @@ export default function Navbar({ user }) {
               key={id}
               aria-current={active === id ? "location" : undefined}
             >
-              {label}
+              {active === id && (
+                <motion.span
+                  className="nav-active-pill"
+                  layoutId="navbar-active-section"
+                  aria-hidden="true"
+                  transition={
+                    reducedMotion
+                      ? { duration: 0 }
+                      : { type: "spring", stiffness: 420, damping: 38 }
+                  }
+                />
+              )}
+              <span className="nav-link-label">{label}</span>
             </a>
           ))}
         </div>
@@ -86,25 +109,42 @@ export default function Navbar({ user }) {
           aria-expanded={open}
           aria-controls="mobile-navigation"
         >
-          {open ? <X size={22} /> : <Menu size={22} />}
+          <span className="nav-menu-lines" aria-hidden="true">
+            <span />
+            <span />
+          </span>
         </button>
       </nav>
-      {open && (
-        <div id="mobile-navigation" ref={panel} className="studio-mobile-links">
-          <p>Explore the portfolio</p>
-          {links.map(([id, label]) => (
-            <a
-              href={`#${id}`}
-              key={id}
-              onClick={close}
-              aria-current={active === id ? "location" : undefined}
-            >
-              {label}
-              <ArrowUpRight size={20} />
-            </a>
-          ))}
-        </div>
-      )}
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            key="mobile-navigation"
+            id="mobile-navigation"
+            ref={panel}
+            className="studio-mobile-links"
+            initial={{ opacity: 0, y: reducedMotion ? 0 : -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: reducedMotion ? 0 : -8 }}
+            transition={{
+              duration: reducedMotion ? 0 : 0.18,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
+            <p>Explore the portfolio</p>
+            {links.map(([id, label]) => (
+              <a
+                href={`#${id}`}
+                key={id}
+                onClick={close}
+                aria-current={active === id ? "location" : undefined}
+              >
+                {label}
+                <ArrowUpRight size={20} />
+              </a>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
