@@ -20,21 +20,53 @@ export const usePortfolioData = () => {
       setError(null);
 
       // Perform requests in parallel
-      const [userRes, skillsRes, projectsRes, timelineRes, appsRes] = await Promise.allSettled([
-        axios.get(`${API_URL}/api/v1/user/portfolio/me`, { withCredentials: true }),
-        axios.get(`${API_URL}/api/v1/skill/getall`, { withCredentials: true }),
-        axios.get(`${API_URL}/api/v1/project/getall`, { withCredentials: true }),
-        axios.get(`${API_URL}/api/v1/timeline/getall`, { withCredentials: true }),
-        axios.get(`${API_URL}/api/v1/softwareapplication/getall`, { withCredentials: true }),
-      ]);
+      const [userRes, skillsRes, projectsRes, timelineRes, appsRes] =
+        await Promise.allSettled([
+          axios.get(`${API_URL}/api/v1/user/portfolio/me`, {
+            withCredentials: true,
+          }),
+          axios.get(`${API_URL}/api/v1/skill/getall`, {
+            withCredentials: true,
+          }),
+          axios.get(`${API_URL}/api/v1/project/getall`, {
+            withCredentials: true,
+          }),
+          axios.get(`${API_URL}/api/v1/timeline/getall`, {
+            withCredentials: true,
+          }),
+          axios.get(`${API_URL}/api/v1/softwareapplication/getall`, {
+            withCredentials: true,
+          }),
+        ]);
 
-      const user = userRes.status === "fulfilled" ? userRes.value.data?.user || null : null;
-      const skills = skillsRes.status === "fulfilled" ? skillsRes.value.data?.skills || [] : [];
-      const projects = projectsRes.status === "fulfilled" ? projectsRes.value.data?.projects || [] : [];
-      const timelines = timelineRes.status === "fulfilled" ? timelineRes.value.data?.timelines || [] : [];
+      const user =
+        userRes.status === "fulfilled"
+          ? userRes.value.data?.user || null
+          : null;
+      const skills =
+        skillsRes.status === "fulfilled"
+          ? skillsRes.value.data?.skills || []
+          : [];
+      const projects =
+        projectsRes.status === "fulfilled"
+          ? projectsRes.value.data?.projects || []
+          : [];
+      const timelines =
+        timelineRes.status === "fulfilled"
+          ? timelineRes.value.data?.timelines || []
+          : [];
       const softwareApplications =
-        appsRes.status === "fulfilled" ? appsRes.value.data?.softwareApplications || [] : [];
+        appsRes.status === "fulfilled"
+          ? appsRes.value.data?.softwareApplications || []
+          : [];
 
+      if (
+        [userRes, skillsRes, projectsRes, timelineRes, appsRes].some(
+          (result) => result.status === "rejected",
+        )
+      ) {
+        setError("Some portfolio content could not be loaded.");
+      }
       setData({
         user,
         skills,

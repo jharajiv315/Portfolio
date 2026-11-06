@@ -32,16 +32,7 @@ export default function Footer({ user }) {
           className="flex items-center gap-6 text-lg sm:text-xl text-[#57534E] mb-6"
         >
           <a
-            href={user?.twitterURL || "https://twitter.com"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-[#B84A1C] transition-colors duration-200 hover:scale-110 transform"
-            aria-label="Twitter / X"
-          >
-            <FaXTwitter />
-          </a>
-          <a
-            href={user?.linkedInURL || "https://linkedin.com"}
+            href={user?.linkedinURL || user?.linkedInURL || "https://www.linkedin.com/in/rajiv-jha-9b36ba3a2/"}
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-[#0A66C2] transition-colors duration-200 hover:scale-110 transform"

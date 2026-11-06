@@ -1,448 +1,179 @@
-import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Send, CheckCircle2, Sparkles, ArrowRight, Mail } from "lucide-react";
+import { useState } from "react";
+import {
+  ArrowUpRight,
+  ArrowRight,
+  CheckCircle2,
+  Mail,
+  Loader2,
+} from "lucide-react";
 import axios from "axios";
-import { toast } from "react-toastify";
-import astraImg from "../assets/Astra.png";
 import { API_URL } from "../config";
-
-// =====================================================
-// COSMIC PARTICLES BACKGROUND CANVAS
-// =====================================================
-
-function CosmicParticles() {
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-
-    let animationFrameId;
-    let isVisible = true;
-    let particles = [];
-    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-    const count = isMobile ? 18 : 50;
-
-    const resize = () => {
-      if (canvas.parentElement) {
-        canvas.width = canvas.parentElement.offsetWidth;
-        canvas.height = canvas.parentElement.offsetHeight;
-      }
-    };
-
-    resize();
-    window.addEventListener("resize", resize, { passive: true });
-
-    class Star {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2 + 0.5;
-        this.alpha = Math.random() * 0.4 + 0.15;
-        this.speedX = (Math.random() - 0.5) * 0.3;
-        this.speedY = (Math.random() - 0.5) * 0.3;
-        this.twinkleSpeed = Math.random() * 0.015 + 0.005;
-      }
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        this.alpha += this.twinkleSpeed;
-        if (this.alpha > 0.6 || this.alpha < 0.15) {
-          this.twinkleSpeed = -this.twinkleSpeed;
-        }
-        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
-          this.reset();
-        }
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(184, 74, 28, ${Math.max(0.1, this.alpha * 0.7)})`;
-        if (!isMobile) {
-          ctx.shadowBlur = 4;
-          ctx.shadowColor = "rgba(184, 74, 28, 0.4)";
-        }
-        ctx.fill();
-      }
-    }
-
-    for (let i = 0; i < count; i++) {
-      particles.push(new Star());
-    }
-
-    const prefersReducedMotion =
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (prefersReducedMotion) {
-      particles.forEach((p) => p.draw());
-      return () => window.removeEventListener("resize", resize);
-    }
-
-    let observer;
-    if (typeof IntersectionObserver !== "undefined" && canvas.parentElement) {
-      observer = new IntersectionObserver(
-        ([entry]) => {
-          isVisible = entry.isIntersecting;
-        },
-        { rootMargin: "100px" }
-      );
-      observer.observe(canvas.parentElement);
-    }
-
-    const loop = () => {
-      if (isVisible) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach((p) => {
-          p.update();
-          p.draw();
-        });
-      }
-      animationFrameId = requestAnimationFrame(loop);
-    };
-
-    loop();
-
-    return () => {
-      window.removeEventListener("resize", resize);
-      cancelAnimationFrame(animationFrameId);
-      if (observer) observer.disconnect();
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none z-0"
-    />
-  );
-}
-
-// =====================================================
-// MAIN CONTACT SECTION
-// =====================================================
-
 export default function Contact({ user }) {
-  const [formData, setFormData] = useState({
+  const [form, setForm] = useState({
     name: "",
     email: "",
     service: "Web Development",
     idea: "",
   });
-
-  const [submitted, setSubmitted] = useState(false);
-  const [lastSubmittedEmail, setLastSubmittedEmail] = useState("");
-  const [status, setStatus] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
+  const [loading, setLoading] = useState(false),
+    [sent, setSent] = useState(false),
+    [error, setError] = useState("");
+  const change = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const submit = async (e) => {
     e.preventDefault();
-    const trimmedName = formData.name.trim();
-    const trimmedEmail = formData.email.trim();
-    const trimmedIdea = formData.idea.trim();
-
-    if (!trimmedName || !trimmedEmail || !trimmedIdea) {
-      toast.error("Please fill in all required fields.");
+    setError("");
+    if (!form.name.trim() || !form.email.trim() || !form.idea.trim()) {
+      setError("Please complete your name, email, and message.");
       return;
     }
-
     setLoading(true);
-    setStatus("");
-
     try {
-      const subject = `[${formData.service}] Inquiry from ${trimmedName}`;
-      const messageContent = `Client Email: ${trimmedEmail}\nService Requested: ${formData.service}\n\nProject Idea / Inquiry:\n${trimmedIdea}`;
-
-      const res = await axios.post(
+      await axios.post(
         `${API_URL}/api/v1/message/send`,
         {
-          senderName: trimmedName,
-          email: trimmedEmail,
-          subject,
-          message: messageContent,
+          senderName: form.name.trim(),
+          email: form.email.trim(),
+          subject: `[${form.service}] Inquiry from ${form.name.trim()}`,
+          message: `Client Email: ${form.email.trim()}\nService Requested: ${form.service}\n\nProject Idea / Inquiry:\n${form.idea.trim()}`,
         },
-        {
-          withCredentials: true,
-          headers: { "Content-Type": "application/json" },
-        }
+        { withCredentials: true, timeout: 45000 },
       );
-
-      setLastSubmittedEmail(trimmedEmail);
-      setSubmitted(true);
-      toast.success(res.data?.message || "Inquiry received successfully!");
-      setFormData({
-        name: "",
-        email: "",
-        service: "Web Development",
-        idea: "",
-      });
+      setSent(true);
+      setForm({ name: "", email: "", service: "Web Development", idea: "" });
     } catch (err) {
-      console.error("Failed to send message:", err);
-      const errorMsg =
-        err.response?.data?.message || "Something went wrong. Please try again.";
-      setSubmitted(false);
-      setStatus(`Error: ${errorMsg}`);
-      toast.error(errorMsg);
+      setError(
+        err.response?.data?.message ||
+          "Your message couldn’t be sent. Please try again or email me directly.",
+      );
     } finally {
       setLoading(false);
     }
   };
-
   return (
-    <section
-      id="contact"
-      className="relative w-full min-h-screen bg-[#FAF7F2] text-[#1C1917] py-24 px-4 sm:px-6 lg:px-12 flex items-center justify-center overflow-hidden"
-    >
-      {/* ================= PARTICLES BACKGROUND ================= */}
-      <CosmicParticles />
-
-      {/* ================= BACKGROUND GLOWS ================= */}
-      <div className="pointer-events-none absolute left-[-150px] top-[20%] h-[500px] w-[500px] rounded-full bg-[#EFE7D8]/70 blur-[150px]" />
-      <div className="pointer-events-none absolute right-[-150px] bottom-[20%] h-[500px] w-[500px] rounded-full bg-[#E8DFC8]/60 blur-[150px]" />
-      <div className="pointer-events-none absolute left-[35%] top-[40%] h-[350px] w-[350px] rounded-full bg-[#EFE7D8]/50 blur-[130px]" />
-
-      {/* ================= MAIN CONTAINER ================= */}
-      <div className="relative z-10 w-full max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          {/* ================= LEFT COLUMN: ASTRONAUT ARTWORK ================= */}
-          <motion.div
-            className="lg:col-span-5 flex flex-col items-center justify-center text-center relative"
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-          >
-            {/* Ambient Warm Glow behind Astronaut */}
-            <div className="absolute w-64 h-64 sm:w-80 sm:h-80 rounded-full bg-gradient-to-tr from-[#E8DFC8]/60 via-[#F5EFEB]/30 to-transparent blur-3xl pointer-events-none" />
-
-            {/* Floating Animated Astronaut Artwork */}
-            <motion.div
-              animate={{
-                y: [-10, 10, -10],
-                rotate: [-1.2, 1.2, -1.2],
-              }}
-              transition={{
-                duration: 5.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="relative z-10 w-full max-w-[280px] sm:max-w-[340px] lg:max-w-[380px] drop-shadow-[0_12px_30px_rgba(28,25,23,0.12)]"
-            >
-              <img
-                src={astraImg}
-                alt="Astronaut floating in cosmic space"
-                className="w-full h-auto object-contain select-none pointer-events-none"
-              />
-            </motion.div>
-          </motion.div>
-
-          {/* ================= RIGHT COLUMN: LET'S WORK TOGETHER FORM ================= */}
-          <motion.div
-            className="lg:col-span-7 w-full max-w-[500px] mx-auto lg:ml-auto"
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-          >
-            <div
-              className="rounded-3xl p-6 sm:p-8 relative overflow-hidden bg-white/95 border border-[#E8E1D5] shadow-[0_20px_45px_-10px_rgba(28,25,23,0.08)]"
-            >
-              <AnimatePresence mode="wait">
-                {submitted ? (
-                  /* ================= CLEAN & PROFESSIONAL SUCCESS PROMPT ================= */
-                  <motion.div
-                    key="success"
-                    initial={{ opacity: 0, scale: 0.96 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.96 }}
-                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                    className="py-8 px-4 text-center flex flex-col items-center justify-center space-y-4 font-poppins"
-                  >
-                    <div className="w-14 h-14 rounded-full bg-[#FAF7F2] border border-[#E8E1D5] flex items-center justify-center text-[#B84A1C] shadow-sm mb-0.5">
-                      <CheckCircle2 className="w-7 h-7 stroke-[2]" />
-                    </div>
-
-                    <div>
-                      <h3 className="font-poppins font-semibold text-2xl text-[#1C1917] tracking-tight">
-                        Thank You for Reaching Out!
-                      </h3>
-                      <p className="mt-2 text-sm text-[#57534E] leading-relaxed max-w-sm mx-auto font-poppins">
-                        Your message has been sent successfully. I have received your note and will review the details. You can expect a response in your inbox shortly.
-                      </p>
-                    </div>
-
-                    {lastSubmittedEmail && (
-                      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FAF7F2] border border-[#E8E1D5] text-xs font-poppins text-[#78716C]">
-                        <Mail className="w-3.5 h-3.5 text-[#B84A1C]" />
-                        <span>
-                          Sender: <strong className="text-[#1C1917] font-medium">{lastSubmittedEmail}</strong>
-                        </span>
-                      </div>
-                    )}
-
-                    <div className="pt-2">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSubmitted(false);
-                          setStatus("");
-                        }}
-                        className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-medium text-white bg-[#B84A1C] hover:bg-[#A03D14] transition-all shadow-sm hover:shadow active:scale-98 cursor-pointer font-poppins"
-                      >
-                        <span>Send Another Message</span>
-                        <ArrowRight size={14} />
-                      </button>
-                    </div>
-                  </motion.div>
-                ) : (
-                  /* ================= CONTACT INPUT FORM ================= */
-                  <motion.div
-                    key="form"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                  >
-                    {/* Form Header */}
-                    <div className="mb-4">
-                      <h2 className="font-serif font-bold text-[24px] sm:text-[28px] lg:text-[32px] leading-[1.1] text-[#1C1917] tracking-tight">
-                        Let's Work <span className="text-[#B84A1C] italic font-serif">Together</span>
-                      </h2>
-                      <p className="mt-1.5 font-sans font-normal text-xs sm:text-[13.5px] leading-[1.5] text-[#57534E]">
-                        Have a project in mind or want to collaborate? Fill out the form below and I'll get back to you promptly.
-                      </p>
-                    </div>
-
-                    <form onSubmit={handleSubmit} className="space-y-3.5">
-                      {/* 1. Your Name */}
-                      <div>
-                        <label htmlFor="contact-name" className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
-                          Your Name <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
-                        </label>
-                        <input
-                          id="contact-name"
-                          type="text"
-                          name="name"
-                          required
-                          value={formData.name}
-                          onChange={handleChange}
-                          placeholder="Your Name"
-                          className="w-full h-[44px] sm:h-[40px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-base sm:text-[13px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out"
-                        />
-                      </div>
-
-                      {/* 2. Your Email */}
-                      <div>
-                        <label htmlFor="contact-email" className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
-                          Your Email <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
-                        </label>
-                        <input
-                          id="contact-email"
-                          type="email"
-                          name="email"
-                          required
-                          value={formData.email}
-                          onChange={handleChange}
-                          placeholder="your.email@example.com"
-                          className="w-full h-[44px] sm:h-[40px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-base sm:text-[13px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out"
-                        />
-                      </div>
-
-                      {/* 3. Service Needed */}
-                      <div>
-                        <label htmlFor="contact-service" className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
-                          Service Needed <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
-                        </label>
-                        <select
-                          id="contact-service"
-                          name="service"
-                          value={formData.service}
-                          onChange={handleChange}
-                          className="w-full h-[44px] sm:h-[40px] px-3.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] font-sans text-base sm:text-[13px] hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out cursor-pointer"
-                        >
-                          <option value="Web Development" className="bg-[#FAF7F2] text-[#1C1917]">
-                            Web Development
-                          </option>
-                          <option value="Full Stack Application" className="bg-[#FAF7F2] text-[#1C1917]">
-                            Full Stack Application
-                          </option>
-                          <option value="Frontend & UI/UX Design" className="bg-[#FAF7F2] text-[#1C1917]">
-                            Frontend & UI/UX Design
-                          </option>
-                          <option value="AI & API Integration" className="bg-[#FAF7F2] text-[#1C1917]">
-                            AI & API Integration
-                          </option>
-                          <option value="Others" className="bg-[#FAF7F2] text-[#1C1917]">
-                            Others
-                          </option>
-                          <option value="Something in mind?" className="bg-[#FAF7F2] text-[#1C1917]">
-                            Something in mind?
-                          </option>
-                        </select>
-                      </div>
-
-                      {/* 4. Explain Your Idea */}
-                      <div>
-                        <label htmlFor="contact-idea" className="block font-sans font-semibold text-[11.5px] text-[#1C1917] mb-1">
-                          Explain Your Idea <span className="text-[#B84A1C] text-[11px] ml-0.5">*</span>
-                        </label>
-                        <textarea
-                          id="contact-idea"
-                          name="idea"
-                          required
-                          value={formData.idea}
-                          onChange={handleChange}
-                          placeholder="Tell me about your project, goals, or inquiry..."
-                          className="w-full min-h-[96px] sm:h-[90px] px-3.5 py-2.5 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-[#1C1917] placeholder:text-[#A8A29E] font-sans text-base sm:text-[13px] leading-relaxed hover:border-[#D8C7B0] focus:outline-none focus:border-[#B84A1C] focus:ring-1 focus:ring-[#B84A1C]/20 transition-all duration-150 ease-out resize-none"
-                        />
-                      </div>
-
-                      {/* Error Status Message (if submission fails) */}
-                      {status && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -4 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="text-xs sm:text-[13px] font-sans font-medium flex items-center gap-2 py-2 px-3 rounded-xl text-rose-800 bg-rose-50 border border-rose-200"
-                        >
-                          <span className="text-rose-600 text-sm flex-shrink-0">⚠️</span>
-                          <span>{status}</span>
-                        </motion.div>
-                      )}
-
-                      {/* 5. Submit Button */}
-                      <div className="pt-1">
-                        <button
-                          type="submit"
-                          disabled={loading}
-                          className="w-full h-[42px] rounded-full font-medium text-xs sm:text-[13.5px] text-white bg-[#B84A1C] hover:bg-[#A03D14] shadow-md hover:shadow-[0_8px_20px_rgba(184,74,28,0.25)] transition-all duration-150 ease-out hover:-translate-y-[1px] active:translate-y-0 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0"
-                        >
-                          {loading ? (
-                            <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          ) : (
-                            <>
-                              <span>Send Message</span>
-                              <Send size={14} />
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    </form>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+    <section id="contact" className="studio-section contact-section">
+      <div className="studio-container contact-layout">
+        <div>
+          <p className="studio-eyebrow">05 / Start a conversation</p>
+          <h2>
+            Have something
+            <br />
+            <em>in mind?</em>
+          </h2>
+          <p className="contact-intro">
+            A project idea, a collaboration, or a conversation about building
+            better software—I’d like to hear it.
+          </p>
+          {user?.email && (
+            <a href={`mailto:${user.email}`} className="contact-email">
+              <Mail size={18} />
+              {user.email}
+              <ArrowUpRight size={17} />
+            </a>
+          )}
+          <p className="contact-note">
+            Your message goes directly to my dashboard.
+          </p>
+        </div>
+        <div className="contact-panel">
+          {sent ? (
+            <div className="contact-success" role="status">
+              <CheckCircle2 size={36} />
+              <h3>Message received.</h3>
+              <p>
+                Thanks for reaching out. I’ll reply using the email you
+                provided.
+              </p>
+              <button
+                type="button"
+                className="studio-button studio-button-outline"
+                onClick={() => setSent(false)}
+              >
+                Send another message <ArrowRight size={17} />
+              </button>
             </div>
-          </motion.div>
+          ) : (
+            <form onSubmit={submit} aria-label="Contact Rajiv">
+              <div className="contact-field-row">
+                <div>
+                  <label htmlFor="contact-name">Your name</label>
+                  <input
+                    id="contact-name"
+                    name="name"
+                    autoComplete="name"
+                    value={form.name}
+                    onChange={change}
+                    required
+                    maxLength={100}
+                    placeholder="How should I address you?"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="contact-email">Email address</label>
+                  <input
+                    id="contact-email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    value={form.email}
+                    onChange={change}
+                    required
+                    maxLength={254}
+                    placeholder="you@example.com"
+                  />
+                </div>
+              </div>
+              <label htmlFor="contact-service">What can I help with?</label>
+              <select
+                id="contact-service"
+                name="service"
+                value={form.service}
+                onChange={change}
+              >
+                <option>Web Development</option>
+                <option>Full Stack Application</option>
+                <option>Frontend & UI/UX Design</option>
+                <option>AI & API Integration</option>
+                <option>Collaboration</option>
+                <option>Others</option>
+              </select>
+              <label htmlFor="contact-idea">Your message</label>
+              <textarea
+                id="contact-idea"
+                name="idea"
+                rows={5}
+                required
+                maxLength={5000}
+                value={form.idea}
+                onChange={change}
+                placeholder="Tell me a little about your idea…"
+                aria-describedby={error ? "contact-error" : undefined}
+              />
+              {error && (
+                <p id="contact-error" className="contact-error" role="alert">
+                  {error}
+                </p>
+              )}
+              <div className="contact-submit">
+                <span>No mailing lists. Just a conversation.</span>
+                <button
+                  type="submit"
+                  className="studio-button"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 size={17} className="animate-spin" />
+                      Sending…
+                    </>
+                  ) : (
+                    <>
+                      Send message <ArrowUpRight size={17} />
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          )}
         </div>
       </div>
     </section>

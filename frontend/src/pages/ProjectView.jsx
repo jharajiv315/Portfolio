@@ -28,7 +28,9 @@ export const ProjectView = () => {
           setProject(res.data.project);
         }
       } catch (error) {
-        toast.error(error.response?.data?.message || "Failed to load project details");
+        toast.error(
+          error.response?.data?.message || "Failed to load project details",
+        );
       } finally {
         setLoading(false);
       }
@@ -38,11 +40,7 @@ export const ProjectView = () => {
 
   const handleReturn = () => {
     // If previous history entry exists in current window, navigate back to preserve scroll position
-    if (window.history.length > 1) {
-      navigate(-1);
-    } else {
-      navigate("/#projects");
-    }
+    navigate("/#projects");
   };
 
   const hasGitRepo =
@@ -56,13 +54,14 @@ export const ProjectView = () => {
     !project.projectLink.includes("[ADD");
 
   const technologiesList = project?.technologies
-    ? project.technologies.split(",").map((s) => s.trim()).filter(Boolean)
+    ? project.technologies
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
     : [];
 
   return (
     <div className="relative min-h-screen bg-[#FAF7F2] text-[#1C1917] py-12 px-5 sm:px-8">
-      <CustomCursor />
-      <ParticleBackground />
 
       <div className="max-w-5xl mx-auto relative z-10">
         {/* Navigation Bar / Return */}
@@ -110,7 +109,7 @@ export const ProjectView = () => {
               <img
                 src={project.projectBanner?.url || "/placeholder.jpg"}
                 alt={project.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-top"
                 onError={(e) => {
                   e.currentTarget.src =
                     "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop";

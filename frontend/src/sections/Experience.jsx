@@ -152,8 +152,9 @@ export default function Experience({ timelines = [] }) {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
+            <p className="studio-eyebrow justify-center">04 / The journey so far</p>
             <h2 className="font-serif font-bold text-3xl sm:text-4xl md:text-5xl text-[#1C1917] tracking-tight">
-              My <span className="text-[#B84A1C] italic font-serif">Experience</span>
+              Learning. Building. <span className="text-[#B84A1C] italic font-serif">Growing.</span>
             </h2>
 
             <p className="mt-3 text-sm sm:text-base text-[#57534E] max-w-2xl mx-auto leading-relaxed">
