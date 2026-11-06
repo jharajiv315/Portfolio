@@ -83,7 +83,7 @@ export function publicProfile(u = {}) {
     aboutMe: text(u.aboutMe),
     githubURL: safeURL(u.githubURL || ""),
     linkedinURL: safeURL(u.linkedInURL || u.linkedinURL || ""),
-    leetcodeURL: safeURL(u.leetcodeURL || "https://leetcode.com/u/Rajiv_Jha/"),
+    leetcodeURL: safeURL(u.leetcodeURL ?? "https://leetcode.com/u/Rajiv_Jha/"),
     avatar: image(u.avatar),
     resume: image(u.resume),
   };

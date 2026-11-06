@@ -139,3 +139,15 @@ test("replaced uploads are retained while published versions can reference them"
     else process.env.STORAGE_DRIVER = before;
   }
 });
+test("clearing a social URL removes it instead of restoring a hardcoded default", () => {
+  const data = initialized(),
+    state = adminState(data);
+  state.draft.user.leetcodeURL = "";
+  state.draft.user.githubURL = "";
+  state.draft.user.linkedinURL = "";
+  saveDraft(data, { ...state.draft, revision: state.revision });
+  const profile = buildDraft(data).user;
+  assert.equal(profile.leetcodeURL, "");
+  assert.equal(profile.githubURL, "");
+  assert.equal(profile.linkedinURL, "");
+});
