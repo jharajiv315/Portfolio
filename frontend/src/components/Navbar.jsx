@@ -9,7 +9,7 @@ const links = [
   ["experience", "Journey"],
   ["contact", "Contact"],
 ];
-export default function Navbar({ user }) {
+export default function Navbar({ user, sections = {} }) {
   const [open, setOpen] = useState(false),
     [active, setActive] = useState("home");
   const reducedMotion = useReducedMotion();
@@ -65,6 +65,7 @@ export default function Navbar({ user }) {
     };
   }, [open]);
   const close = () => setOpen(false);
+  const visibleLinks = links.filter(([id]) => sections[id] !== false);
   return (
     <header
       className={`studio-nav refined-nav${scrolled ? " is-scrolled" : ""}${open ? " is-menu-open" : ""}`}
@@ -75,7 +76,7 @@ export default function Navbar({ user }) {
           {user?.fullName || "Rajiv Jha"}
         </a>
         <div className="studio-desktop-links">
-          {links.map(([id, label]) => (
+          {visibleLinks.map(([id, label]) => (
             <a
               href={`#${id}`}
               key={id}
@@ -97,9 +98,11 @@ export default function Navbar({ user }) {
             </a>
           ))}
         </div>
-        <a className="studio-nav-contact" href="#contact">
-          Let’s talk <ArrowUpRight size={15} />
-        </a>
+        {sections.contact !== false && (
+          <a className="studio-nav-contact" href="#contact">
+            Let’s talk <ArrowUpRight size={15} />
+          </a>
+        )}
         <button
           ref={toggle}
           className="studio-menu-toggle"
@@ -131,7 +134,7 @@ export default function Navbar({ user }) {
             }}
           >
             <p>Explore the portfolio</p>
-            {links.map(([id, label]) => (
+            {visibleLinks.map(([id, label]) => (
               <a
                 href={`#${id}`}
                 key={id}

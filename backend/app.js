@@ -13,6 +13,8 @@ import skillRouter from "./routes/skillRouter.js";
 import softwareApplicationRouter from "./routes/softwareApplicationRouter.js";
 import projectRouter from "./routes/projectRouter.js";
 
+import contentRouter, { publishedReadGuard } from "./routes/contentRouter.js";
+
 const app = express();
 dotenv.config({ path: "./config/config.env" });
 
@@ -64,7 +66,7 @@ app.use(
 );
 
 app.use(cookieParser());
-app.use(express.json());
+app.use(express.json({ limit: "512kb" }));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
@@ -83,6 +85,8 @@ app.get("/api/v1/health", (req, res) => {
   });
 });
 
+app.use("/api/v1/content", contentRouter);
+if (process.env.STORAGE_DRIVER === "blob") app.use("/api/v1", publishedReadGuard);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/timeline", timelineRouter);
 app.use("/api/v1/message", messageRouter);

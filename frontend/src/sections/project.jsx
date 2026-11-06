@@ -1,7 +1,13 @@
 import { ArrowUpRight, Github, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export default function Projects({ projects = [], user, loading }) {
+export default function Projects({
+  projects = [],
+  user,
+  loading,
+  copy = {},
+  previewToken,
+}) {
   return (
     <section id="projects" className="studio-section project-section">
       <div className="studio-container">
@@ -9,13 +15,10 @@ export default function Projects({ projects = [], user, loading }) {
           <div>
             <p className="studio-eyebrow">01 / Selected work</p>
             <h2>
-              Ideas made <em>real.</em>
+              {copy.projectsTitle} <em>{copy.projectsAccent}</em>
             </h2>
           </div>
-          <p>
-            A closer look at the products I’m building, the problems they
-            address, and the technology behind them.
-          </p>
+          <p>{copy.projectsIntro}</p>
         </div>
         <div className="studio-project-grid">
           {loading && !projects.length
@@ -32,6 +35,7 @@ export default function Projects({ projects = [], user, loading }) {
               ))
             : projects.map((project, index) => {
                 const id = project._id || project.id;
+                const detailsURL = `/project/${id}${previewToken ? `#preview=${previewToken}` : ""}`;
                 const tech = (
                   Array.isArray(project.technologies)
                     ? project.technologies
@@ -43,7 +47,7 @@ export default function Projects({ projects = [], user, loading }) {
                 return (
                   <article className="studio-project-card" key={id}>
                     <Link
-                      to={`/project/${id}`}
+                      to={detailsURL}
                       className="project-preview"
                       aria-label={`Explore ${project.title}`}
                     >
@@ -79,7 +83,7 @@ export default function Projects({ projects = [], user, loading }) {
                         <span>{String(index + 1).padStart(2, "0")}</span>
                       </div>
                       <h3>
-                        <Link to={`/project/${id}`}>
+                        <Link to={detailsURL}>
                           {project.title}
                           <ArrowUpRight size={21} />
                         </Link>
@@ -96,7 +100,7 @@ export default function Projects({ projects = [], user, loading }) {
                         )}
                       </div>
                       <div className="project-links">
-                        <Link to={`/project/${id}`}>
+                        <Link to={detailsURL}>
                           Project details <ArrowRight size={15} />
                         </Link>
                         <div>

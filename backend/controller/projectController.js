@@ -1,3 +1,4 @@
+import { deleteReplacedAsset } from "../utils/deleteReplacedAsset.js";
 import { catchAsyncErrors } from "../middlewares/catchAsyncErrors.js";
 import ErrorHandler from "../middlewares/error.js";
 import { Project } from "../models/projectSchema.js";
@@ -74,7 +75,7 @@ export const updateProject = catchAsyncErrors(async (req, res, next) => {
     const project = await Project.findById(req.params.id);
     const projectImageId = project?.projectBanner?.public_id;
     if (projectImageId) {
-      await cloudinary.uploader.destroy(projectImageId);
+      await deleteReplacedAsset(projectImageId);
     }
     const newProjectImage = await cloudinary.uploader.upload(
       projectBanner.tempFilePath,
@@ -111,7 +112,7 @@ export const deleteProject = catchAsyncErrors(async (req, res, next) => {
   }
   const projectImageId = project?.projectBanner?.public_id;
   if (projectImageId) {
-    await cloudinary.uploader.destroy(projectImageId);
+    await deleteReplacedAsset(projectImageId);
   }
   await project.deleteOne();
   res.status(200).json({

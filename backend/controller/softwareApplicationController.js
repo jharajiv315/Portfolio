@@ -1,3 +1,4 @@
+import { deleteReplacedAsset } from "../utils/deleteReplacedAsset.js";
 import { catchAsyncErrors } from "../middlewares/catchAsyncErrors.js";
 import ErrorHandler from "../middlewares/error.js";
 import { SoftwareApplication } from "../models/softwareApplicationSchema.js";
@@ -47,7 +48,7 @@ export const deleteApplication = catchAsyncErrors(async (req, res, next) => {
   }
   const softwareApplicationSvgId = softwareApplication.svg?.public_id;
   if (softwareApplicationSvgId) {
-    await cloudinary.uploader.destroy(softwareApplicationSvgId);
+    await deleteReplacedAsset(softwareApplicationSvgId);
   }
   await softwareApplication.deleteOne();
   res.status(200).json({

@@ -19,6 +19,9 @@ export default function Home() {
     loading,
     error,
     refetch,
+    settings,
+    isPreview,
+    previewToken,
   } = usePortfolioData();
   useEffect(() => {
     if (window.location.hash) {
@@ -26,25 +29,86 @@ export default function Home() {
       target?.scrollIntoView();
     }
   }, []);
+  const copy = settings.copy;
+  const visible = settings.visibility;
+  if (isPreview && (loading || error))
+    return (
+      <div className="min-h-screen bg-[#FAF7F2] p-8 text-[#1C1917]">
+        <h1 className="text-2xl font-semibold">Draft preview</h1>
+        <p className="my-5" role="status">
+          {error || "Loading your saved draft…"}
+        </p>
+        {error && <button onClick={refetch}>Try again</button>}{" "}
+        <a href="/">Return to public portfolio</a>
+      </div>
+    );
   return (
     <MotionConfig reducedMotion="user">
-      <div className="portfolio-studio">
+      <div
+        className="portfolio-studio"
+        onClickCapture={
+          isPreview
+            ? (event) => {
+                const anchor = event.target.closest?.('a[href^="#"]');
+                if (anchor) {
+                  const target = document.getElementById(
+                    anchor.getAttribute("href").slice(1),
+                  );
+                  if (target) {
+                    event.preventDefault();
+                    target.scrollIntoView({
+                      behavior: window.matchMedia(
+                        "(prefers-reduced-motion: reduce)",
+                      ).matches
+                        ? "auto"
+                        : "smooth",
+                    });
+                  }
+                }
+              }
+            : undefined
+        }
+      >
         <a href="#main-content" className="studio-skip-link">
           Skip to content
         </a>
-        <Navbar user={user} />
+        <Navbar user={user} sections={visible} />
         <main id="main-content">
-          <Hero user={user} projectCount={projects.length} />
-          <Projects projects={projects} user={user} loading={loading} />
-          <About user={user} />
-          <Skills skills={skills} softwareApplications={softwareApplications} />
-          {timelines.length > 0 && <Experience timelines={timelines} />}
-          <Contact user={user} />
+          {isPreview && (
+            <div className="portfolio-preview-banner" role="status">
+              Draft preview · Not public · Expires after 15 minutes{" "}
+              <a href="/">Exit preview</a>
+            </div>
+          )}
+          <Hero user={user} projectCount={projects.length} copy={copy} />
+          {visible.projects && (
+            <Projects
+              projects={projects}
+              user={user}
+              loading={loading}
+              copy={copy}
+              previewToken={previewToken}
+            />
+          )}
+          {visible.about && <About user={user} copy={copy} />}
+          {visible.skills && (
+            <Skills
+              skills={skills}
+              softwareApplications={softwareApplications}
+              copy={copy}
+            />
+          )}
+          {visible.experience && timelines.length > 0 && (
+            <Experience timelines={timelines} copy={copy} />
+          )}
+          {visible.contact && (
+            <Contact user={user} copy={copy} preview={isPreview} />
+          )}
         </main>
-        <Footer user={user} />
+        <Footer user={user} copy={copy} />
         {error && (
           <div className="studio-load-notice" role="status">
-            Some content couldn’t load.{" "}
+            {error}{" "}
             <button type="button" onClick={refetch}>
               Try again
             </button>

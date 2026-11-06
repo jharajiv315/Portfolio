@@ -1,3 +1,4 @@
+import { deleteReplacedAsset } from "../utils/deleteReplacedAsset.js";
 import { catchAsyncErrors } from "../middlewares/catchAsyncErrors.js";
 import ErrorHandler from "../middlewares/error.js";
 import { Skill } from "../models/skillSchema.js";
@@ -46,7 +47,7 @@ export const deleteSkill = catchAsyncErrors(async (req, res, next) => {
   }
   const skillSvgId = skill.svg?.public_id;
   if (skillSvgId) {
-    await cloudinary.uploader.destroy(skillSvgId);
+    await deleteReplacedAsset(skillSvgId);
   }
   await skill.deleteOne();
   res.status(200).json({

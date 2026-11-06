@@ -1732,3 +1732,4 @@
     display: none;
   }
 }
+.portfolio-preview-banner{position:fixed;z-index:70;bottom:20px;left:20px;right:20px;margin:0 auto;padding:12px 18px;background:#f3e5cd;color:#77411d;border:1px solid #dcbf98;border-radius:8px;font-size:12px;max-width:1000px}.portfolio-preview-banner a{margin-left:18px;text-decoration:underline}.project-case-study{display:grid;grid-template-columns:1fr 1fr;gap:24px}.project-case-study section{background:#fffdf9;border:1px solid #e8e1d5;border-radius:16px;padding:28px}.project-case-study h2,.case-gallery h2{font:600 23px Georgia,serif;margin-bottom:15px;color:#29251f}.project-case-study p{color:#62594e;font-size:14px;line-height:1.9;white-space:pre-line}.case-gallery>div{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}.case-gallery img{width:100%;border-radius:12px;border:1px solid #e8e1d5}@media(max-width:600px){.project-case-study,.case-gallery>div{grid-template-columns:1fr}.project-case-study section{padding:22px}}

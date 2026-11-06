@@ -1,3 +1,4 @@
+import { deleteReplacedAsset } from "../utils/deleteReplacedAsset.js";
 import { v2 as cloudinary } from "cloudinary";
 import { catchAsyncErrors } from "../middlewares/catchAsyncErrors.js";
 import { User } from "../models/userSchema.js";
@@ -169,7 +170,7 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
     const profileImageId = user?.avatar?.public_id;
     if (profileImageId && profileImageId !== "default_avatar") {
       try {
-        await cloudinary.uploader.destroy(profileImageId);
+        await deleteReplacedAsset(profileImageId);
       } catch (err) {
         console.warn("Could not delete previous avatar:", err.message);
       }
@@ -202,10 +203,10 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
     const resumeFileId = user?.resume?.public_id;
     if (resumeFileId && resumeFileId !== "default_resume") {
       try {
-        await cloudinary.uploader.destroy(resumeFileId, { resource_type: "raw" });
+        await deleteReplacedAsset(resumeFileId, { resource_type: "raw" });
       } catch (err) {
         try {
-          await cloudinary.uploader.destroy(resumeFileId, { resource_type: "image" });
+          await deleteReplacedAsset(resumeFileId, { resource_type: "image" });
         } catch (e) {
           console.warn("Could not delete previous resume:", e.message);
         }

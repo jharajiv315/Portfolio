@@ -1,0 +1,406 @@
+{
+  "schemaVersion": 1,
+  "user": {
+    "fullName": "Rajiv Jha",
+    "email": "jharajiv315@gmail.com",
+    "aboutMe": "Fullstack Developer & Software Engineer",
+    "githubURL": "https://github.com/jharajiv315",
+    "linkedinURL": "https://www.linkedin.com/in/rajiv-jha-9b36ba3a2/",
+    "leetcodeURL": "https://leetcode.com/u/Rajiv_Jha/",
+    "avatar": {
+      "url": "https://res.cloudinary.com/lcvw5npt/image/upload/v1789979952/PORTFOLIO%20AVATAR/rwypwxbotmckxljvbgdb.png"
+    },
+    "resume": {
+      "url": "https://res.cloudinary.com/lcvw5npt/raw/upload/v1790445214/PORTFOLIO%20RESUME/Rajiv_Jha_Resume.docx"
+    }
+  },
+  "projects": [
+    {
+      "id": 2,
+      "_id": 2,
+      "title": "KRIVIO AI",
+      "description": "An AI-assisted business mentor and commerce toolkit for rural Indian artisans, farmers, and self-help groups. KRIVIO combines multilingual voice guidance, an AI image studio, product catalog creation, marketplace-ready exports, wholesale PDF quotations, and shareable storefronts. Built with a React and TypeScript frontend, an Express gateway, Python/FastAPI services, PostgreSQL, and Gemini integrations.",
+      "stack": "AI Commerce Platform",
+      "technologies": "React, TypeScript, Node.js, Express, Python, FastAPI, PostgreSQL, Supabase Auth, Gemini, Tailwind CSS",
+      "deployed": "In Development",
+      "projectLink": "https://krivio-ai.vercel.app/",
+      "gitRepoLink": "https://github.com/jharajiv315/KRIVIO-AI",
+      "projectBanner": {
+        "url": "https://raw.githubusercontent.com/jharajiv315/Portfolio/main/frontend/public/project-previews/krivio.jpg"
+      },
+      "caseStudy": {
+        "problem": "Rural artisans need practical help preparing products for digital selling: photos, descriptions, pricing, and marketplace formats.",
+        "contribution": "The project brings a React and TypeScript interface together with an Express gateway, Python services, and PostgreSQL-backed business and product workflows.",
+        "decisions": "Keep business context attached to product and mentor workflows.\nUse structured marketplace exports rather than treating a generated description as a finished listing.\nSupport voice and regional-language interactions alongside visual editing.",
+        "lessons": "AI output needs validation and clear user review before it becomes business data. Authentication, account isolation, and predictable export formats are as important as the generation interface.",
+        "screenshots": []
+      }
+    },
+    {
+      "id": 3,
+      "_id": 3,
+      "title": "GitaPath",
+      "description": "A source-grounded Bhagavad Gita guidance platform that connects everyday questions with relevant teachings and chapter-and-verse references. It includes structured AI conversations, a chapter browser, guided learning, reflection journaling, and voice input. The React and TypeScript interface connects to an Express API with Gemini integration and Supabase authentication.",
+      "stack": "AI Guidance & Learning",
+      "technologies": "React, TypeScript, Node.js, Express, Gemini, Supabase, Tailwind CSS, Vite",
+      "deployed": "In Development",
+      "projectLink": "https://gitapath-tau.vercel.app/",
+      "gitRepoLink": "https://github.com/jharajiv315/gitapath",
+      "projectBanner": {
+        "url": "https://raw.githubusercontent.com/jharajiv315/Portfolio/main/frontend/public/project-previews/gitapath.jpg"
+      },
+      "caseStudy": {
+        "problem": "People can describe a difficult life situation but may not know which Bhagavad Gita teaching relates to it or how to verify the source.",
+        "contribution": "The project connects a conversational React interface with structured guidance responses, chapter-and-verse references, learning tools, reflection features, and an Express API.",
+        "decisions": "Return structured guidance with source references instead of a single unstructured answer.\nSeparate scripture knowledge from explanation and reflection.\nProvide explicit fallback behavior when an AI or retrieval service is unavailable.",
+        "lessons": "Source transparency must be visible in the interface. Graceful failure and clear boundaries help make an AI guidance product more dependable than a chat interface alone.",
+        "screenshots": []
+      }
+    },
+    {
+      "id": 4,
+      "_id": 4,
+      "title": "TRUVA",
+      "description": "A package-label scanning and review application with separate consumer and inspector workspaces. TRUVA extracts printed declarations, explains food-label evidence, compares compatible saved products, and presents inspection records for human review. Built with React and TypeScript, a Python/FastAPI inspection API, Gemini vision, RapidOCR, and Supabase Auth. Scan history is stored locally per account; automated findings support review rather than certify compliance.",
+      "stack": "AI Label Intelligence",
+      "technologies": "React, TypeScript, Python, FastAPI, Gemini, RapidOCR, Supabase Auth, Tailwind CSS, Capacitor",
+      "deployed": "In Development",
+      "projectLink": "https://truva-gules.vercel.app/",
+      "gitRepoLink": "https://github.com/jharajiv315/TRUVA",
+      "projectBanner": {
+        "url": "https://raw.githubusercontent.com/jharajiv315/Portfolio/main/frontend/public/project-previews/truva.png"
+      },
+      "caseStudy": {
+        "problem": "Packaged-product labels are difficult to inspect and compare, especially when declarations are incomplete or hard to read.",
+        "contribution": "The project includes consumer and inspector workspaces, image-based label extraction, evidence-led reports, food-label explanations, and comparison of compatible saved products.",
+        "decisions": "Keep consumer vision and detailed inspector OCR workflows distinct.\nTreat extracted text as evidence for review, not a verified compliance decision.\nWithhold comparisons when quantities or units are incompatible; keep browser-local scan history isolated per account.",
+        "lessons": "Uncertainty is part of the product experience. Incomplete evidence should remain visible, and an automated finding should not be presented as a legal or medical conclusion.",
+        "screenshots": []
+      }
+    }
+  ],
+  "settings": {
+    "copy": {
+      "heroEyebrow": "Computer science · Full-stack · AI/ML",
+      "heroLine1": "Thoughtful code.",
+      "heroLine2": "Useful products.",
+      "heroNameTemplate": "I’m {name}.",
+      "heroSupport": "From an idea to a working application, I learn by building, testing, and improving.",
+      "heroPrimaryLabel": "Explore my work",
+      "heroResumeLabel": "View résumé",
+      "portraitLabel": "THE PERSON BEHIND THE CODE",
+      "portraitCaption": "Always a work in progress.",
+      "portraitSubcaption": "Curiosity → code → iteration",
+      "heroFooter": "Building at the intersection of software & AI.",
+      "aboutTitle": "Curious by nature.",
+      "aboutAccent": "Engineer by practice.",
+      "aboutP1": "I’m studying computer science and building my foundations in software engineering and AI/ML. I enjoy turning a complex problem into smaller, understandable pieces—and then into something people can use.",
+      "aboutP2": "My work brings together full-stack development, data, and algorithms. Every project is a chance to make better decisions, understand a system more deeply, and improve the details that matter.",
+      "projectsTitle": "Ideas made",
+      "projectsAccent": "real.",
+      "projectsIntro": "A closer look at the products I’m building, the problems they address, and the technology behind them.",
+      "skillsTitle": "The tools behind",
+      "skillsAccent": "the thinking.",
+      "skillsIntro": "A growing foundation across software development, algorithms, and working with data.",
+      "experienceTitle": "Learning. Building.",
+      "experienceAccent": "Growing.",
+      "experienceIntro": "Academic progression, competitive programming milestones, and technical development.",
+      "contactTitle": "Have something",
+      "contactAccent": "in mind?",
+      "contactIntro": "A project idea, a collaboration, or a conversation about building better software—I’d like to hear it.",
+      "footerQuote": "\"Success is when preparation meets opportunity.\""
+    },
+    "visibility": {
+      "projects": true,
+      "about": true,
+      "skills": true,
+      "experience": true,
+      "contact": true
+    },
+    "projectOrder": [],
+    "hiddenProjectIds": []
+  },
+  "skills": [
+    {
+      "id": 2,
+      "_id": 2,
+      "title": "Java",
+      "proficiency": 75,
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg"
+      }
+    },
+    {
+      "id": 3,
+      "_id": 3,
+      "title": "Python",
+      "proficiency": 75,
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
+      }
+    },
+    {
+      "id": 4,
+      "_id": 4,
+      "title": "JavaScript",
+      "proficiency": 65,
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"
+      }
+    },
+    {
+      "id": 5,
+      "_id": 5,
+      "title": "C",
+      "proficiency": 55,
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg"
+      }
+    },
+    {
+      "id": 6,
+      "_id": 6,
+      "title": "C++",
+      "proficiency": 50,
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg"
+      }
+    },
+    {
+      "id": 7,
+      "_id": 7,
+      "title": "HTML",
+      "proficiency": 85,
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg"
+      }
+    },
+    {
+      "id": 8,
+      "_id": 8,
+      "title": "CSS",
+      "proficiency": 75,
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg"
+      }
+    },
+    {
+      "id": 9,
+      "_id": 9,
+      "title": "React",
+      "proficiency": 65,
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
+      }
+    },
+    {
+      "id": 10,
+      "_id": 10,
+      "title": "Node.js",
+      "proficiency": 60,
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg"
+      }
+    },
+    {
+      "id": 11,
+      "_id": 11,
+      "title": "Express.js",
+      "proficiency": 60,
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg"
+      }
+    },
+    {
+      "id": 12,
+      "_id": 12,
+      "title": "NumPy",
+      "proficiency": 75,
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg"
+      }
+    },
+    {
+      "id": 13,
+      "_id": 13,
+      "title": "Pandas",
+      "proficiency": 75,
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg"
+      }
+    },
+    {
+      "id": 14,
+      "_id": 14,
+      "title": "SQL",
+      "proficiency": 75,
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azuresqldatabase/azuresqldatabase-original.svg"
+      }
+    },
+    {
+      "id": 15,
+      "_id": 15,
+      "title": "PostgreSQL",
+      "proficiency": 75,
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg"
+      }
+    },
+    {
+      "id": 16,
+      "_id": 16,
+      "title": "MongoDB",
+      "proficiency": 55,
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg"
+      }
+    },
+    {
+      "id": 18,
+      "_id": 18,
+      "title": "Machine Learning",
+      "proficiency": 30,
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg"
+      }
+    },
+    {
+      "id": 19,
+      "_id": 19,
+      "title": "Git",
+      "proficiency": 70,
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg"
+      }
+    },
+    {
+      "id": 20,
+      "_id": 20,
+      "title": "GitHub",
+      "proficiency": 70,
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
+      }
+    },
+    {
+      "id": 21,
+      "_id": 21,
+      "title": "Figma",
+      "proficiency": 45,
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg"
+      }
+    },
+    {
+      "id": 22,
+      "_id": 22,
+      "title": "DSA",
+      "proficiency": 75,
+      "svg": {
+        "url": "https://res.cloudinary.com/lcvw5npt/image/upload/v1789989773/PORTFOLIO%20SKILL%20IMAGES/l0e7mv3wzsbjpyvwd8mw.jpg"
+      }
+    }
+  ],
+  "timelines": [
+    {
+      "id": 2,
+      "_id": 2,
+      "title": "B.Tech in Computer Science Engineering",
+      "description": "2nd Year (3rd Semester) ·BTECH CSE 2029 ·SLRTCE",
+      "timeline": {
+        "from": "2025",
+        "to": "2029"
+      }
+    },
+    {
+      "id": 3,
+      "_id": 3,
+      "title": "Foundations in Programming & Core CS",
+      "description": "Started building programming foundations in Java, core Data Structures fundamentals, and web development basics.",
+      "timeline": {
+        "from": "2025",
+        "to": "2025"
+      }
+    },
+    {
+      "id": 4,
+      "_id": 4,
+      "title": "Advanced DSA, Data Systems & Machine Learning",
+      "description": "Focused on Advanced DSA, Python (NumPy, Pandas), relational database architecture with PostgreSQL/SQL, full-stack engineering, and introductory Machine Learning.",
+      "timeline": {
+        "from": "2026",
+        "to": "Present"
+      }
+    },
+    {
+      "id": 5,
+      "_id": 5,
+      "title": "Planned Focus: Deep Learning, PyTorch & Production AI",
+      "description": "Planned development focusing on Deep Learning, PyTorch, MLOps, system design, and building reliable production AI systems.",
+      "timeline": {
+        "from": "Upcoming",
+        "to": "Future"
+      }
+    }
+  ],
+  "softwareApplications": [
+    {
+      "id": 2,
+      "_id": 2,
+      "name": "Git",
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg"
+      }
+    },
+    {
+      "id": 3,
+      "_id": 3,
+      "name": "GitHub",
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
+      }
+    },
+    {
+      "id": 4,
+      "_id": 4,
+      "name": "Visual Studio Code",
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg"
+      }
+    },
+    {
+      "id": 5,
+      "_id": 5,
+      "name": "Figma",
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg"
+      }
+    },
+    {
+      "id": 6,
+      "_id": 6,
+      "name": "PostgreSQL",
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg"
+      }
+    },
+    {
+      "id": 7,
+      "_id": 7,
+      "name": "MongoDB",
+      "svg": {
+        "url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg"
+      }
+    },
+    {
+      "id": 8,
+      "_id": 8,
+      "name": "Cloudinary",
+      "svg": {
+        "url": "https://res.cloudinary.com/cloudinary/image/upload/dpr_auto/w_80/v1/logo/for_white_bg/cloudinary_icon_for_white_bg.svg"
+      }
+    }
+  ],
+  "testimonials": []
+}

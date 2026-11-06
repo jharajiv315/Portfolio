@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
-export default function Footer({ user }) {
+export default function Footer({ user, copy = {} }) {
   const currentYear = new Date().getFullYear();
   const fullName = user?.fullName || "Rajiv Jha";
 
@@ -32,7 +32,11 @@ export default function Footer({ user }) {
           className="flex items-center gap-6 text-lg sm:text-xl text-[#57534E] mb-6"
         >
           <a
-            href={user?.linkedinURL || user?.linkedInURL || "https://www.linkedin.com/in/rajiv-jha-9b36ba3a2/"}
+            href={
+              user?.linkedinURL ||
+              user?.linkedInURL ||
+              "https://www.linkedin.com/in/rajiv-jha-9b36ba3a2/"
+            }
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-[#0A66C2] transition-colors duration-200 hover:scale-110 transform"
@@ -59,7 +63,7 @@ export default function Footer({ user }) {
           transition={{ duration: 0.6, delay: 0.25 }}
           className="text-xs sm:text-sm font-serif italic text-[#78716C] mb-3 max-w-md"
         >
-          "Success is when preparation meets opportunity."
+          {copy.footerQuote}
         </motion.p>
 
         {/* Copyright */}

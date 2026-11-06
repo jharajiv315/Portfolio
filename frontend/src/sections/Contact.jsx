@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import { API_URL } from "../config";
-export default function Contact({ user }) {
+export default function Contact({ user, copy = {}, preview = false }) {
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -21,6 +21,10 @@ export default function Contact({ user }) {
   const change = (e) => setForm({ ...form, [e.target.name]: e.target.value });
   const submit = async (e) => {
     e.preventDefault();
+    if (preview) {
+      setError("Contact submission is disabled in preview.");
+      return;
+    }
     setError("");
     if (!form.name.trim() || !form.email.trim() || !form.idea.trim()) {
       setError("Please complete your name, email, and message.");
@@ -55,14 +59,11 @@ export default function Contact({ user }) {
         <div>
           <p className="studio-eyebrow">05 / Start a conversation</p>
           <h2>
-            Have something
+            {copy.contactTitle}
             <br />
-            <em>in mind?</em>
+            <em>{copy.contactAccent}</em>
           </h2>
-          <p className="contact-intro">
-            A project idea, a collaboration, or a conversation about building
-            better software—I’d like to hear it.
-          </p>
+          <p className="contact-intro">{copy.contactIntro}</p>
           {user?.email && (
             <a href={`mailto:${user.email}`} className="contact-email">
               <Mail size={18} />
@@ -158,7 +159,7 @@ export default function Contact({ user }) {
                 <button
                   type="submit"
                   className="studio-button"
-                  disabled={loading}
+                  disabled={loading || preview}
                 >
                   {loading ? (
                     <>

@@ -1,14 +1,14 @@
 import { ArrowUpRight, Code2, BrainCircuit, Layers3 } from "lucide-react";
-export default function About({ user }) {
+export default function About({ user, copy = {} }) {
   return (
     <section id="about" className="studio-section">
       <div className="studio-container about-layout">
         <div>
           <p className="studio-eyebrow">02 / A little about me</p>
           <h2>
-            Curious by nature.
+            {copy.aboutTitle}
             <br />
-            <em>Engineer by practice.</em>
+            <em>{copy.aboutAccent}</em>
           </h2>
           <a href="#contact" className="studio-text-link">
             Let’s connect <ArrowUpRight size={17} />
@@ -19,18 +19,8 @@ export default function About({ user }) {
             {user?.aboutMe ||
               "Full-stack developer and computer science student."}
           </p>
-          <p>
-            I’m studying computer science and building my foundations in
-            software engineering and AI/ML. I enjoy turning a complex problem
-            into smaller, understandable pieces—and then into something people
-            can use.
-          </p>
-          <p>
-            My work brings together full-stack development, data, and
-            algorithms. Every project is a chance to make better decisions,
-            understand a system more deeply, and improve the details that
-            matter.
-          </p>
+          <p>{copy.aboutP1}</p>
+          <p>{copy.aboutP2}</p>
           <div className="about-focus">
             <span>
               <Code2 size={18} />

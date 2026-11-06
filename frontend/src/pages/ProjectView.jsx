@@ -1,3 +1,4 @@
+import usePortfolioData from "../hooks/usePortfolioData";
 import { API_URL } from "../config";
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
@@ -6,39 +7,17 @@ import axios from "axios";
 import { ArrowLeft, Github, ExternalLink, Layers, Cpu } from "lucide-react";
 
 export const ProjectView = () => {
-  const [project, setProject] = useState(null);
-  const [loading, setLoading] = useState(true);
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const { projects, loading, refreshing, error, isPreview, previewToken } =
+    usePortfolioData();
+  const project = projects.find((p) => String(p.id || p._id) === id);
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    window.scrollTo(0, 0);
   }, [id]);
-
-  useEffect(() => {
-    const getProject = async () => {
-      try {
-        setLoading(true);
-        const res = await axios.get(`${API_URL}/api/v1/project/get/${id}`, {
-          withCredentials: true,
-        });
-        if (res.data && res.data.project) {
-          setProject(res.data.project);
-        }
-      } catch (error) {
-        toast.error(
-          error.response?.data?.message || "Failed to load project details",
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-    getProject();
-  }, [id]);
-
   const handleReturn = () => {
     // If previous history entry exists in current window, navigate back to preserve scroll position
-    navigate("/#projects");
+    navigate(previewToken ? `/#preview=${previewToken}` : "/#projects");
   };
 
   const hasGitRepo =
@@ -60,8 +39,12 @@ export const ProjectView = () => {
 
   return (
     <div className="relative min-h-screen bg-[#FAF7F2] text-[#1C1917] py-12 px-5 sm:px-8">
-
       <div className="max-w-5xl mx-auto relative z-10">
+        {isPreview && (
+          <div className="portfolio-preview-banner">
+            Draft preview · Not published
+          </div>
+        )}
         {/* Navigation Bar / Return */}
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-[#E8E1D5]">
           <button
@@ -77,13 +60,13 @@ export const ProjectView = () => {
           </span>
         </div>
 
-        {loading ? (
+        {loading || (!project && refreshing) ? (
           <div className="flex items-center justify-center min-h-[50vh]">
             <div className="w-8 h-8 rounded-full border-2 border-[#B84A1C] border-t-transparent animate-spin" />
           </div>
         ) : !project ? (
           <div className="text-center py-20 text-[#78716C]">
-            Project not found or unavailable.
+            {error || "Project not found or unavailable."}
           </div>
         ) : (
           <div className="flex flex-col gap-10">
@@ -115,6 +98,45 @@ export const ProjectView = () => {
               />
             </div>
 
+            {project.caseStudy && (
+              <div className="project-case-study">
+                {[
+                  ["problem", "The problem"],
+                  ["contribution", "Project contribution"],
+                  ["decisions", "Engineering decisions"],
+                  ["lessons", "Lessons & takeaways"],
+                ].map(
+                  ([key, label]) =>
+                    project.caseStudy[key] && (
+                      <section key={key}>
+                        <h2>{label}</h2>
+                        <p>{project.caseStudy[key]}</p>
+                      </section>
+                    ),
+                )}
+              </div>
+            )}
+            {project.caseStudy?.screenshots?.length > 0 && (
+              <section className="case-gallery">
+                <h2>Project screenshots</h2>
+                <div>
+                  {project.caseStudy.screenshots.map((url, i) => (
+                    <a
+                      key={url}
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img
+                        src={url}
+                        loading="lazy"
+                        alt={`${project.title} screenshot ${i + 1}`}
+                      />
+                    </a>
+                  ))}
+                </div>
+              </section>
+            )}
             {/* Content Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Main Description */}

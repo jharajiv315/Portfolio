@@ -9,7 +9,7 @@ import {
 import { SiLeetcode } from "react-icons/si";
 import developerMascot from "../assets/developer-mascot.png";
 
-export default function Hero({ user, projectCount = 0 }) {
+export default function Hero({ user, projectCount = 0, copy = {} }) {
   const name = user?.fullName || "Rajiv Jha";
   const resume = user?.resume?.url;
   const linkedIn = user?.linkedinURL || user?.linkedInURL;
@@ -18,26 +18,25 @@ export default function Hero({ user, projectCount = 0 }) {
       <div className="hero-copy">
         <p className="studio-eyebrow">
           <span className="status-dot" />
-          Computer science · Full-stack · AI/ML
+          {copy.heroEyebrow}
         </p>
         <h1>
-          Thoughtful code.
+          {copy.heroLine1}
           <br />
-          Useful products.
+          {copy.heroLine2}
           <br />
-          <span className="hero-name">I’m {name}.</span>
+          <span className="hero-name">
+            {copy.heroNameTemplate?.replace("{name}", name)}
+          </span>
         </h1>
         <p className="hero-description">
           {user?.aboutMe ||
             "Full-stack developer and computer science student exploring AI, data, and the systems behind useful software."}
         </p>
-        <p className="hero-support">
-          From an idea to a working application, I learn by building, testing,
-          and improving.
-        </p>
+        <p className="hero-support">{copy.heroSupport}</p>
         <div className="studio-actions">
           <a href="#projects" className="studio-button">
-            Explore my work <ArrowDown size={17} />
+            {copy.heroPrimaryLabel} <ArrowDown size={17} />
           </a>
           <a
             href={resume || "#contact"}
@@ -46,7 +45,7 @@ export default function Hero({ user, projectCount = 0 }) {
             className="studio-button studio-button-outline"
           >
             <FileText size={17} />
-            {resume ? "View résumé" : "Get in touch"}
+            {resume ? copy.heroResumeLabel : "Get in touch"}
           </a>
         </div>
         <div className="hero-socials flex-wrap">
@@ -60,7 +59,7 @@ export default function Hero({ user, projectCount = 0 }) {
             <Github size={19} />
           </a>
           <a
-            href="https://leetcode.com/u/Rajiv_Jha/"
+            href={user?.leetcodeURL || "https://leetcode.com/u/Rajiv_Jha/"}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Rajiv on LeetCode"
@@ -87,7 +86,7 @@ export default function Hero({ user, projectCount = 0 }) {
       </div>
       <div className="hero-visual">
         <div className="portrait-label">
-          <span>THE PERSON BEHIND THE CODE</span>
+          <span>{copy.portraitLabel}</span>
           <ArrowUpRight size={18} />
         </div>
         <div className="portrait-frame">
@@ -99,14 +98,14 @@ export default function Hero({ user, projectCount = 0 }) {
         </div>
         <div className="portrait-caption">
           <div>
-            <strong>Always a work in progress.</strong>
-            <span>Curiosity → code → iteration</span>
+            <strong>{copy.portraitCaption}</strong>
+            <span>{copy.portraitSubcaption}</span>
           </div>
           <span className="portrait-mark">RJ.</span>
         </div>
       </div>
       <div className="hero-bottom">
-        <span>Building at the intersection of software & AI.</span>
+        <span>{copy.heroFooter}</span>
         <a href="#projects">
           Selected work{" "}
           {projectCount > 0 && (

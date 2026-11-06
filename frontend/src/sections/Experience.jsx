@@ -10,11 +10,7 @@ function DesktopExperienceCard({ exp, progress }) {
   const isTop = exp.position === "top";
   const opacity = useTransform(progress, exp.threshold, [0, 1]);
   const scale = useTransform(progress, exp.threshold, [0.85, 1]);
-  const y = useTransform(
-    progress,
-    exp.threshold,
-    isTop ? [-25, 0] : [25, 0]
-  );
+  const y = useTransform(progress, exp.threshold, isTop ? [-25, 0] : [25, 0]);
 
   return (
     <motion.div
@@ -34,7 +30,9 @@ function DesktopExperienceCard({ exp, progress }) {
 
       <div className="text-[11px] font-sans font-semibold text-[#B84A1C] flex items-center justify-between mb-1.5">
         <span className="truncate max-w-[140px]">{exp.company}</span>
-        <span className="text-[#78716C] text-[11px] font-normal">{exp.period}</span>
+        <span className="text-[#78716C] text-[11px] font-normal">
+          {exp.period}
+        </span>
       </div>
 
       <h3 className="text-sm sm:text-base font-serif font-bold text-[#1C1917] mb-1.5 leading-snug">
@@ -65,7 +63,7 @@ function DesktopExperienceCard({ exp, progress }) {
 // MAIN EXPERIENCE SECTION
 // =====================================================
 
-export default function Experience({ timelines = [] }) {
+export default function Experience({ timelines = [], copy = {} }) {
   const sectionRef = useRef(null);
 
   const { scrollYProgress } = useScroll({
@@ -96,12 +94,17 @@ export default function Experience({ timelines = [] }) {
     const desc = item.description || "";
     const skillList = [];
     if (desc.includes("Java")) skillList.push("Java");
-    if (desc.includes("DSA") || desc.includes("Data Structures")) skillList.push("DSA");
+    if (desc.includes("DSA") || desc.includes("Data Structures"))
+      skillList.push("DSA");
     if (desc.includes("Python")) skillList.push("Python");
-    if (desc.includes("PostgreSQL") || desc.includes("SQL")) skillList.push("PostgreSQL");
-    if (desc.includes("Machine Learning") || desc.includes("AI")) skillList.push("AIML");
-    if (desc.includes("Deep Learning") || desc.includes("PyTorch")) skillList.push("PyTorch");
-    if (desc.includes("Full-Stack") || desc.includes("web")) skillList.push("Full Stack");
+    if (desc.includes("PostgreSQL") || desc.includes("SQL"))
+      skillList.push("PostgreSQL");
+    if (desc.includes("Machine Learning") || desc.includes("AI"))
+      skillList.push("AIML");
+    if (desc.includes("Deep Learning") || desc.includes("PyTorch"))
+      skillList.push("PyTorch");
+    if (desc.includes("Full-Stack") || desc.includes("web"))
+      skillList.push("Full Stack");
     if (skillList.length === 0) skillList.push("Computer Science");
 
     const total = sortedTimelines.length;
@@ -114,7 +117,9 @@ export default function Experience({ timelines = [] }) {
     return {
       id: item._id || item.id || index + 1,
       role: item.title,
-      company: item.title.includes("B.Tech") ? "University Degree" : "Technical Milestone",
+      company: item.title.includes("B.Tech")
+        ? "University Degree"
+        : "Technical Milestone",
       period: period,
       position: position,
       description: item.description,
@@ -128,10 +133,10 @@ export default function Experience({ timelines = [] }) {
     experiences.length === 1
       ? "grid-cols-1"
       : experiences.length === 2
-      ? "grid-cols-2"
-      : experiences.length === 3
-      ? "grid-cols-3"
-      : "grid-cols-4";
+        ? "grid-cols-2"
+        : experiences.length === 3
+          ? "grid-cols-3"
+          : "grid-cols-4";
 
   return (
     <section
@@ -152,13 +157,18 @@ export default function Experience({ timelines = [] }) {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <p className="studio-eyebrow justify-center">04 / The journey so far</p>
+            <p className="studio-eyebrow justify-center">
+              04 / The journey so far
+            </p>
             <h2 className="font-serif font-bold text-3xl sm:text-4xl md:text-5xl text-[#1C1917] tracking-tight">
-              Learning. Building. <span className="text-[#B84A1C] italic font-serif">Growing.</span>
+              {copy.experienceTitle}{" "}
+              <span className="text-[#B84A1C] italic font-serif">
+                {copy.experienceAccent}
+              </span>
             </h2>
 
             <p className="mt-3 text-sm sm:text-base text-[#57534E] max-w-2xl mx-auto leading-relaxed">
-              Academic progression, competitive programming milestones, and technical development.
+              {copy.experienceIntro}
             </p>
           </motion.div>
         </div>
@@ -166,7 +176,9 @@ export default function Experience({ timelines = [] }) {
         {/* ================= DESKTOP HORIZONTAL TIMELINE ================= */}
         <div className="hidden lg:block relative py-6">
           {/* 1. TOP CARDS ROW */}
-          <div className={`grid ${colsClass} gap-6 items-end min-h-[200px] pb-6`}>
+          <div
+            className={`grid ${colsClass} gap-6 items-end min-h-[200px] pb-6`}
+          >
             {experiences.map((exp, index) => {
               if (exp.position !== "top") {
                 return <div key={`top-empty-${exp.id}`} />;
@@ -185,7 +197,9 @@ export default function Experience({ timelines = [] }) {
 
                   <div className="text-[11px] font-sans font-semibold text-[#B84A1C] flex items-center justify-between mb-1.5">
                     <span>{exp.company}</span>
-                    <span className="text-[#78716C] text-[11px] font-normal">{exp.period}</span>
+                    <span className="text-[#78716C] text-[11px] font-normal">
+                      {exp.period}
+                    </span>
                   </div>
 
                   <h3 className="text-sm sm:text-base font-serif font-bold text-[#1C1917] mb-1.5 leading-snug">
@@ -225,7 +239,10 @@ export default function Experience({ timelines = [] }) {
 
             <div className={`w-full grid ${colsClass} gap-6 relative z-10`}>
               {experiences.map((exp, index) => (
-                <div key={`dot-${exp.id}`} className="flex justify-center items-center">
+                <div
+                  key={`dot-${exp.id}`}
+                  className="flex justify-center items-center"
+                >
                   <motion.div
                     initial={{ scale: 0 }}
                     whileInView={{ scale: 1 }}
@@ -242,7 +259,9 @@ export default function Experience({ timelines = [] }) {
           </div>
 
           {/* 3. BOTTOM CARDS ROW */}
-          <div className={`grid ${colsClass} gap-6 items-start min-h-[200px] pt-6`}>
+          <div
+            className={`grid ${colsClass} gap-6 items-start min-h-[200px] pt-6`}
+          >
             {experiences.map((exp, index) => {
               if (exp.position !== "bottom") {
                 return <div key={`bottom-empty-${exp.id}`} />;
@@ -260,8 +279,12 @@ export default function Experience({ timelines = [] }) {
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-0.5 h-3 bg-[#B84A1C]/70" />
 
                   <div className="text-[11px] font-sans font-semibold text-[#B84A1C] flex items-center justify-between mb-1.5">
-                    <span className="truncate max-w-[140px]">{exp.company}</span>
-                    <span className="text-[#78716C] text-[11px] font-normal">{exp.period}</span>
+                    <span className="truncate max-w-[140px]">
+                      {exp.company}
+                    </span>
+                    <span className="text-[#78716C] text-[11px] font-normal">
+                      {exp.period}
+                    </span>
                   </div>
 
                   <h3 className="text-sm sm:text-base font-serif font-bold text-[#1C1917] mb-1.5 leading-snug">
@@ -324,7 +347,9 @@ export default function Experience({ timelines = [] }) {
                   </span>
                 </div>
 
-                <h3 className="text-sm sm:text-base font-serif font-bold text-[#1C1917] mb-1.5 leading-snug">{exp.role}</h3>
+                <h3 className="text-sm sm:text-base font-serif font-bold text-[#1C1917] mb-1.5 leading-snug">
+                  {exp.role}
+                </h3>
 
                 <p className="text-[#57534E] text-xs sm:text-sm font-sans leading-relaxed mb-3">
                   {exp.description}

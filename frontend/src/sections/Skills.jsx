@@ -1,9 +1,4 @@
-import {
-  Code2,
-  PanelsTopLeft,
-  BrainCircuit,
-  Wrench,
-} from "lucide-react";
+import { Code2, PanelsTopLeft, BrainCircuit, Wrench } from "lucide-react";
 const groups = [
   {
     name: "Languages",
@@ -39,7 +34,11 @@ const groups = [
   },
   { name: "Tools & more", icon: Wrench, keys: [] },
 ];
-export default function Skills({ skills = [], softwareApplications = [] }) {
+export default function Skills({
+  skills = [],
+  softwareApplications = [],
+  copy = {},
+}) {
   const buckets = groups.map((g) => ({ ...g, items: [] }));
   for (const skill of skills) {
     const key = String(skill.title || "")
@@ -56,15 +55,12 @@ export default function Skills({ skills = [], softwareApplications = [] }) {
           <div>
             <p className="studio-eyebrow">03 / My toolkit</p>
             <h2>
-              The tools behind
+              {copy.skillsTitle}
               <br />
-              <em>the thinking.</em>
+              <em>{copy.skillsAccent}</em>
             </h2>
           </div>
-          <p>
-            A growing foundation across software development, algorithms, and
-            working with data.
-          </p>
+          <p>{copy.skillsIntro}</p>
         </div>
         <div className="skill-group-grid">
           {buckets
