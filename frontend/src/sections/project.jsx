@@ -1,4 +1,5 @@
-import { ArrowUpRight, Github, ArrowRight } from "lucide-react";
+import { useRef, useState } from "react";
+import { ArrowUpRight, Github, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Projects({
@@ -8,6 +9,42 @@ export default function Projects({
   copy = {},
   previewToken,
 }) {
+  const [selected, setSelected] = useState(0);
+  const [drag, setDrag] = useState(0);
+  const gesture = useRef(null);
+  const suppressClick = useRef(false);
+  const active = projects.length ? selected % projects.length : 0;
+  const move = (delta) => {
+    if (projects.length > 1) setSelected((active + delta + projects.length) % projects.length);
+    setDrag(0);
+  };
+  const pointerDown = (event) => {
+    if (projects.length < 2 || !event.isPrimary || event.button !== 0) return;
+    suppressClick.current = false;
+    gesture.current = { x: event.clientX, y: event.clientY, horizontal: false, id: event.pointerId };
+  };
+  const pointerMove = (event) => {
+    const start = gesture.current;
+    if (!start || start.id !== event.pointerId) return;
+    const dx = event.clientX - start.x, dy = event.clientY - start.y;
+    if (!start.horizontal) {
+      if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) { gesture.current = null; return; }
+      if (Math.abs(dx) < 10) return;
+      start.horizontal = true;
+      event.currentTarget.setPointerCapture(event.pointerId);
+    }
+    suppressClick.current = true;
+    setDrag(Math.max(-100, Math.min(100, dx * 0.45)));
+  };
+  const pointerEnd = (event) => {
+    const start = gesture.current;
+    gesture.current = null;
+    if (start?.horizontal && event.type !== 'pointercancel') {
+      const dx = event.clientX - start.x;
+      if (Math.abs(dx) >= 50) move(dx < 0 ? 1 : -1);
+    }
+    setDrag(0);
+  };
   return (
     <section id="projects" className="studio-section project-section">
       <div className="studio-container">
@@ -20,7 +57,16 @@ export default function Projects({
           </div>
           <p>{copy.projectsIntro}</p>
         </div>
-        <div className="studio-project-grid">
+        <div className="project-deck" role="region" aria-roledescription="carousel" aria-label="Selected projects"
+          tabIndex={projects.length > 1 ? 0 : undefined}
+          onKeyDown={event => {
+            if (event.target !== event.currentTarget) return;
+            if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') { event.preventDefault(); move(event.key === 'ArrowRight' ? 1 : -1); }
+          }}
+          onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerEnd} onPointerCancel={pointerEnd}
+          onDragStart={event => event.preventDefault()}
+          onClickCapture={event => { if (suppressClick.current) { event.preventDefault(); event.stopPropagation(); suppressClick.current = false; } }}>
+          <div className="project-deck-cards">
           {loading && !projects.length
             ? [1, 2, 3].map((n) => (
                 <div
@@ -35,6 +81,8 @@ export default function Projects({
               ))
             : projects.map((project, index) => {
                 const id = project._id || project.id;
+                const rank = (index - active + projects.length) % projects.length;
+                const isActive = rank === 0;
                 const detailsURL = `/project/${id}${previewToken ? `#preview=${previewToken}` : ""}`;
                 const tech = (
                   Array.isArray(project.technologies)
@@ -45,7 +93,11 @@ export default function Projects({
                   .filter(Boolean);
                 const live = /^https?:\/\//.test(project.projectLink || "");
                 return (
-                  <article className={`studio-project-card ${index === 0 ? "project-featured" : ""}`} key={id}>
+                  <article className={`studio-project-card project-featured deck-card ${isActive ? 'deck-active' : 'deck-behind'} ${isActive && drag ? 'deck-dragging' : ''}`} key={id}
+                    role="group" aria-roledescription="slide" aria-label={`${index + 1} of ${projects.length}: ${project.title}`}
+                    aria-hidden={!isActive} inert={isActive ? undefined : ''}
+                    style={{ '--deck-rank': Math.min(rank, 2), '--deck-drag': `${isActive ? drag : 0}px`, zIndex: projects.length - rank, visibility: rank > 2 ? 'hidden' : undefined }}>
+
                     <Link
                       to={detailsURL}
                       className="project-preview"
@@ -131,6 +183,17 @@ export default function Projects({
                 );
               })}
         </div>
+        </div>
+        {projects.length > 1 && (
+          <div className="project-deck-controls">
+            <p className="deck-hint">Swipe to explore <span aria-hidden="true">↔</span></p>
+            <div className="deck-pagination">
+              <button type="button" onClick={() => move(-1)} aria-label="Previous project"><ChevronLeft size={19} /></button>
+              <span aria-live="polite" aria-atomic="true">{String(active + 1).padStart(2, '0')} <span aria-hidden="true">/</span><span className="sr-only">of</span> {String(projects.length).padStart(2, '0')}<span className="sr-only">: {projects[active]?.title}</span></span>
+              <button type="button" onClick={() => move(1)} aria-label="Next project"><ChevronRight size={19} /></button>
+            </div>
+          </div>
+        )}
         {!loading && !projects.length && (
           <p className="studio-empty">
             Projects are being updated. Explore my GitHub in the meantime.

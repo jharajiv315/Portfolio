@@ -1804,3 +1804,20 @@
   .reveal-section { opacity: 0; transform: translateY(12px); transition: opacity 420ms ease, transform 420ms ease; }
   .reveal-section.reveal-ready { opacity: 1; transform: none; }
 }
+/* Full-size project deck: only the active card is interactive. */
+.project-deck { position: relative; touch-action: pan-y pinch-zoom; border-radius: 18px; margin-bottom: 30px; }
+.project-deck-cards { display: grid; grid-template-columns: minmax(0,1fr); isolation: isolate; }
+.project-deck .deck-card { grid-area: 1 / 1; width: 100%; min-width: 0; transform-origin: center bottom; transform: translateX(var(--deck-drag)) translateY(calc(var(--deck-rank) * 13px)) scale(calc(1 - var(--deck-rank) * .022)); transition: transform 300ms cubic-bezier(.22,.7,.25,1), box-shadow 250ms ease; }
+.project-deck .deck-behind { pointer-events: none; background: #eee7dc; border-color: #ddd3c4; }
+.project-deck .deck-behind > * { visibility: hidden; }
+.project-deck .deck-active { background: #fffdf9; box-shadow: 0 8px 24px #51432a0a; }
+.project-deck .deck-dragging { transition: none; cursor: grabbing; user-select: none; }
+.project-deck .deck-card:hover { transform: translateX(var(--deck-drag)) translateY(calc(var(--deck-rank) * 13px)) scale(calc(1 - var(--deck-rank) * .022)); }
+.project-deck-controls { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 46px; }
+.deck-hint { font-size: 12px; color: #786e60; display: flex; align-items: center; gap: 12px; }
+.deck-pagination { display: flex; align-items: center; gap: 16px; }
+.deck-pagination > span { font-size: 12px; color: #665d50; font-variant-numeric: tabular-nums; }
+.deck-pagination button { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; border: 1px solid #ded5c8; background: #fffdf9; color: #b84a1c; transition: background-color 160ms ease; }
+.deck-pagination button:hover { background: #f0e8db; }
+@media (max-width: 767px) { .project-deck .deck-card { display: flex; } .project-deck-controls { margin-top: 40px; } .deck-pagination { gap: 10px; } }
+@media (prefers-reduced-motion: reduce) { .project-deck .deck-card { transition: none; } }
