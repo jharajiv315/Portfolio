@@ -16,7 +16,9 @@ function cached() {
       parsed.settings
     )
       return (memory = parsed);
-  } catch {}
+  } catch {
+    // Invalid or unavailable browser storage falls back to the bundled snapshot.
+  }
   return baseline;
 }
 export function previewToken() {
@@ -67,7 +69,9 @@ export default function usePortfolioData() {
         memory = content;
         try {
           localStorage.setItem(CACHE_KEY, JSON.stringify(content));
-        } catch {}
+        } catch {
+          // Storage can be blocked or full; the in-memory content still updates.
+        }
       }
       setData(content);
     } catch (e) {
