@@ -41,6 +41,10 @@ jobs:
         working-directory: ./frontend
         run: npm run lint
 
+      - name: Test SEO rendering and sitemap
+        working-directory: ./frontend
+        run: node --test lib/project-seo.test.js
+
       - name: Build Frontend Production Bundle
         working-directory: ./frontend
         run: npm run build

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
-
+Disallow: /api/
 Sitemap: https://portfolio-beta-ochre-90.vercel.app/sitemap.xml

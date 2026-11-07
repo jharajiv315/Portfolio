@@ -22,7 +22,7 @@ export default async function handler(req, res) {
       return res.status(404).send(template);
     }
     res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=60');
-    return res.status(200).send(renderProjectHTML(template, project, content.user.fullName));
+    return res.status(200).send(renderProjectHTML(template, project, content.user.fullName, content.user));
   } catch (error) {
     console.error('Project metadata unavailable:', error.message);
     res.setHeader('Cache-Control','no-store'); res.setHeader('Retry-After','30');
