@@ -24,6 +24,13 @@ export default function Home() {
     previewToken,
   } = usePortfolioData();
   useEffect(() => {
+    document.title = 'Rajiv Jha — Computer Science Student · Aspiring AIML Engineer';
+    const description = document.head.querySelector('meta[name="description"]');
+    if (description) description.content = 'Rajiv Jha — B.Tech Computer Science student building toward AIML engineering through machine learning, algorithms, and full-stack software development.';
+    document.head.querySelectorAll('meta[property^="og:"], meta[name^="twitter:"]').forEach(tag => tag.remove());
+    let canonical = document.head.querySelector('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
+    canonical.href = 'https://portfolio-beta-ochre-90.vercel.app/';
     if (window.location.hash) {
       const target = document.getElementById(window.location.hash.slice(1));
       target?.scrollIntoView();

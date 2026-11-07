@@ -23,3 +23,15 @@ The initial public snapshot is migrated from existing content without changing t
 ## Verification
 
 `npm test --prefix backend` covers public-data projection, draft isolation, preview expiry, stale-revision conflicts, ordering and visibility, public email separation, asset retention, and the HTTP save/preview/publish flow. Both Vite applications must build successfully.
+
+## Backups and recovery
+
+Content & publishing → Backups exports the saved draft as versioned JSON. It includes content and media URLs, not media binaries, authentication or inquiries. Save unsaved form edits first. Import accepts up to 450 KB and restores to the draft only; Preview → Publish remains required. Restore previous published version recovers the one preceding publication. Export before replacing a draft you want to retain. Restore uses revision checks and private-store conditional writes, so concurrent edits are rejected rather than overwritten.
+
+## Project sharing
+
+Vercel serves `/project/:id` through `api/project.js`, injecting current published title, description, canonical URL and Open Graph/Twitter image into the built application shell. Hidden/unknown projects return 404 with noindex. Successful pages have a 60-second CDN cache; social networks can retain their own cached previews longer. A temporary content outage returns 503 with the application shell and Retry-After, rather than exposing draft or obsolete project metadata. Project title, description and thumbnail are managed in existing project editors and take effect after publication.
+
+## Inquiry inbox
+
+Search matches name, email, subject and message. Filters include All, Unread, New, In discussion and Closed. Read state and status are independent, persist in private storage, and can be changed or reopened. Existing inquiries start unread; existing replied inquiries default to In discussion. A reply uses server email delivery; if that fails, the saved reply exposes an email-app fallback. Tracking does not send any email.

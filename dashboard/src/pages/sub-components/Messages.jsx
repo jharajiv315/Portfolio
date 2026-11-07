@@ -1,3 +1,5 @@
+import axios from "axios";
+import { API_URL } from "../../config";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -57,6 +59,19 @@ const Messages = () => {
   );
 
   const [messageId, setMessageId] = useState("");
+  const [fallback, setFallback] = useState(null);
+  const [query, setQuery] = useState(''), [filter, setFilter] = useState('all'), [updating, setUpdating] = useState('');
+  const statusOf = m => m.status || (m.replied ? 'in_discussion' : 'new');
+  const visible = (messages || []).filter(m =>
+    (filter === 'all' || (filter === 'unread' ? !m.readAt : statusOf(m) === filter)) &&
+    [m.senderName, m.email, m.subject, m.message].join(' ').toLowerCase().includes(query.trim().toLowerCase())
+  ).sort((a,b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+  const updateInquiry = async (id, changes) => {
+    setUpdating(String(id));
+    try { await axios.patch(`${API_URL}/api/v1/message/${id}`, changes); dispatch(getAllMessages()); }
+    catch (e) { toast.error(e.response?.data?.message || 'Could not update inquiry.'); }
+    finally { setUpdating(''); }
+  };
 
   // Reply Modal State
   const [isReplyOpen, setIsReplyOpen] = useState(false);
@@ -95,12 +110,6 @@ const Messages = () => {
     const targetSubject = replySubject.trim();
     const targetBody = replyBody.trim();
 
-    // Directly open Gmail composer tab on user click (never blocked by browser popup blocker)
-    if (targetEmail) {
-      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(targetEmail)}&su=${encodeURIComponent(targetSubject)}&body=${encodeURIComponent(targetBody)}`;
-      window.open(gmailUrl, "_blank");
-    }
-
     setMessageId(selectedMessage._id);
     dispatch(
       replyMessage(selectedMessage._id, {
@@ -123,7 +132,8 @@ const Messages = () => {
       dispatch(clearAllMessageErrors());
     }
     if (message) {
-      toast.success("Reply saved in dashboard and opened in Gmail! Click Send in Gmail.");
+      toast.success(message);
+      if (lastReplyResult?.emailDelivered === false) setFallback(lastReplyResult.mailtoUrl);
       setIsReplyOpen(false);
       setSelectedMessage(null);
       dispatch(resetMessagesSlice());
@@ -154,9 +164,17 @@ const Messages = () => {
                 </Button>
               </CardHeader>
 
+              {fallback && <div role="status" className="m-6 rounded-xl border p-4 text-sm">Your reply was saved, but email delivery failed. <a className="underline text-primary" href={fallback}>Open your email app to send it</a><Button variant="ghost" onClick={() => setFallback(null)}>Dismiss</Button></div>}
+              <div className="flex flex-wrap gap-3 px-6 pt-5">
+                <label className="flex-1 min-w-48 text-xs">Search inquiries<Input value={query} onChange={e => setQuery(e.target.value)} placeholder="Name, email, subject or message" className="mt-1" /></label>
+                <label className="text-xs">Filter<select value={filter} onChange={e => setFilter(e.target.value)} className="block mt-1 rounded-lg border bg-background p-2 text-sm">
+                  <option value="all">All ({(messages || []).length})</option><option value="unread">Unread ({(messages || []).filter(m => !m.readAt).length})</option><option value="new">New</option><option value="in_discussion">In discussion</option><option value="closed">Closed</option>
+                </select></label>
+                <p className="w-full text-xs text-muted-foreground" role="status">{visible.length} matching inquiries</p>
+              </div>
               <CardContent className="grid sm:grid-cols-2 gap-5 pt-6">
-                {messages && messages.length > 0 ? (
-                  messages.map((element) => {
+                {visible.length > 0 ? (
+                  visible.map((element) => {
                     const senderEmail = extractEmail(element.email, element.message);
                     const isReplied = Boolean(element.replied);
 
@@ -191,15 +209,7 @@ const Messages = () => {
                             </div>
 
                             <div className="flex flex-col items-end gap-1">
-                              {isReplied ? (
-                                <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800">
-                                  <CheckCircle2 className="h-3 w-3" /> Replied
-                                </span>
-                              ) : (
-                                <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800">
-                                  <Clock className="h-3 w-3" /> New
-                                </span>
-                              )}
+                              <span className="text-xs font-medium text-primary">{({new: 'New', in_discussion: 'In discussion', closed: 'Closed'})[statusOf(element)]}</span>
                               <span className="text-[10px] text-muted-foreground">
                                 {element.createdAt
                                   ? new Date(element.createdAt).toLocaleDateString(undefined, {
@@ -212,6 +222,11 @@ const Messages = () => {
                             </div>
                           </div>
 
+                          <div className="flex flex-wrap items-center gap-2">
+                            {!element.readAt && <span className="text-xs font-semibold text-primary">● Unread</span>}
+                            <Button size="sm" variant="outline" disabled={updating === String(element._id)} onClick={() => updateInquiry(element._id, { read: !element.readAt })}>{element.readAt ? 'Mark unread' : 'Mark read'}</Button>
+                            <label className="text-xs">Status <select aria-label={`Status for ${element.subject}`} className="rounded border bg-background p-2" value={statusOf(element)} disabled={updating === String(element._id)} onChange={e => updateInquiry(element._id, {status: e.target.value})}><option value="new">New</option><option value="in_discussion">In discussion</option><option value="closed">Closed</option></select></label>
+                          </div>
                           {/* Subject */}
                           <div className="text-xs font-semibold text-foreground/90">
                             <span className="text-muted-foreground font-normal">Subject: </span>
@@ -228,7 +243,7 @@ const Messages = () => {
                             <div className="mt-3 p-3 rounded-xl bg-emerald-50/50 border border-emerald-200/60 dark:bg-emerald-950/20 dark:border-emerald-900/40 text-xs">
                               <div className="flex items-center gap-1.5 text-emerald-800 dark:text-emerald-400 font-semibold mb-1">
                                 <CornerDownRight className="h-3.5 w-3.5" />
-                                <span>Your Reply</span>
+                                <span>Saved reply</span>
                                 {element.repliedAt && (
                                   <span className="text-[10px] font-normal text-muted-foreground ml-auto">
                                     {new Date(element.repliedAt).toLocaleDateString(undefined, {
@@ -294,7 +309,7 @@ const Messages = () => {
                 ) : (
                   <div className="col-span-2 text-center py-16 text-muted-foreground">
                     <Mail className="h-12 w-12 mx-auto mb-3 opacity-30" />
-                    <p className="text-base font-serif font-medium">No messages received yet.</p>
+                    <p className="text-base font-serif font-medium">{loading ? "Loading inquiries…" : "No inquiries match this view."}</p>
                     <p className="text-xs text-muted-foreground mt-1">
                       New messages submitted through your portfolio contact form will appear here.
                     </p>

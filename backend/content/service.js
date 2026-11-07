@@ -206,6 +206,7 @@ export function adminState(data) {
     publishedRevision: data.contentPublished?.revision || null,
     publishedAt: data.contentPublished?.publishedAt || null,
     savedAt: data.draftSavedAt || null,
+    previousPublishedAt: data.contentPreviousPublished?.publishedAt || null,
   };
 }
 export function publicContent(data) {

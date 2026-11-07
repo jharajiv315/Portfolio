@@ -163,6 +163,35 @@ export default function ContentStudio({ onDirtyChange = () => {} }) {
       setBusy("");
     }
   };
+  const downloadBackup = async () => {
+    setBusy('backup'); setError('');
+    try {
+      const response = await axios.get(`${endpoint}/backup`);
+      const url = URL.createObjectURL(new Blob([JSON.stringify(response.data, null, 2)], { type: 'application/json' }));
+      const a = document.createElement('a'); a.href = url; a.download = `portfolio-backup-${new Date().toISOString().slice(0,10)}.json`; a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch { setError('Could not download the backup. Please try again.'); }
+    finally { setBusy(''); }
+  };
+  const restore = async (backup, previous = false) => {
+    if (!window.confirm('Replace the current draft with this backup? Download your current draft first if you want to keep it. Your live portfolio will remain unchanged until you preview and publish.')) return;
+    setBusy('restore'); setError('');
+    try {
+      install((await axios.post(`${endpoint}/restore`, { revision: state.revision, backup, previous })).data);
+      toast.success('Draft restored. Preview and publish when ready.');
+    } catch (e) { setError(e.response?.data?.message || 'Restore failed. Check the backup file and try again.'); }
+    finally { setBusy(''); }
+  };
+  const importBackup = async (event) => {
+    const file = event.target.files?.[0]; event.target.value = '';
+    if (!file) return;
+    try {
+      if (file.size > 450000) throw Error('Backup exceeds the 450 KB import limit.');
+      const backup = JSON.parse(await file.text());
+      if (backup.format !== 'rajiv-portfolio-backup' || backup.version !== 1) throw Error('Choose a portfolio backup exported here.');
+      await restore(backup);
+    } catch (e) { setError(e.message || 'Could not read the backup.'); }
+  };
   const update = (fn) => {
     setDraft((current) => {
       const next = structuredClone(current);
@@ -274,7 +303,7 @@ export default function ContentStudio({ onDirtyChange = () => {} }) {
         )}
       </div>
       <nav aria-label="Content settings" className="mb-6 flex flex-wrap gap-2">
-        {["Profile", "Page text", "Visibility & order", "Project stories"].map(
+        {["Profile", "Page text", "Visibility & order", "Project stories", "Backups"].map(
           (name) => (
             <Button
               key={name}
@@ -287,6 +316,22 @@ export default function ContentStudio({ onDirtyChange = () => {} }) {
         )}
       </nav>
       <fieldset disabled={Boolean(busy)} className="min-w-0">
+        {tab === 'Backups' && (
+          <section className="rounded-xl border bg-card p-6 space-y-5">
+            <h3 className="text-lg font-semibold">Back up your work</h3>
+            <p className="text-sm text-muted-foreground">Export your saved draft: profile, projects, skills, timeline, tools, page text and visibility. Media URLs are included; image files, passwords and private inquiries are not. Save unsaved edits before exporting.</p>
+            <Button variant="outline" disabled={dirty} onClick={downloadBackup}>Download saved draft</Button>
+            <div className="border-t pt-5 space-y-3">
+              <h4 className="font-medium">Restore a backup</h4>
+              <p className="text-sm text-muted-foreground">Restore replaces the draft only. Review it in Preview, then Publish to make it live.</p>
+              <label className="block text-sm">Import exported backup (JSON, up to 450 KB)
+                <input type="file" accept="application/json,.json" onChange={importBackup} className="mt-2 block w-full text-sm" />
+              </label>
+              <Button variant="outline" disabled={!state.previousPublishedAt} onClick={() => restore(null, true)}>Restore previous published version</Button>
+              <p className="text-xs text-muted-foreground">{state.previousPublishedAt ? `Previous version: ${new Date(state.previousPublishedAt).toLocaleString()}` : 'A previous version becomes available after your next publication.'}</p>
+            </div>
+          </section>
+        )}
         {tab === "Profile" && (
           <section className="grid gap-6 rounded-xl border bg-card p-6 md:grid-cols-2">
             {PROFILE.map(([key, label]) => (

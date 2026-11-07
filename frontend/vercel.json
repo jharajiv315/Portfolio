@@ -1,5 +1,15 @@
 {
+  "functions": {
+    "api/project.js": {
+      "includeFiles": "dist/index.html",
+      "maxDuration": 60
+    }
+  },
   "rewrites": [
+    {
+      "source": "/project/:id",
+      "destination": "/api/project?id=:id"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"

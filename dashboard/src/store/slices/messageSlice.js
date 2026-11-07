@@ -12,7 +12,6 @@ const messageSlice = createSlice({
   },
   reducers: {
     getAllMessagesRequest(state) {
-      state.messages = [];
       state.error = null;
       state.loading = true;
     },

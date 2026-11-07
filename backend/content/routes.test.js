@@ -71,6 +71,11 @@ test("HTTP draft → preview → publish workflow isolates visitors and rejects 
   assert.equal((await request("/admin", "GET", null, false)).status, 401);
   assert.equal((await request("/admin", "PUT", {}, false)).status, 401);
   assert.equal((await request("/publish", "POST", {}, false)).status, 401);
+  assert.equal((await request('/backup', 'GET', null, false)).status, 401);
+  assert.equal((await request('/restore', 'POST', {}, false)).status, 401);
+  const backup = await request('/backup');
+  assert.equal(backup.status, 200);
+  assert(!JSON.stringify(backup.body).includes('PRIVATE'));
   let { body: state } = await request("/admin");
   state.draft.settings.copy.heroSupport = "Only visible in draft";
   const saved = await request("/admin", "PUT", {

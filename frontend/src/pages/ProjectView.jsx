@@ -1,3 +1,4 @@
+import { projectMetadata } from "../../lib/project-seo";
 import usePortfolioData from "../hooks/usePortfolioData";
 import { API_URL } from "../config";
 import React, { useEffect, useState } from "react";
@@ -11,6 +12,7 @@ export const ProjectView = () => {
   const navigate = useNavigate();
   const {
     projects,
+    user,
     loading,
     refreshing,
     error,
@@ -19,6 +21,24 @@ export const ProjectView = () => {
     settings,
   } = usePortfolioData();
   const project = projects.find((p) => String(p.id || p._id) === id);
+  useEffect(() => {
+    if (!project || isPreview) return;
+    const previousTitle = document.title;
+    const m = projectMetadata(project, user?.fullName);
+    document.title = m.title;
+    const changes = [];
+    let canonical = document.head.querySelector('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
+    canonical.href = m.url;
+    changes.push(() => canonical.remove());
+    for (const [attribute, key, value] of [['name','description',m.description], ['property','og:title',m.title], ['property','og:description',m.description], ['property','og:image',m.image], ['property','og:url',m.url], ['name','twitter:card','summary_large_image'], ['name','twitter:title',m.title], ['name','twitter:description',m.description], ['name','twitter:image',m.image]]) {
+      let tag = document.head.querySelector(`meta[${attribute}="${key}"]`);
+      const old = tag?.getAttribute('content'); const created = !tag;
+      if (!tag) { tag = document.createElement('meta'); tag.setAttribute(attribute,key); document.head.appendChild(tag); }
+      tag.setAttribute('content',value); changes.push(() => created ? tag.remove() : tag.setAttribute('content',old || ''));
+    }
+    return () => { document.title = previousTitle; changes.forEach(undo => undo()); };
+  }, [project, user?.fullName, isPreview]);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);

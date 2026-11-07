@@ -1,3 +1,4 @@
+import { exportBackup, restoreBackup } from "../content/backup.js";
 import express from "express";
 import jwt from "jsonwebtoken";
 import { readStore, mutateStore } from "../storage/blobStore.js";
@@ -71,6 +72,13 @@ export function createContentRouter({
     ),
   );
 
+  router.get('/backup', auth, handle(async (req, res) => {
+    res.set('Content-Disposition', 'attachment; filename="portfolio-backup.json"');
+    res.json(exportBackup((await read()).data));
+  }));
+  router.post('/restore', auth, handle(async (req, res) => {
+    res.json(await mutate(data => restoreBackup(data, req.body)));
+  }));
   return router;
 }
 export default createContentRouter();
