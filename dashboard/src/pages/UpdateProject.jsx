@@ -81,7 +81,9 @@ const UpdateProject = () => {
         });
     };
     getProject();
+  }, [id, message]);
 
+  useEffect(() => {
     if (error) {
       toast.error(error);
       dispatch(clearAllProjectErrors());
@@ -91,7 +93,7 @@ const UpdateProject = () => {
       dispatch(resetProjectSlice());
       dispatch(getAllProjects());
     }
-  }, [id, message, error]);
+  }, [message, error, dispatch]);
 
   const handleUpdateProject = (e) => {
     e.preventDefault();

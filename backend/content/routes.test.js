@@ -127,6 +127,11 @@ test("HTTP draft → preview → publish workflow isolates visitors and rejects 
     live.body.content.settings.copy.heroSupport,
     "Only visible in draft",
   );
+  const publishedBeforeRestore = (await request('', 'GET', null, false)).body;
+  const restored = await request('/restore', 'POST', { revision: saved.body.revision, backup: backup.body });
+  assert.equal(restored.status, 200);
+  assert.deepEqual((await request('', 'GET', null, false)).body, publishedBeforeRestore);
+  assert.equal((await request('/publish', 'POST', {revision:restored.body.revision})).status, 409);
   assert.equal(
     (await request("/preview/not-a-valid-token", "GET", null, false)).status,
     410,

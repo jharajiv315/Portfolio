@@ -7,7 +7,8 @@ import {
   FileText,
 } from "lucide-react";
 import { SiLeetcode } from "react-icons/si";
-import developerMascot from "../assets/developer-mascot.png";
+const portraitURL = (url, width) => url?.includes('res.cloudinary.com/') && url.includes('/image/upload/')
+  ? url.replace('/image/upload/', `/image/upload/f_auto,q_auto,w_${width},c_limit/`) : url;
 
 export default function Hero({
   user,
@@ -120,7 +121,10 @@ export default function Hero({
         </div>
         <div className="portrait-frame">
           <img
-            src={user?.avatar?.url || developerMascot}
+            src={portraitURL(user?.avatar?.url, 900) || '/logo.png'}
+            srcSet={user?.avatar?.url?.includes('res.cloudinary.com/') ? `${portraitURL(user.avatar.url, 480)} 480w, ${portraitURL(user.avatar.url, 900)} 900w` : undefined}
+            sizes="(max-width: 767px) 90vw, 440px"
+            decoding="async"
             alt={`${name}, software developer`}
             fetchPriority="high"
           />
