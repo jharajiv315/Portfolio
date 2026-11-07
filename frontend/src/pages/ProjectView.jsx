@@ -71,7 +71,7 @@ export const ProjectView = () => {
     : [];
 
   return (
-    <div className="relative min-h-screen bg-[#FAF7F2] text-[#1C1917] py-12 px-5 sm:px-8">
+    <div className="case-page relative min-h-screen bg-[#FAF7F2] text-[#1C1917] py-12 px-5 sm:px-8">
       <div className="max-w-5xl mx-auto relative z-10">
         {isPreview && (
           <div className="portfolio-preview-banner">
@@ -102,7 +102,7 @@ export const ProjectView = () => {
             {error || "Project not found or unavailable."}
           </div>
         ) : (
-          <div className="flex flex-col gap-10">
+          <div className="case-layout flex flex-col gap-10">
             {/* Header / Title */}
             <div>
               <p className="text-xs font-semibold text-[#B84A1C] uppercase tracking-wider mb-2">
@@ -112,7 +112,7 @@ export const ProjectView = () => {
                 {project.title}
               </h1>
               {project.deployed && (
-                <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 border border-emerald-200 text-emerald-800">
+                <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-[#F1E9DE] border border-[#E8E1D5] text-[#875337]">
                   Status: {project.deployed}
                 </span>
               )}
@@ -141,7 +141,7 @@ export const ProjectView = () => {
                 ].map(
                   ([key, label]) =>
                     project.caseStudy[key] && (
-                      <section key={key}>
+                      <section key={key} className="case-chapter">
                         <h2>{label}</h2>
                         <p>{project.caseStudy[key]}</p>
                       </section>
@@ -171,9 +171,9 @@ export const ProjectView = () => {
               </section>
             )}
             {/* Content Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="case-overview grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Main Description */}
-              <div className="md:col-span-2 rounded-3xl p-6 sm:p-8 bg-white/95 border border-[#E8E1D5] shadow-xs flex flex-col gap-4">
+              <div className="case-description md:col-span-2 rounded-3xl p-6 sm:p-8 bg-white/95 border border-[#E8E1D5] shadow-xs flex flex-col gap-4">
                 <h2 className="text-xl font-serif font-bold text-[#1C1917] flex items-center gap-2">
                   <Layers className="w-5 h-5 text-[#B84A1C]" />
                   <span>About this Project</span>
@@ -184,7 +184,7 @@ export const ProjectView = () => {
               </div>
 
               {/* Sidebar: Tech & Links */}
-              <div className="rounded-3xl p-6 sm:p-8 bg-white/95 border border-[#E8E1D5] shadow-xs flex flex-col gap-6">
+              <div className="case-facts rounded-3xl p-6 sm:p-8 bg-white/95 border border-[#E8E1D5] shadow-xs flex flex-col gap-6">
                 <div>
                   <h3 className="text-xs uppercase tracking-wider text-[#78716C] mb-3 flex items-center gap-2 font-semibold">
                     <Cpu className="w-4 h-4 text-[#B84A1C]" />

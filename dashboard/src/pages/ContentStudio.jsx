@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useId } from "react";
 import axios from "axios";
 import { API_URL } from "../config";
 import { Button } from "@/components/ui/button";
@@ -44,16 +44,24 @@ function Field({
   hint,
 }) {
   const Tag = multiline ? "textarea" : "input";
+  const inputType = /URL$/.test(label) ? 'url' : /email/i.test(label) ? 'email' : type;
+  const invalid = Boolean(value && ((inputType === 'url' && !/^https?:\/\/[^\s]+$/.test(value)) || (inputType === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))));
+  const fieldId = useId();
   return (
-    <label className="block text-sm font-medium">
+    <label className="studio-field block text-sm font-medium">
       {label}
       <Tag
         className="mt-2 w-full rounded-lg border bg-background px-3 py-2 text-sm font-normal"
-        type={multiline ? undefined : type}
+        id={fieldId}
+        aria-invalid={invalid}
+        aria-describedby={invalid ? `${fieldId}-error` : undefined}
+        type={multiline ? undefined : inputType}
         rows={multiline ? 4 : undefined}
         value={value || ""}
         onChange={(e) => onChange(e.target.value)}
       />
+      {invalid && <span id={`${fieldId}-error`} className="mt-1 block text-xs text-destructive">{inputType === 'url' ? 'Use a full https:// or http:// address.' : 'Enter a valid email address.'}</span>}
+      {multiline && <span className="mt-1 block text-right text-[11px] font-normal text-muted-foreground">{(value || '').length.toLocaleString()} characters</span>}
       {hint && (
         <span className="mt-1 block text-xs font-normal text-muted-foreground">
           {hint}
@@ -224,11 +232,11 @@ export default function ContentStudio({ onDirtyChange = () => {} }) {
     );
   return (
     <div className="mx-auto max-w-6xl p-4 sm:p-8">
-      <div className="sticky top-0 z-20 mb-6 rounded-xl border bg-card/95 p-5 shadow-sm backdrop-blur">
+      <div className="content-toolbar sticky top-0 z-20 mb-6 rounded-xl border bg-card/95 p-5 shadow-sm backdrop-blur">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <h2 className="text-xl font-semibold">Content & publishing</h2>
-            <p className="mt-1 text-xs text-muted-foreground" role="status">
+            <p className={`publishing-state ${dirty ? "state-unsaved" : state.revision === state.publishedRevision ? "state-published" : "state-draft"}`} role="status">
               {dirty
                 ? "Unsaved changes"
                 : state.revision === state.publishedRevision
@@ -307,6 +315,7 @@ export default function ContentStudio({ onDirtyChange = () => {} }) {
           (name) => (
             <Button
               key={name}
+              aria-pressed={tab === name}
               variant={tab === name ? "default" : "outline"}
               onClick={() => setTab(name)}
             >
@@ -352,6 +361,7 @@ export default function ContentStudio({ onDirtyChange = () => {} }) {
                 }
               />
             ))}
+            {draft.user.avatar?.url && <div className="flex items-center gap-4 rounded-xl border p-4 md:col-span-2"><img src={draft.user.avatar.url} alt="Current profile preview" className="h-20 w-20 rounded-xl object-cover" /><p className="text-sm text-muted-foreground">Profile image preview<br /><span className="text-xs">Your saved draft image appears here before publication.</span></p></div>}
             <Field
               label="Avatar URL"
               value={draft.user.avatar?.url}

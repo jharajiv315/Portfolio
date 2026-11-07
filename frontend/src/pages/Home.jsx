@@ -36,6 +36,15 @@ export default function Home() {
       target?.scrollIntoView();
     }
   }, []);
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+    const nodes = [...document.querySelectorAll('.studio-section-heading')];
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('reveal-ready'); observer.unobserve(entry.target); } });
+    }, { threshold: 0.1 });
+    nodes.forEach(node => { node.classList.add('reveal-section'); observer.observe(node); });
+    return () => { observer.disconnect(); nodes.forEach(node => node.classList.remove('reveal-section','reveal-ready')); };
+  }, [settings.visibility]);
   const copy = settings.copy;
   const visible = settings.visibility;
   if (isPreview && (loading || error))

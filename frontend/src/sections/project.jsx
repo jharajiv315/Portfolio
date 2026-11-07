@@ -45,7 +45,7 @@ export default function Projects({
                   .filter(Boolean);
                 const live = /^https?:\/\//.test(project.projectLink || "");
                 return (
-                  <article className="studio-project-card" key={id}>
+                  <article className={`studio-project-card ${index === 0 ? "project-featured" : ""}`} key={id}>
                     <Link
                       to={detailsURL}
                       className="project-preview"
@@ -88,7 +88,7 @@ export default function Projects({
                           <ArrowUpRight size={21} />
                         </Link>
                       </h3>
-                      <p className="project-summary">{project.description}</p>
+                      <p className="project-summary">{String(project.description || "").split(/(?<=[.!?])\s+/)[0]}</p>
                       <div className="project-technologies">
                         {tech.slice(0, 5).map((t) => (
                           <span key={t}>{t}</span>
@@ -101,7 +101,7 @@ export default function Projects({
                       </div>
                       <div className="project-links">
                         <Link to={detailsURL}>
-                          Project details <ArrowRight size={15} />
+                          Case study <ArrowRight size={15} />
                         </Link>
                         <div>
                           {project.gitRepoLink && (
@@ -111,7 +111,7 @@ export default function Projects({
                               rel="noopener noreferrer"
                               aria-label={`${project.title} source code`}
                             >
-                              <Github size={18} />
+                              <Github size={16} /> GitHub
                             </a>
                           )}
                           {live && (
@@ -121,7 +121,7 @@ export default function Projects({
                               rel="noopener noreferrer"
                               aria-label={`Open ${project.title} live demo`}
                             >
-                              Live <ArrowUpRight size={16} />
+                              Live demo <ArrowUpRight size={16} />
                             </a>
                           )}
                         </div>

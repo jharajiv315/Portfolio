@@ -97,3 +97,18 @@ textarea { line-height: 1.7; }
 th { font-size: .75rem; font-weight: 600; }
 td { font-size: .875rem; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+/* Consistent editing surfaces, using the existing dashboard tokens. */
+.admin-workspace { padding-bottom: 32px; }
+.admin-workspace h2 { font-size: clamp(1.4rem,2vw,1.85rem); line-height: 1.25; }
+.admin-workspace section { scroll-margin-top: 120px; }
+.studio-field { line-height: 1.6; }
+.studio-field input, .studio-field textarea { padding: 12px 14px; transition: border-color 160ms ease, box-shadow 160ms ease; }
+.studio-field input:focus, .studio-field textarea:focus { border-color: hsl(var(--primary)); box-shadow: 0 0 0 3px hsl(var(--primary) / .08); }
+.studio-field [aria-invalid="true"] { border-color: hsl(var(--destructive)); }
+.publishing-state { display: inline-block; margin-top: 10px; padding: 5px 10px; border-radius: 6px; font-size: 11px; line-height: 1.6; border: 1px solid hsl(var(--border)); }
+.state-unsaved { color: #93421c; background: #fff0df; border-color: #e5c6a4; }
+.state-draft { color: #61584b; background: #f4efe7; }
+.state-published { color: #365d48; background: #edf3ed; border-color: #cbdccc; }
+.editor-savebar { position: sticky; bottom: 12px; z-index: 20; padding: 16px 20px; border: 1px solid hsl(var(--border)); border-radius: 14px; background: hsl(var(--card)); box-shadow: 0 6px 24px #30271a0c; }
+input[type="file"]::file-selector-button { border: 1px solid hsl(var(--border)); border-radius: 8px; background: hsl(var(--secondary)); color: hsl(var(--foreground)); padding: 10px 14px; margin-right: 12px; cursor: pointer; }
+@media (max-width: 640px) { .content-toolbar { position: static; } .editor-savebar { bottom: 8px; padding: 14px; } .editor-savebar > button { width: 100%; } }

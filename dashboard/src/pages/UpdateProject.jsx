@@ -37,9 +37,17 @@ const UpdateProject = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
 
+  const [bannerError, setBannerError] = useState("");
   const handleProjectBanner = (e) => {
     const file = e.target.files[0];
+    if (!file) return;
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 5 * 1024 * 1024) {
+      setBannerError('Choose a JPG, PNG or WebP image under 5 MB.');
+      e.target.value = ''; return;
+    }
+    setBannerError('');
     const reader = new FileReader();
+    reader.onerror = () => setBannerError('This image could not be read. Please choose another file.');
     reader.readAsDataURL(file);
     reader.onload = () => {
       setProjectBannerPreview(reader.result);
@@ -69,7 +77,7 @@ const UpdateProject = () => {
           );
         })
         .catch((error) => {
-          toast.error(error.response.data.message);
+          toast.error(error.response?.data?.message || "Could not load this project. Please retry.");
         });
     };
     getProject();
@@ -115,9 +123,9 @@ const UpdateProject = () => {
             <div className="border-b border-gray-900/10 pb-12">
               <div className="flex flex-col gap-2 items-start justify-between sm:items-center sm:flex-row">
                 <h2 className="font-semibold leading-7 text-gray-900 text-3xl">
-                  UPDATE PROJECT
+                  Edit project
                 </h2>
-                <Button onClick={handleReturnToDashboard}>
+                <Button type="button" variant="outline" onClick={handleReturnToDashboard}>
                   Return to Dashboard
                 </Button>
               </div>
@@ -129,15 +137,20 @@ const UpdateProject = () => {
                         ? projectBannerPreview
                         : "/avatarHolder.jpg"
                     }
-                    alt="projectBanner"
-                    className="w-full h-auto"
+                    alt="Project thumbnail preview"
+                    className="w-full max-h-80 object-contain rounded-xl border bg-muted/30"
                   />
                   <div className="relative">
                     <input
                       type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      aria-label="Project thumbnail"
+                      aria-invalid={Boolean(bannerError)}
+                      aria-describedby="banner-help"
                       onChange={handleProjectBanner}
                       className="avatar-update-btn mt-4 w-full"
                     />
+                    <p id="banner-help" className={`mt-2 text-xs ${bannerError ? 'text-destructive' : 'text-muted-foreground'}`}>{bannerError || 'JPG, PNG or WebP · up to 5 MB. A landscape screenshot works best.'}</p>
                   </div>
                 </div>
                 <div className="w-full sm:col-span-4">
@@ -272,7 +285,8 @@ const UpdateProject = () => {
             </div>
           </div>
 
-          <div className="mt-6 flex items-center justify-end gap-x-6">
+          <div className="editor-savebar mt-6 flex flex-wrap items-center justify-between gap-4">
+            <p className="text-xs text-muted-foreground">Saves to your draft. Preview and publish from Content & publishing.</p>
             {loading ? (
               <SpecialLoadingButton content={"Updating"} width={"w-52"} />
             ) : (
@@ -280,7 +294,7 @@ const UpdateProject = () => {
                 type="submit"
                 className="rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary w-52"
               >
-                Update
+                Save project draft
               </button>
             )}
           </div>
