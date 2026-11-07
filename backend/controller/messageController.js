@@ -1,3 +1,4 @@
+const escapeEmailHTML = value => String(value ?? "").replace(/[&<>"\']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","\'":"&#39;"}[c]));
 import { catchAsyncErrors } from "../middlewares/catchAsyncErrors.js";
 import ErrorHandler from "../middlewares/error.js";
 import { Message } from "../models/messageSchema.js";
@@ -96,7 +97,7 @@ export const sendMessage = catchAsyncErrors(async (req, res, next) => {
             <div class="content">
               <div class="field-group">
                 <div class="label">Sender Name</div>
-                <div class="value">${senderName.trim()}</div>
+                <div class="value">${escapeEmailHTML(senderName.trim())}</div>
               </div>
               <div class="field-group">
                 <div class="label">Sender Email</div>
@@ -106,11 +107,11 @@ export const sendMessage = catchAsyncErrors(async (req, res, next) => {
               </div>
               <div class="field-group">
                 <div class="label">Subject</div>
-                <div class="value">${subject.trim()}</div>
+                <div class="value">${escapeEmailHTML(subject.trim())}</div>
               </div>
               <div class="field-group">
                 <div class="label">Message Body</div>
-                <div class="message-box">${message.trim()}</div>
+                <div class="message-box">${escapeEmailHTML(message.trim())}</div>
               </div>
 
               <div style="text-align: center;">
@@ -223,23 +224,23 @@ export const replyMessage = catchAsyncErrors(async (req, res, next) => {
     <body>
       <div class="container">
         <div class="header">
-          <h1>${adminName}</h1>
+          <h1>${escapeEmailHTML(adminName)}</h1>
           <p>Portfolio Inquiry Response · ${sentDate}</p>
         </div>
         <div class="content">
-          <div class="greeting">Hi ${message.senderName || "there"},</div>
+          <div class="greeting">Hi ${escapeEmailHTML(message.senderName || "there")},</div>
 
-          <div class="reply-text">${cleanReply}</div>
+          <div class="reply-text">${escapeEmailHTML(cleanReply)}</div>
 
           <div class="quote-box">
             <div class="quote-title">In Reference to Your Original Message:</div>
-            <div style="font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #292524;">Subject: ${message.subject}</div>
-            <div class="quote-body">${message.message}</div>
+            <div style="font-weight: 600; font-size: 13px; margin-bottom: 6px; color: #292524;">Subject: ${escapeEmailHTML(message.subject)}</div>
+            <div class="quote-body">${escapeEmailHTML(message.message)}</div>
           </div>
 
           <div class="signature">
             Warm regards,<br>
-            <strong>${adminName}</strong><br>
+            <strong>${escapeEmailHTML(adminName)}</strong><br>
             <span style="color: #78716c; font-size: 13px;">Software & AIML Engineer</span><br>
             <a href="https://portfolio-beta-ochre-90.vercel.app" style="color: #b84a1c; text-decoration: none; font-size: 13px; font-weight: 500;">portfolio-beta-ochre-90.vercel.app</a>
           </div>

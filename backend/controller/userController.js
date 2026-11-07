@@ -306,7 +306,7 @@ export const getUserForPortfolio = catchAsyncErrors(async (req, res, next) => {
 export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
-    return next(new ErrorHandler("User Not Found!", 404));
+    return res.status(200).json({success:true,message:"If this account exists, password reset instructions have been sent."});
   }
 
   const resetToken = user.getResetPasswordToken();
@@ -375,7 +375,7 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
   if (emailSent) {
     return res.status(200).json({
       success: true,
-      message: `Password reset instructions sent to ${user.email} successfully! Check your inbox.`,
+      message: "If this account exists, password reset instructions have been sent.",
     });
   }
 

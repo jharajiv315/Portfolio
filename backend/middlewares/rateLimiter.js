@@ -19,7 +19,7 @@ const createRateLimiter = ({ windowMs = 15 * 60 * 1000, max = 100, message = "To
 
   return (req, res, next) => {
     const ip =
-      req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
+      req.ip ||
       req.socket?.remoteAddress ||
       "unknown-ip";
 

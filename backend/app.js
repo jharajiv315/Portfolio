@@ -1,3 +1,4 @@
+import { validateUploads } from "./middlewares/uploadValidation.js";
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
@@ -65,16 +66,28 @@ app.use(
   })
 );
 
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (!['GET', 'HEAD', 'OPTIONS'].includes(req.method) && origin && !allowedOrigins.includes(origin)) {
+    return res.status(403).json({ success: false, message: 'This origin is not allowed.' });
+  }
+  next();
+});
 app.use(cookieParser());
 app.use(express.json({ limit: "512kb" }));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
   fileUpload({
+    limits: { fileSize: 5 * 1024 * 1024 },
+    abortOnLimit: true,
+    responseOnLimit: "Files must be smaller than 5 MB.",
     useTempFiles: true,
     tempFileDir: os.tmpdir(),
   })
 );
+
+app.use(validateUploads);
 
 // Production health check endpoint
 app.get("/api/v1/health", (req, res) => {

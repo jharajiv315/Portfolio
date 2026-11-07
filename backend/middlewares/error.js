@@ -54,7 +54,7 @@ export const errorMiddleware = (err, req, res, next) => {
 
     res.status(err.statusCode).json({
         success: false,
-        message: errorMessage,
+        message: err.statusCode >= 500 ? "The request could not be completed. Please try again later." : errorMessage,
     });
 };
 
