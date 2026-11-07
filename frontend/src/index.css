@@ -1821,3 +1821,7 @@
 .deck-pagination button:hover { background: #f0e8db; }
 @media (max-width: 767px) { .project-deck .deck-card { display: flex; } .project-deck-controls { margin-top: 40px; } .deck-pagination { gap: 10px; } }
 @media (prefers-reduced-motion: reduce) { .project-deck .deck-card { transition: none; } }
+.contact-panel fieldset { border: 0; padding: 0; margin: 0; }
+.contact-panel [aria-invalid="true"] { border-color: #b84a1c; box-shadow: 0 0 0 2px #b84a1c12; }
+.contact-field-help { color: #786e60; font-size: 11px; line-height: 1.7; margin: 8px 0; }
+.contact-panel fieldset:disabled { opacity: .8; }

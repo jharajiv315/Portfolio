@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   ArrowUpRight,
   ArrowRight,
@@ -18,18 +18,33 @@ export default function Contact({ user, copy = {}, preview = false }) {
   const [loading, setLoading] = useState(false),
     [sent, setSent] = useState(false),
     [error, setError] = useState("");
-  const change = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const [fieldErrors, setFieldErrors] = useState({});
+  const pending = useRef(false);
+  const formRef = useRef(null);
+  const receipt = useRef('');
+  const validate = values => ({
+    ...(values.name.trim().length < 3 ? {name: 'Enter at least 3 characters for your name.'} : {}),
+    ...(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim()) ? {email: 'Enter a valid email address so I can reply.'} : {}),
+    ...(values.idea.trim().length < 5 ? {idea: 'Tell me a little more (at least 5 characters).'} : {}),
+  });
+  const change = (e) => {
+    const next = {...form, [e.target.name]:e.target.value}; setForm(next);
+    if (fieldErrors[e.target.name]) setFieldErrors(validate(next));
+    setError('');
+  };
   const submit = async (e) => {
     e.preventDefault();
+    if (pending.current) return;
     if (preview) {
       setError("Contact submission is disabled in preview.");
       return;
     }
     setError("");
-    if (!form.name.trim() || !form.email.trim() || !form.idea.trim()) {
-      setError("Please complete your name, email, and message.");
-      return;
+    const invalid = validate(form); setFieldErrors(invalid);
+    if (Object.keys(invalid).length) {
+      formRef.current?.elements.namedItem(Object.keys(invalid)[0])?.focus(); return;
     }
+    pending.current = true;
     setLoading(true);
     try {
       await axios.post(
@@ -42,6 +57,7 @@ export default function Contact({ user, copy = {}, preview = false }) {
         },
         { withCredentials: true, timeout: 45000 },
       );
+      receipt.current = form.email.trim();
       setSent(true);
       setForm({ name: "", email: "", service: "Web Development", idea: "" });
     } catch (err) {
@@ -50,6 +66,7 @@ export default function Contact({ user, copy = {}, preview = false }) {
           "Your message couldn’t be sent. Please try again or email me directly.",
       );
     } finally {
+      pending.current = false;
       setLoading(false);
     }
   };
@@ -81,8 +98,7 @@ export default function Contact({ user, copy = {}, preview = false }) {
               <CheckCircle2 size={36} />
               <h3>Message received.</h3>
               <p>
-                Thanks for reaching out. I’ll reply using the email you
-                provided.
+                Your inquiry is saved in my dashboard. I’ll reply to {receipt.current}.
               </p>
               <button
                 type="button"
@@ -93,7 +109,9 @@ export default function Contact({ user, copy = {}, preview = false }) {
               </button>
             </div>
           ) : (
-            <form onSubmit={submit} aria-label="Contact Rajiv">
+            <form ref={formRef} onSubmit={submit} noValidate aria-label="Contact Rajiv" aria-busy={loading}>
+              <fieldset disabled={loading || preview} className="min-w-0">
+              <legend className="sr-only">Send a portfolio inquiry</legend>
               <div className="contact-field-row">
                 <div>
                   <label htmlFor="contact-name">Your name</label>
@@ -103,10 +121,13 @@ export default function Contact({ user, copy = {}, preview = false }) {
                     autoComplete="name"
                     value={form.name}
                     onChange={change}
+                    aria-invalid={Boolean(fieldErrors.name)}
+                    aria-describedby={fieldErrors.name ? 'contact-name-error' : undefined}
                     required
                     maxLength={100}
                     placeholder="How should I address you?"
                   />
+                  {fieldErrors.name && <p id="contact-name-error" className="contact-error" role="alert">{fieldErrors.name}</p>}
                 </div>
                 <div>
                   <label htmlFor="contact-email">Email address</label>
@@ -117,10 +138,13 @@ export default function Contact({ user, copy = {}, preview = false }) {
                     autoComplete="email"
                     value={form.email}
                     onChange={change}
+                    aria-invalid={Boolean(fieldErrors.email)}
+                    aria-describedby={fieldErrors.email ? 'contact-email-error' : undefined}
                     required
                     maxLength={254}
                     placeholder="you@example.com"
                   />
+                  {fieldErrors.email && <p id="contact-email-error" className="contact-error" role="alert">{fieldErrors.email}</p>}
                 </div>
               </div>
               <label htmlFor="contact-service">What can I help with?</label>
@@ -147,15 +171,19 @@ export default function Contact({ user, copy = {}, preview = false }) {
                 value={form.idea}
                 onChange={change}
                 placeholder="Tell me a little about your idea…"
-                aria-describedby={error ? "contact-error" : undefined}
+                aria-invalid={Boolean(fieldErrors.idea)}
+                aria-describedby="contact-message-help contact-idea-error"
               />
+              <p id="contact-message-help" className="contact-field-help">{form.idea.length}/5000 characters · Please don’t include passwords or sensitive details.</p>
+              {fieldErrors.idea && <p id="contact-idea-error" className="contact-error" role="alert">{fieldErrors.idea}</p>}
+              {preview && <p className="contact-field-help">Submissions are disabled in draft preview.</p>}
               {error && (
                 <p id="contact-error" className="contact-error" role="alert">
                   {error}
                 </p>
               )}
               <div className="contact-submit">
-                <span>No mailing lists. Just a conversation.</span>
+                <span role="status">{loading ? "Saving your inquiry… Please keep this page open." : "No mailing lists. Just a conversation."}</span>
                 <button
                   type="submit"
                   className="studio-button"
@@ -173,6 +201,7 @@ export default function Contact({ user, copy = {}, preview = false }) {
                   )}
                 </button>
               </div>
+              </fieldset>
             </form>
           )}
         </div>

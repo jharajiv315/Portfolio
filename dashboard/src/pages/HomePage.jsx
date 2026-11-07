@@ -200,7 +200,7 @@ const HomePage = () => {
             case "Publishing":
               return <ContentStudio onDirtyChange={setContentDirty} />;
             case "Dashboard":
-              return <Dashboard />;
+              return <Dashboard onNavigate={switchActive} />;
             case "Add Project":
               return <AddProject />;
             case "Add Skill":
@@ -216,7 +216,7 @@ const HomePage = () => {
             case "Account":
               return <Account />;
             default:
-              return <Dashboard />;
+              return <Dashboard onNavigate={switchActive} />;
           }
         })()}
       </div>
